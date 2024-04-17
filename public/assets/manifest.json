@@ -1,0 +1,15 @@
+{
+  "background_color": "#fff",
+  "description": "W3Grocery: Pre-Build Grocery Mobile App Template.",
+  "display": "fullscreen",
+  "icons": [
+	{
+	  "src": "/assets/images/pwa150x150.png",
+	  "sizes": "150x150",
+	  "type": "image/png"
+	}
+  ],
+  "name": "W3Grocery: Pre-Build Grocery Mobile App",
+  "short_name": "W3Grocery",
+  "start_url": "index.html"
+}

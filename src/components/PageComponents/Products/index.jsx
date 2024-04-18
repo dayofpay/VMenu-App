@@ -10,21 +10,22 @@ const [productData,setProductData] = useState({});
 const [categoryNames,setCategoryNames] = useState([]);
 
 useEffect(() => {
-const getProduct = async () => {
-try {
-const data = await getProductData(id);
-setProductData(data);
-const updatedCategoryNames = [...categoryNames]; // Create a new array
-data.category_names.forEach(category => {
-updatedCategoryNames.push(category); // Push each category name to the new array
-});
-setCategoryNames(updatedCategoryNames); // Update state with the new array
-} catch (error) {
-// Handle error
-console.error("Error fetching product data:", error);
-}
-}
-getProduct();
+	document.title = "Детайли за продукт";
+	const getProduct = async () => {
+		try {
+			const data = await getProductData(id);
+			setProductData(data);
+			const updatedCategoryNames = [...categoryNames]; // Create a new array
+			data.category_names.forEach(category => {
+				updatedCategoryNames.push(category); // Push each category name to the new array
+			});
+			setCategoryNames(updatedCategoryNames); // Update state with the new array
+		} catch (error) {
+			// Handle error
+			console.error("Error fetching product data:", error);
+		}
+	}
+	getProduct();
 }, [id]); // Dependency array added to trigger effect when id changes
 
 if(!productData.item_images){
@@ -151,12 +152,13 @@ return (
 						</div>
 
 						<div className="dz-stepper border-1 rounded-stepper">
-							<input readOnly className="stepper" type="text" value="0" name="demo3" />
+							<input readOnly className="stepper" type="text" value="1" name="demo3" />
 						</div>
 					</div>
 					{productData.hasDiscount ? (
 					<div className="d-flex align-items-center justify-content-between">
-						<div className="badge bg-accent badge-lg badge-warning font-w400 px-3">В момента намален на -{productData.discount_percentage}% !</div>
+						<div className="badge bg-accent badge-lg badge-warning font-w400 px-3">В момента намален на
+							-{productData.discount_percentage}% !</div>
 					</div>
 					) : (null)}
 				</div>

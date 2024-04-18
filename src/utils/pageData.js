@@ -1,0 +1,8 @@
+const APP_PAGES = {
+    'HOME_PAGE' : 'APP_HOME',
+    'PRODUCT_DETAILS_PAGE' : 'APP_PRODUCT_DETAILS',
+}
+
+export {
+    APP_PAGES
+}

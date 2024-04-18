@@ -52,7 +52,7 @@ if(
 	
 	var theme =  getUrlParameter('color-theme');
 	var themeMode =  getUrlParameter('theme-mode');
-	//console.log(theme);
+	console.log(theme);
 	
     // Change the theme version controller
     jQuery('.theme-btn').on('click',function(){
@@ -63,7 +63,7 @@ if(
         }else{
            setCookie('themeVersion_value', '');  
         }
-        
+    
     });
 	
 	//change the primary color controller

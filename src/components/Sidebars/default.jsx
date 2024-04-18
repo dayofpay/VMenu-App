@@ -83,7 +83,7 @@ export default function DefaultSidebar() {
 				</li>
 				<li><a className="nav-link" href="welcome.html">
 						<span className="dz-icon">
-							<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px"
+							<svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" height="24px"
 								viewBox="0 0 24 24" width="24px" fill="#000000">
 								<g></g>
 								<g>
@@ -101,7 +101,7 @@ export default function DefaultSidebar() {
 				<li className="nav-label">Settings</li>
 				<li className="nav-color" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
 					aria-controls="offcanvasBottom">
-					<a href="javascript:void(0);" className="nav-link">
+					<a href="#" className="nav-link">
 						<span className="dz-icon">
 							<svg className="color-plate" xmlns="http://www.w3.org/2000/svg" height="30px"
 								viewBox="0 0 24 24" width="30px" fill="#000000">
@@ -115,7 +115,7 @@ export default function DefaultSidebar() {
 				<li>
 					<div className="mode">
 						<span className="dz-icon">
-							<svg className="dark" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"
+							<svg className="dark" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24"
 								height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
 								<g></g>
 								<g>
@@ -131,12 +131,12 @@ export default function DefaultSidebar() {
 						<span className="text-dark">Dark Mode</span>
 						<div className="custom-switch">
 							<input type="checkbox" className="switch-input theme-btn" id="toggle-dark-menu"/>
-							<label className="custom-switch-label" for="toggle-dark-menu"></label>
+							<label className="custom-switch-label" htmlFor="toggle-dark-menu"></label>
 						</div>
 					</div>
 				</li>
 			</ul>
-			<a href="javascript:void(0);" onclick="deleteAllCookie()" className="btn btn-primary btn-sm cookie-btn">Delete
+			<a href="#" className="btn btn-primary btn-sm cookie-btn">Delete
 				Cookie</a>
 			<div className="sidebar-bottom d-none">
 				<h6 className="name">W3Grocery - Multipurpose App</h6>

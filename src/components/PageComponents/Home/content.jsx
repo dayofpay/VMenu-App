@@ -2,13 +2,11 @@ import {
 	useEffect
 } from "react";
 import withObjectData from "../../../HOC/withObjectInfo";
+import { Link } from "react-router-dom";
 
 const HomeContent = ({
 		objectData
 	}) => {
-		useEffect(() => {
-			console.log(objectData);
-		}, [])
 
 return (
 <>
@@ -204,13 +202,19 @@ return (
 									<a href="#" className="r-btn">
 										<div className="like-button"><i className="fa-regular fa-heart"></i></div>
 									</a>
-									{product.has_discount ? ( <div className="label">-{product.discount_percentage}%</div>) : (null)}
+									{product.has_discount ? ( <div className="label">-{product.discount_percentage}%
+									</div>) : (null)}
 								</div>
 								<div className="dz-content">
-									<h6 className="title mb-3"><a href="product.html">{product.item_name}</a></h6>
+									<h6 className="title mb-3"><Link to={`/products/${product.item_id}`}>{product.item_name}</Link></h6>
 									<div className="dz-meta">
 										<ul>
-											<li className="price text-accent">$ 10.9</li>
+											{product.has_discount ? (
+											<li className="price text-accent">BGN {(product.item_price -
+												(product.discount_percentage *
+												product.item_price) / 100).toFixed(2)} <br /><span
+													class="badge w-100 light badge-light">Намален от {Number(product.item_price).toFixed(2)} ЛВ</span></li>
+											) : ( <li className="price text-accent">BGN {Number(product.item_price).toFixed(2)}</li>)}
 											<li className="review">
 												<span className="text-soft font-10">(243)</span>
 												<i className="fa fa-star"></i>
@@ -218,11 +222,10 @@ return (
 										</ul>
 									</div>
 									<div className="mt-2">
-										<a className="btn btn-primary add-btn light" href="#">Add to
-											cart</a>
-										<div className="dz-stepper border-1 rounded-stepper stepper-fill">
+										<a className="btn btn-primary add-btn light" href="#">Добави в количката</a>
+										{/* <div className="dz-stepper border-1 rounded-stepper stepper-fill">
 											<input className="stepper" type="text" name="demo3" readOnly />
-										</div>
+										</div> */}
 									</div>
 								</div>
 							</div>

@@ -6,7 +6,6 @@ import usePersistedState from "../hooks/usePersistedState";
 export default function withObjectData(Component) {
   return function EnhancedComponent(props) {
     const [objectData, setObjectData] = usePersistedState('objectData', {});
-    console.log(objectData);
     useEffect(() => {
       const fetchObjectData = async () => {
         try {

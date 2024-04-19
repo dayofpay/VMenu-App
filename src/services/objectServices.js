@@ -6,6 +6,6 @@ export async function getObjectData(objectId) {
         const response = await request.get(`http://localhost:3300/api/objects/${objectId}/information`);
         return response;
     }catch(error){
-        console.log(error);
+        console.log('Error in getObjectData',error);
     }
 }

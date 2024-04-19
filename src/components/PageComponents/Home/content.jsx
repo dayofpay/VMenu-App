@@ -9,6 +9,7 @@ const HomeContent = ({
 		useEffect(() => {
 			console.log(objectData);
 		}, [])
+
 return (
 <>
 	<div className="page-content">

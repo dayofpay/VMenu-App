@@ -11,7 +11,7 @@ export default function Home(){
     return (
         <>
         <ScriptLoader page={APP_PAGES.HOME_PAGE}/>
-        <Header/>
+        <Header/> 
         <DefaultSidebar/>
         <DefaultBanner/>
         <HomeV2/>

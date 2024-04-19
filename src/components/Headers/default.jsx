@@ -1,6 +1,8 @@
 import withObjectData from "../../HOC/withObjectInfo";
 
  function DefaultHeader({objectData}) {
+
+	console.log(objectData);
 return (
 <header className="header">
 	<div className="main-bar">
@@ -16,11 +18,11 @@ return (
 							</path>
 						</svg>
 					</a>
-					<h5 className="title mb-0 text-nowrap">{objectData.objectInformation.object_name}</h5>
+					<h5 className="title mb-0 text-nowrap">{objectData?.objectInformation?.object_name}</h5>
 				</div>
 				<div className="mid-content"></div>
 				<div className="right-content">
-					{objectData.license.perksData.tc_colorSchema ? (
+					{objectData?.license?.perksData.tc_colorSchema ? (
 					<a href="#" className="theme-color" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
 						aria-controls="offcanvasBottom">
 						<svg className="color-plate" xmlns="http://www.w3.org/2000/svg" height="30px"
@@ -30,7 +32,7 @@ return (
 						</svg>
 					</a>
 					) : (null)}
-					{objectData.license.perksData.tc_darkMode ? (
+					{objectData?.license.perksData.tc_darkMode ? (
 					<a href="javascript:void(0);" className="theme-btn">
 						<svg className="dark" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24"
 							height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">

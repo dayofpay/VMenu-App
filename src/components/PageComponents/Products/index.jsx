@@ -13,6 +13,7 @@ import {
 } from "react";
 import ProductDescription from "./ProductDescription";
 import '../../Styles/ProductQuantity.css';
+import { incrementQuantity,decrementQuantity } from "../../../handlers/ProductQuantityHR";
 export default function ProductDetails() {
 	const {
 		id
@@ -164,9 +165,9 @@ return (
 						</div>
 
 						<div className="product-quantity">
-							<button className="quantity-btn">-</button>
+							<button className="quantity-btn" onClick={()=> decrementQuantity(productQuantity, setProductQuantity)}>-</button>
 							<input type="text" className="quantity-input" value={productQuantity} readOnly />
-							<button className="quantity-btn">+</button>
+							<button className="quantity-btn" onClick={()=> incrementQuantity(productQuantity, setProductQuantity)}>+</button>
 						</div>
 					</div>
 					{productData.hasDiscount ? (

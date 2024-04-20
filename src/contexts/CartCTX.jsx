@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import usePersistedState from "../hooks/usePersistedState";
 import { PATH_LIST } from "../utils/pathList";
 import { ProductDetailsKeys } from "../keys/formKeys";
+import * as storage from '../utils/memory';
 export const CartContext = createContext();
 
 export const CartProvider = ({
@@ -12,26 +13,27 @@ export const CartProvider = ({
 
 }) => {
     const navigate = useNavigate();
-    const [auth,setAuth] = usePersistedState('auth',{});
-    const loginSubmitHandler = async (values) => {
-      const result = await authService.login(values.email,values.password);
-  
-      if(result.code !== 403){
-        navigate(PATH_LIST.home);
-      }
-      setAuth(result);
-      localStorage.setItem('accessToken',result.accessToken);
-      localStorage.setItem('user_id', result._id);
+    const [objectData,setObjectData] = usePersistedState('objectData',{});
+    const cartUpdateHandler = (data) => {
+        const createCart = () => {
+            storage.setItem('cart',[data])
+        }
 
-      
+        const updateCart = (cartObj) => {
+            const productExists = cartObj.some((product) => product?.productId === data.productId);
+            productExists ? null : storage.setItem('cart',[...cartObj,data]);
+        }
+        const cartObj = storage.getItem('cart');
+        cartObj === null ? createCart() : updateCart(cartObj);
     }
     const logValues = {
+        cartUpdateHandler,
         // Insert submit handlers here
   } 
      return (
-        <AuthContext.Provider value={logValues}>
+        <CartContext.Provider value={logValues}>
             {children}
-        </AuthContext.Provider>
+        </CartContext.Provider>
     )
 }
 CartContext.displayName = 'CartContext';

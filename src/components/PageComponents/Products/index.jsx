@@ -1,4 +1,5 @@
 import {
+	useContext,
 	useEffect
 } from "react";
 import {
@@ -14,14 +15,19 @@ import {
 import ProductDescription from "./ProductDescription";
 import '../../Styles/ProductQuantity.css';
 import { incrementQuantity,decrementQuantity } from "../../../handlers/ProductQuantityHR";
+import CartContext from "../../../contexts/CartCTX";
+import { ProductDetailsKeys } from "../../../keys/formKeys";
+import useForm from "../../../hooks/useForm";
 export default function ProductDetails() {
 	const {
 		id
 	} = useParams();
 	const navigate = useNavigate();
+	const {cartUpdateHandler} = useContext(CartContext);
 	const [productData, setProductData] = useState({});
 	const [categoryNames, setCategoryNames] = useState([]);
 	const [productQuantity,setProductQuantity] = useState(1);
+
 	useEffect(() => {
 		document.title = "Детайли за продукт";
 		const getProduct = async () => {
@@ -39,10 +45,33 @@ export default function ProductDetails() {
 			}
 		}
 		getProduct();
-	}, [id]); // Dependency array added to trigger effect when id changes
+	}, []);
 
+	const {values,onChange, onSubmit,setValues } = useForm(
+		async () => {
+		  try {
+			await cartUpdateHandler(values);
+		  } catch (error) {
+			throw new Error(error);
+		  }
+		},
+		
+		  {
+			  [ProductDetailsKeys.PRODUCT_ID]: productData.item_id,
+			  [ProductDetailsKeys.PRODUCT_QUANTITY] : productQuantity,
+			},
+		);
+		useEffect(() => {
+			try {
+			  setValues((prevValues) => ({
+				...prevValues,
+				[ProductDetailsKeys.PRODUCT_ID]: productData?.["item_id"] || "Loading...",
+			  }));
+			} catch (error) {
+			  navigate('/');
+			}
+		  }, [productData]);
 		if(!productData.item_images){
-
 		return(
 		<div id="preloader">
 			<div className="loader">
@@ -55,7 +84,6 @@ export default function ProductDetails() {
 		</div>
 		)
 		}
-
 return (
 
 <div className="page-wraper">
@@ -94,7 +122,9 @@ return (
 		</div>
 	</header>
 
+	<form onSubmit={onSubmit}>
 	<div className="page-content">
+		<input type="hidden" name={ProductDetailsKeys.PRODUCT_ID} value={productData.item_id} />
 		<div className="content-body bottom-content">
 			<div className="swiper-btn-center-lr my-0">
 				<div className="swiper demo-swiper">
@@ -165,11 +195,13 @@ return (
 						</div>
 
 						<div className="product-quantity">
-							<button className="quantity-btn" onClick={()=> decrementQuantity(productQuantity, setProductQuantity)}>-</button>
-							<input type="text" className="quantity-input" value={productQuantity} readOnly />
-							<button className="quantity-btn" onClick={()=> incrementQuantity(productQuantity, setProductQuantity)}>+</button>
+							<button type="button" className="quantity-btn" onClick={()=> decrementQuantity(values[ProductDetailsKeys.PRODUCT_QUANTITY],
+								setProductQuantity)}>-</button>
+							<input type="text" onChange={onChange} name={ProductDetailsKeys.PRODUCT_QUANTITY} className="quantity-input"
+								value={values[ProductDetailsKeys.PRODUCT_QUANTITY]} readOnly />
+							<button type="button" className="quantity-btn" onClick={()=> incrementQuantity(values[ProductDetailsKeys.PRODUCT_QUANTITY],
+								setProductQuantity)}>+</button> </div>
 						</div>
-					</div>
 					{productData.hasDiscount ? (
 					<div className="d-flex align-items-center justify-content-between">
 						<div className="badge bg-accent badge-lg badge-warning font-w400 px-3">В момента намален на
@@ -182,7 +214,7 @@ return (
 
 		<div className="footer fixed">
 			<div className="container">
-				<a href="shopping-cart.html" className="btn btn-primary text-start w-100">
+				<button type="submit" className="btn btn-primary text-start w-100">
 					<svg className="cart me-4" width="16" height="16" viewBox="0 0 24 24" fill="none"
 						xmlns="http://www.w3.org/2000/svg">
 						<path
@@ -196,10 +228,11 @@ return (
 							fill="white" />
 					</svg>
 					ДОБАВИ В КОЛИЧКАТА
-				</a>
+				</button>
 			</div>
 		</div>
 	</div>
+	</form>
 
 
 </div>

@@ -49,9 +49,9 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
             ...prevErrors,
             form: result.error,
           }));
-          console.log("Request failed:", result.data);
+          console.error("Submit Handler Status - ❌:", result);
         } else {
-          console.log("Request success!");
+          console.log("Submit Handler Status - ✅!");
         }
       }
     } catch (error) {

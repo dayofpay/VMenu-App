@@ -12,7 +12,6 @@ export default function withObjectData(Component) {
             const restaurantId = JSON.parse(localStorage.getItem('restaurantId'));
             const response = await getObjectData(Number(restaurantId));
             setObjectData(response.objectData)
-
         } catch (error) {
           console.error('Error while trying to fetch object data:', error);
         }

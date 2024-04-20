@@ -1,6 +1,12 @@
 import withObjectData from "../../HOC/withObjectInfo";
 
  function DefaultHeader({objectData}) {
+
+	if(!objectData.objectInformation) {
+		return (
+			<div>Loading</div>
+		)
+	}
 return (
 <header className="header">
 	<div className="main-bar">

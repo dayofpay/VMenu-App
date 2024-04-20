@@ -7,7 +7,11 @@ import { Link } from "react-router-dom";
 const HomeContent = ({
 		objectData
 	}) => {
-
+		if(!objectData.objectInformation) {
+			return (
+				<div>Loading</div>
+			)
+		}
 return (
 <>
 	<div className="page-content">

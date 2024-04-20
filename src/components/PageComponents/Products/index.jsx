@@ -1,7 +1,8 @@
 import {
 	useContext,
-	useEffect
+	useEffect,
 } from "react";
+import { Link } from "react-router-dom";
 import {
 	useNavigate,
 	useParams
@@ -18,16 +19,17 @@ import { incrementQuantity,decrementQuantity } from "../../../handlers/ProductQu
 import CartContext from "../../../contexts/CartCTX";
 import { ProductDetailsKeys } from "../../../keys/formKeys";
 import useForm from "../../../hooks/useForm";
+import * as storage from '../../../utils/memory';
 export default function ProductDetails() {
 	const {
 		id
 	} = useParams();
 	const navigate = useNavigate();
-	const {cartUpdateHandler} = useContext(CartContext);
+	const {cartUpdateHandler,cartDeleteHandler} = useContext(CartContext);
 	const [productData, setProductData] = useState({});
 	const [categoryNames, setCategoryNames] = useState([]);
 	const [productQuantity,setProductQuantity] = useState(1);
-
+	const [productExists,setProductExists] = useState(false);
 	useEffect(() => {
 		document.title = "Детайли за продукт";
 		const getProduct = async () => {
@@ -44,13 +46,20 @@ export default function ProductDetails() {
 				console.error("Error fetching product data:", error);
 			}
 		}
-		getProduct();
-	}, []);
 
+		getProduct();
+	}, [id]);
+	console.log(productExists);
 	const {values,onChange, onSubmit,setValues } = useForm(
 		async () => {
 		  try {
-			await cartUpdateHandler(values);
+			if(!productExists){
+				await cartUpdateHandler(values,setProductExists);
+				console.log('Product does not exist');
+			}
+			else{
+				await cartDeleteHandler(values,setProductExists);
+			}
 		  } catch (error) {
 			throw new Error(error);
 		  }
@@ -66,11 +75,13 @@ export default function ProductDetails() {
 			  setValues((prevValues) => ({
 				...prevValues,
 				[ProductDetailsKeys.PRODUCT_ID]: productData?.["item_id"] || "Loading...",
+				[ProductDetailsKeys.PRODUCT_QUANTITY] : productQuantity,
 			  }));
+			  setProductExists(storage.getItem('cart').some((product) => product.productId === productData.item_id))
 			} catch (error) {
 			  navigate('/');
 			}
-		  }, [productData]);
+		  }, [productData,productQuantity]);
 		if(!productData.item_images){
 		return(
 		<div id="preloader">
@@ -83,7 +94,9 @@ export default function ProductDetails() {
 			</div>
 		</div>
 		)
+		
 		}
+		
 return (
 
 <div className="page-wraper">
@@ -95,14 +108,14 @@ return (
 			<div className="container">
 				<div className="header-content">
 					<div className="left-content">
-						<a href="#" className="back-btn">
+						<Link to="/" className="back-btn">
 							<svg height="512" viewBox="0 0 486.65 486.65" width="512">
 								<path
 									d="m202.114 444.648c-8.01-.114-15.65-3.388-21.257-9.11l-171.875-171.572c-11.907-11.81-11.986-31.037-.176-42.945.058-.059.117-.118.176-.176l171.876-171.571c12.738-10.909 31.908-9.426 42.817 3.313 9.736 11.369 9.736 28.136 0 39.504l-150.315 150.315 151.833 150.315c11.774 11.844 11.774 30.973 0 42.817-6.045 6.184-14.439 9.498-23.079 9.11z" />
 								<path
 									d="m456.283 272.773h-425.133c-16.771 0-30.367-13.596-30.367-30.367s13.596-30.367 30.367-30.367h425.133c16.771 0 30.367 13.596 30.367 30.367s-13.596 30.367-30.367 30.367z" />
 							</svg>
-						</a>
+						</Link>
 						<h5 className="title mb-0 text-nowrap">Детайли за продукт</h5>
 					</div>
 					<div className="mid-content">
@@ -195,11 +208,11 @@ return (
 						</div>
 
 						<div className="product-quantity">
-							<button type="button" className="quantity-btn" onClick={()=> decrementQuantity(values[ProductDetailsKeys.PRODUCT_QUANTITY],
+							<button type="button" className="quantity-btn" onClick={()=> decrementQuantity(productQuantity,
 								setProductQuantity)}>-</button>
 							<input type="text" onChange={onChange} name={ProductDetailsKeys.PRODUCT_QUANTITY} className="quantity-input"
-								value={values[ProductDetailsKeys.PRODUCT_QUANTITY]} readOnly />
-							<button type="button" className="quantity-btn" onClick={()=> incrementQuantity(values[ProductDetailsKeys.PRODUCT_QUANTITY],
+								value={productQuantity} readOnly />
+							<button type="button" className="quantity-btn" onClick={()=> incrementQuantity(productQuantity,
 								setProductQuantity)}>+</button> </div>
 						</div>
 					{productData.hasDiscount ? (
@@ -214,7 +227,7 @@ return (
 
 		<div className="footer fixed">
 			<div className="container">
-				<button type="submit" className="btn btn-primary text-start w-100">
+				<button type="submit" className={!productExists ? "btn btn-primary text-start w-100" : "btn btn-danger text-start w-100"}>
 					<svg className="cart me-4" width="16" height="16" viewBox="0 0 24 24" fill="none"
 						xmlns="http://www.w3.org/2000/svg">
 						<path
@@ -227,7 +240,7 @@ return (
 							d="M11.3404 20.5158C11.2749 19.0196 10.0401 17.8418 8.54244 17.847C7.0023 17.9092 5.80422 19.2082 5.86645 20.7484C5.92617 22.2262 7.1283 23.4008 8.60704 23.4262H8.67432C10.2142 23.3587 11.4079 22.0557 11.3404 20.5158Z"
 							fill="white" />
 					</svg>
-					ДОБАВИ В КОЛИЧКАТА
+					{!productExists ? ('ДОБАВИ В КОЛИЧКАТА'): ('ПРЕМАХНИ ОТ КОЛИЧКАТА')}
 				</button>
 			</div>
 		</div>

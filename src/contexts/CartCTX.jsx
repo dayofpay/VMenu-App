@@ -14,20 +14,40 @@ export const CartProvider = ({
 }) => {
     const navigate = useNavigate();
     const [objectData,setObjectData] = usePersistedState('objectData',{});
-    const cartUpdateHandler = (data) => {
+    const cartUpdateHandler = (data,setProductExists) => {
         const createCart = () => {
             storage.setItem('cart',[data])
         }
-
         const updateCart = (cartObj) => {
             const productExists = cartObj.some((product) => product?.productId === data.productId);
             productExists ? null : storage.setItem('cart',[...cartObj,data]);
         }
+        setProductExists(true);
         const cartObj = storage.getItem('cart');
         cartObj === null ? createCart() : updateCart(cartObj);
     }
+
+    const cartDeleteHandler = (data,setProductExists) => {
+        let cart = storage.getItem('cart');
+        
+    
+        // Find the index of the item to delete
+        const indexToDelete = cart.findIndex(item => item.productId === data.productId);
+    
+        if (indexToDelete !== -1) {
+
+            cart.splice(indexToDelete, 1);
+            
+
+            storage.setItem('cart', cart);
+
+            setProductExists(false);
+        }
+    }
+    
     const logValues = {
         cartUpdateHandler,
+        cartDeleteHandler,
         // Insert submit handlers here
   } 
      return (

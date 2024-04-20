@@ -25,6 +25,7 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
   };
 
   const onChange = (event) => {
+    console.log('change');
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
     setValues((state) => ({

@@ -41,13 +41,13 @@ const getItem = (key) => {
         const item = localStorage.getItem(key);
         if (item === null) {
             console.warn(`The item ${key} does not exist in storage`);
-            return null;
+            return [];
         }
 
         return JSON.parse(item);
     } catch (error) {
         console.error(`Error getting item ${key} from the storage: ${error}`);
-        return null;
+        return [];
     }
 }
 

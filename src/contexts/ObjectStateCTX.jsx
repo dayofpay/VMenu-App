@@ -9,8 +9,8 @@ const RequireObjectState = ({
     redirectPath = '/error',
   }) => {
 
-    const restaurantId = storage.getItem('restaurantId');
-    const tableId = storage.getItem('tableId');
+    const restaurantId = localStorage.getItem('restaurantId');
+    const tableId = localStorage.getItem('tableId');
 
     if (!restaurantId || !tableId) {
         return <Navigate to={redirectPath} replace />;

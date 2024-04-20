@@ -20,6 +20,7 @@ import CartContext from "../../../contexts/CartCTX";
 import { ProductDetailsKeys } from "../../../keys/formKeys";
 import useForm from "../../../hooks/useForm";
 import * as storage from '../../../utils/memory';
+import LoadingAnimation from "../../Animations/Loading";
 export default function ProductDetails() {
 	const {
 		id
@@ -84,15 +85,7 @@ export default function ProductDetails() {
 		  }, [productData,productQuantity]);
 		if(!productData.item_images){
 		return(
-		<div id="preloader">
-			<div className="loader">
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-			</div>
-		</div>
+			<LoadingAnimation/>
 		)
 		
 		}

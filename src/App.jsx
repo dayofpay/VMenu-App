@@ -6,6 +6,7 @@ import SetOptions from './components/Options/SetOptions';
 import RequireObjectState from './contexts/ObjectStateCTX';
 import ShowProductDetails from './components/Pages/ProductDetails';
 import { CartProvider } from './contexts/CartCTX';
+import { PATH_LIST } from './utils/pathList';
 function App() {
 
 return (
@@ -14,11 +15,11 @@ return (
     <CartProvider>
         <Suspense fallback={<LoadingAnimation />}>
         <Routes>
-            <Route path="/:objectId/:tableId" element={<SetOptions />}/>
+            <Route path={PATH_LIST.APP_SET_OPTIONS} element={<SetOptions />}/>
             <Route element={<RequireObjectState />}>
-            <Route path="/" element={<Home />} />
+                <Route path={PATH_LIST.APP_HOME} element={<Home />} />
 
-            <Route path='/products/:id/' element={<ShowProductDetails />}/>
+                <Route path={PATH_LIST.APP_PRODUCT} element={<ShowProductDetails />}/>
             </Route>
         </Routes>
         </Suspense>

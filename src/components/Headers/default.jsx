@@ -1,11 +1,9 @@
 import withObjectData from "../../HOC/withObjectInfo";
-
+import LoadingAnimation from "../Animations/Loading";
  function DefaultHeader({objectData}) {
 
 	if(!objectData.objectInformation) {
-		return (
-			<div>Loading</div>
-		)
+		return <LoadingAnimation/>
 	}
 return (
 <header className="header">

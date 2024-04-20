@@ -3,14 +3,12 @@ import {
 } from "react";
 import withObjectData from "../../../HOC/withObjectInfo";
 import { Link } from "react-router-dom";
-
+import LoadingAnimation from "../../Animations/Loading";
 const HomeContent = ({
 		objectData
 	}) => {
 		if(!objectData.objectInformation) {
-			return (
-				<div>Loading</div>
-			)
+			return <LoadingAnimation/>
 		}
 return (
 <>
@@ -39,48 +37,25 @@ return (
 						<div className="swiper-btn-center-lr">
 							<div className="swiper tag-group mt-4 recomand-swiper">
 								<div className="swiper-wrapper">
-									<div className="swiper-slide">
-										<div className="card add-banner"
-											style={{backgroundImage: "url(assets/images/background/bg2.png)"}}>
+									{
+									objectData?.objectAnnounces.map((announce, index) => (
+									<div className="swiper-slide" key={index}>
+										<div className="card add-banner" style={{
+          backgroundImage: `url(http://localhost:3300/uploads/${announce.entry_image})`
+        }}>
 											<div className="circle-1"></div>
 											<div className="circle-2"></div>
 											<div className="card-body">
 												<div className="card-info">
-													<span className="font-12 font-w500 text-dark">Happy Weekend</span>
-													<h1 data-text="20% OFF" className="title mb-2">20% OFF</h1>
-													<small>*for All Menus</small>
+													<span className="font-12 font-w500 text-dark">{announce.entry_headline}</span>
+													<h1 data-text="Новина" className="title mb-2">{announce.entry_thumbnail_text}</h1>
+													<small>* {announce.createdAt}</small>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div className="swiper-slide">
-										<div className="card add-banner"
-											style={{backgroundImage: "url(assets/images/background/bg3.png)"}}>
-											<div className="circle-1"></div>
-											<div className="circle-2"></div>
-											<div className="card-body">
-												<div className="card-info">
-													<span className="font-12 font-w500 text-dark">Happy Weekend</span>
-													<h1 data-text="25% OFF" className="title mb-2">25% OFF</h1>
-													<small>*for All Menus</small>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div className="swiper-slide">
-										<div className="card add-banner"
-											style={{backgroundImage: "url(assets/images/background/bg4.png)"}}>
-											<div className="circle-1"></div>
-											<div className="circle-2"></div>
-											<div className="card-body">
-												<div className="card-info">
-													<span className="font-12 font-w500 text-dark">Happy Weekend</span>
-													<h1 data-text="15% OFF" className="title mb-2">15% OFF</h1>
-													<small>*for All Menus</small>
-												</div>
-											</div>
-										</div>
-									</div>
+									))
+									}
 								</div>
 							</div>
 						</div>

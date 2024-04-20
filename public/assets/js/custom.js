@@ -162,12 +162,12 @@ W3Grocery = function(){
         });
     }
     
-    // Page Back ============
-	var handleGoBack = function(){
-		$('.back-btn').on('click',function(){
-			window.history.go(-1); return false
-		})        
-    }
+    // // Page Back ============
+	// var handleGoBack = function(){
+	// 	$('.back-btn').on('click',function(){
+	// 		window.history.go(-1); return false
+	// 	})        
+    // }
     
 	// Progressive Web App Modal ============
 	var handlePWAModal = function (){

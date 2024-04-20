@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { getObjectData } from "../services/objectServices";
 import usePersistedState from "../hooks/usePersistedState";
+import * as storage from '../utils/memory';
 
 export default function withObjectData(Component) {
   return function EnhancedComponent(props) {
@@ -9,7 +10,7 @@ export default function withObjectData(Component) {
     useEffect(() => {
       const fetchObjectData = async () => {
         try {
-            const restaurantId = JSON.parse(localStorage.getItem('restaurantId'));
+            const restaurantId = JSON.parse(storage.getItem('restaurantId'));
             const response = await getObjectData(Number(restaurantId));
             setObjectData(response.objectData)
         } catch (error) {

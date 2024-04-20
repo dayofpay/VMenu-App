@@ -1,47 +1,59 @@
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getProductData } from "../../../services/productServices";
-import { useState } from "react";
+import {
+	useEffect
+} from "react";
+import {
+	useNavigate,
+	useParams
+} from "react-router-dom";
+import {
+	getProductData
+} from "../../../services/productServices";
+import {
+	useState
+} from "react";
 import ProductDescription from "./ProductDescription";
-export default function ProductDetails(){
-const {id} = useParams();
-const navigate = useNavigate();
-const [productData,setProductData] = useState({});
-const [categoryNames,setCategoryNames] = useState([]);
-
-useEffect(() => {
-	document.title = "Детайли за продукт";
-	const getProduct = async () => {
-		try {
-			const data = await getProductData(id);
-			setProductData(data);
-			const updatedCategoryNames = [...categoryNames]; // Create a new array
-			data.category_names.forEach(category => {
-				updatedCategoryNames.push(category); // Push each category name to the new array
-			});
-			setCategoryNames(updatedCategoryNames); // Update state with the new array
-		} catch (error) {
-			// Handle error
-			console.error("Error fetching product data:", error);
+import '../../Styles/ProductQuantity.css';
+export default function ProductDetails() {
+	const {
+		id
+	} = useParams();
+	const navigate = useNavigate();
+	const [productData, setProductData] = useState({});
+	const [categoryNames, setCategoryNames] = useState([]);
+	const [productQuantity,setProductQuantity] = useState(1);
+	useEffect(() => {
+		document.title = "Детайли за продукт";
+		const getProduct = async () => {
+			try {
+				const data = await getProductData(id);
+				setProductData(data);
+				const updatedCategoryNames = [...categoryNames]; // Create a new array
+				data.category_names.forEach(category => {
+					updatedCategoryNames.push(category); // Push each category name to the new array
+				});
+				setCategoryNames(updatedCategoryNames); // Update state with the new array
+			} catch (error) {
+				// Handle error
+				console.error("Error fetching product data:", error);
+			}
 		}
-	}
-	getProduct();
-}, [id]); // Dependency array added to trigger effect when id changes
+		getProduct();
+	}, [id]); // Dependency array added to trigger effect when id changes
 
-if(!productData.item_images){
+		if(!productData.item_images){
 
-return(
-<div id="preloader">
-	<div className="loader">
-		<span></span>
-		<span></span>
-		<span></span>
-		<span></span>
-		<span></span>
-	</div>
-</div>
-)
-}
+		return(
+		<div id="preloader">
+			<div className="loader">
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+		)
+		}
 
 return (
 
@@ -151,8 +163,10 @@ return (
 							)}
 						</div>
 
-						<div className="dz-stepper border-1 rounded-stepper">
-							<input readOnly className="stepper" type="text" value="1" name="demo3" />
+						<div className="product-quantity">
+							<button className="quantity-btn">-</button>
+							<input type="text" className="quantity-input" value={productQuantity} readOnly />
+							<button className="quantity-btn">+</button>
 						</div>
 					</div>
 					{productData.hasDiscount ? (

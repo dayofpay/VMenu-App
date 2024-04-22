@@ -14,6 +14,7 @@ const SetOptions = () => {
   useEffect(() => {
     setRestaurantId(objectId);
     setTable(tableId);
+    localStorage.removeItem('cart');
     navigate('/');
   }, [navigate, restaurantId, table]);
 

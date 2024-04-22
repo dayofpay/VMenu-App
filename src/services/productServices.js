@@ -7,3 +7,10 @@ export async function getProductData(productId){
 
     return productData;
 }
+
+export async function getProductsByCategory(categoryId){
+    const objectId = JSON.parse(localStorage.getItem('restaurantId'));
+    const products = await get(`http://localhost:3300/api/categories/${objectId}/${categoryId}`);
+
+    return products;
+}

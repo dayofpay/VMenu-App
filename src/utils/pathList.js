@@ -4,6 +4,7 @@ const PATH_LIST = {
     'APP_PRODUCT' : '/products/:id',
     'APP_SET_OPTIONS' : '/:objectId/:tableId',
     'CATEGORY_DETAILS' : '/category/:id',
+    'CATEGORY_LIST' : '/categories',
 }
 
 export {PATH_LIST}

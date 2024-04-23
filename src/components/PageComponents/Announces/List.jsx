@@ -81,10 +81,6 @@ const ShowAnnounces = ({objectData}) => {
                             <span className="text-soft">{TimeBetween(announce?.['createdAt'],new Date())}</span>
                             <div className="saprete-circle ms-1"></div>
                         </li>
-                        <li className="d-flex align-items-center">
-                            <span className="text-soft">1 min read</span>
-                            <div className="saprete-circle ms-1"></div>
-                        </li>
                         <li>
                             <span className="text-soft">Качено от {announce?.announced_by.first_name}</span>
                         </li>

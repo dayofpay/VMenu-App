@@ -1,14 +1,23 @@
-export default function DefaultBanner() {
+import withObjectData from "../../HOC/withObjectInfo";
+import LoadingAnimation from "../Animations/Loading";
+
+function ShowBanner({objectData}) {
+	const timeType = new Date().getHours();
+	const time = timeType < 12 ? 'Добро Утро, ' : timeType < 18 ? 'Добър Вечер, ' : 'Добър Вечер, ';
+
+	if(!objectData){
+		return <LoadingAnimation/>
+	}
     return (
 
 		<div className="author-notification">
 			<div className="container inner-wrapper">
 				<div className="dz-info">
-					<span className="text-dark d-block">Good Morning</span>
-					<h2 className="name mb-0 title">Louis A. 👋</h2>
+					<span className="text-dark d-block">{time}</span>
+					<h2 className="name mb-0 title"> Владислав {/*Гост на {objectData.objectInformation.object_name}*/} 👋</h2>
 				</div>
 				<a href="notification.html" className="notify-cart">
-					<span className="font-18 font-w600 text-dark">6</span>
+					<span className="font-18 font-w600 text-dark">7</span>
 					<div className="badge">
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path
@@ -24,3 +33,7 @@ export default function DefaultBanner() {
 		</div>
     )
 }
+
+const Banner = withObjectData(ShowBanner);
+
+export default Banner;

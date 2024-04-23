@@ -9,6 +9,7 @@ import { CartProvider } from './contexts/CartCTX';
 import { PATH_LIST } from './utils/pathList';
 import CategoryDetails from './components/PageComponents/Categories/CategoryDetails';
 import CategoryList from './components/PageComponents/Categories/CategoryList';
+import Cart from './components/PageComponents/Cart/Cart';
 function App() {
 
 return (
@@ -23,6 +24,7 @@ return (
                 <Route path={PATH_LIST.CATEGORY_DETAILS} element={<CategoryDetails/>}/>
                 <Route path={PATH_LIST.CATEGORY_LIST} element={<CategoryList/>}/>
                 <Route path={PATH_LIST.APP_PRODUCT} element={<ShowProductDetails />}/>
+                <Route path={PATH_LIST.APP_CART} element={<Cart/>}/>
             </Route>
         </Routes>
         </Suspense>

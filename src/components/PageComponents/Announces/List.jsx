@@ -69,7 +69,7 @@ const ShowAnnounces = ({objectData}) => {
         <ul className="blog-list">
             {objectData?.objectAnnounces.map((announce,index) => (
             <li className="list pb-3 border-bottom mb-3" key={index}>
-            <Link to={`/announces/${announce.announced_by.user_id}`}>
+            <Link to={`/announces/${announce.entry_id}`}>
                 <div className="media media-80 me-2">
                     <img className="rounded" src={`http://localhost:3300/uploads/${announce?.entry_image}`} alt="/"/>
                 </div>

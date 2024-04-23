@@ -1,4 +1,3 @@
-import withObjectData from "../../HOC/withObjectInfo";
 import LoadingAnimation from "../Animations/Loading";
  function DefaultHeader({objectData}) {
 

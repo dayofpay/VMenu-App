@@ -92,7 +92,7 @@ const ShowCart = ({ objectData }) => {
 
     
 
-    if (!objectData) {
+    if (!objectData.objectInformation) {
         return <LoadingAnimation />;
     }
 

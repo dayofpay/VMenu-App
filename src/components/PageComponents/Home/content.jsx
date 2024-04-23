@@ -1,7 +1,3 @@
-import {
-	useEffect
-} from "react";
-import withObjectData from "../../../HOC/withObjectInfo";
 import { Link } from "react-router-dom";
 import LoadingAnimation from "../../Animations/Loading";
 import '../../Styles/happy-icons.min.css';

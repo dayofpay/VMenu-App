@@ -1,24 +1,24 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import LoadingAnimation from './components/Animations/Loading';
-import Home from './Pages/Home';
 import SetOptions from './components/Options/SetOptions';
 import RequireObjectState from './contexts/ObjectStateCTX';
-import ShowProductDetails from './components/Pages/ProductDetails';
 import { CartProvider } from './contexts/CartCTX';
 import { PATH_LIST } from './utils/pathList';
-import CategoryDetails from './components/PageComponents/Categories/CategoryDetails';
-import CategoryList from './components/PageComponents/Categories/CategoryList';
-import Cart from './components/PageComponents/Cart/Cart';
-import Announces from './components/PageComponents/Announces/List';
-import AnnounceDetails from './components/PageComponents/Announces/Details';
+const Home = lazy(() => import('./Pages/Home'));
+const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
+const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
+const CategoryList = lazy(() => import('./components/PageComponents/Categories/CategoryList'));
+const Cart = lazy(() => import('./components/PageComponents/Cart/Cart'));
+const Announces = lazy(() => import('./components/PageComponents/Announces/List'));
+const AnnounceDetails = lazy(() => import('./components/PageComponents/Announces/Details'));
 function App() {
 
 return (
 
 <>
     <CartProvider>
-        <Suspense fallback={<LoadingAnimation />}>
+     <Suspense fallback={<LoadingAnimation />}>
         <Routes>
             <Route path={PATH_LIST.APP_SET_OPTIONS} element={<SetOptions />}/>
             <Route element={<RequireObjectState />}>
@@ -31,7 +31,7 @@ return (
                 <Route path={PATH_LIST.ANNOUNCE_DETAILS} element={<AnnounceDetails/>}/>
             </Route>
         </Routes>
-        </Suspense>
+     </Suspense>
     </CartProvider>
 </>
 

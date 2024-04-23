@@ -37,7 +37,7 @@ const ShowAppMenu = () => {
 				</a>
 				<a href="profile.html" className="nav-link">
 					<div className="media media-25 rounded-circle mx-auto">
-						<img src="assets/images/avatar/9.jpg" alt="/"/>
+						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDVwLf8ILV1hh8NcQ01IMi4T0skZvIfAUuixdeF4kZTw&s" alt="/"/>
 					</div>
 				</a>
 			</div>

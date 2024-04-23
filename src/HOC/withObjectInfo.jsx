@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { getObjectData } from "../services/objectServices";
 import usePersistedState from "../hooks/usePersistedState";
 import * as storage from '../utils/memory';
+import { createVisitor } from "../services/userServices";
 
 export default function withObjectData(Component) {
   return function EnhancedComponent(props) {

@@ -86,7 +86,7 @@ const ShowAnnounces = ({objectData}) => {
                             <div className="saprete-circle ms-1"></div>
                         </li>
                         <li>
-                            <span className="text-soft">By Emile</span>
+                            <span className="text-soft">Качено от {announce?.announced_by.first_name}</span>
                         </li>
                     </ul>
                 </div>

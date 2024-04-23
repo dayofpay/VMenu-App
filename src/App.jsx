@@ -10,6 +10,7 @@ import { PATH_LIST } from './utils/pathList';
 import CategoryDetails from './components/PageComponents/Categories/CategoryDetails';
 import CategoryList from './components/PageComponents/Categories/CategoryList';
 import Cart from './components/PageComponents/Cart/Cart';
+import Announces from './components/PageComponents/Announces/List';
 function App() {
 
 return (
@@ -25,6 +26,7 @@ return (
                 <Route path={PATH_LIST.CATEGORY_LIST} element={<CategoryList/>}/>
                 <Route path={PATH_LIST.APP_PRODUCT} element={<ShowProductDetails />}/>
                 <Route path={PATH_LIST.APP_CART} element={<Cart/>}/>
+                <Route path={PATH_LIST.ANNOUNCE_LIST} element={<Announces/>}/>
             </Route>
         </Routes>
         </Suspense>

@@ -12,9 +12,9 @@ const SetOptions = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    localStorage.clear();
     setRestaurantId(objectId);
     setTable(tableId);
-    localStorage.removeItem('cart');
     navigate('/');
   }, [navigate, restaurantId, table]);
 

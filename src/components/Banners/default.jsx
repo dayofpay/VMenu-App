@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import withObjectData from "../../HOC/withObjectInfo";
 import LoadingAnimation from "../Animations/Loading";
+import { PATH_LIST } from "../../utils/pathList";
 
 function ShowBanner({objectData}) {
 	const timeType = new Date().getHours();
@@ -16,7 +18,7 @@ function ShowBanner({objectData}) {
 					<span className="text-dark d-block">{time}</span>
 					<h2 className="name mb-0 title"> Владислав {/*Гост на {objectData.objectInformation.object_name}*/} 👋</h2>
 				</div>
-				<a href="notification.html" className="notify-cart">
+				<Link to={PATH_LIST.ANNOUNCE_LIST} className="notify-cart">
 					<span className="font-18 font-w600 text-dark">7</span>
 					<div className="badge">
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +30,7 @@ function ShowBanner({objectData}) {
 								fill="white" />
 						</svg>
 					</div>
-				</a>
+				</Link>
 			</div>
 		</div>
     )

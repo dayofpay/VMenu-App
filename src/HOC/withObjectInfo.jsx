@@ -15,6 +15,7 @@ export default function withObjectData(Component) {
             setObjectData(response.objectData)
         } catch (error) {
           console.error('Error while trying to fetch object data:', error);
+          localStorage.clear();
         }
       };
 

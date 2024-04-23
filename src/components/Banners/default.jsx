@@ -19,7 +19,7 @@ function ShowBanner({objectData}) {
 					<h2 className="name mb-0 title"> Владислав {/*Гост на {objectData.objectInformation.object_name}*/} 👋</h2>
 				</div>
 				<Link to={PATH_LIST.ANNOUNCE_LIST} className="notify-cart">
-					<span className="font-18 font-w600 text-dark">7</span>
+					<span className="font-18 font-w600 text-dark">{objectData.objectAnnounces.length}</span>
 					<div className="badge">
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path

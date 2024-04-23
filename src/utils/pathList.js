@@ -7,6 +7,7 @@ const PATH_LIST = {
     'CATEGORY_LIST' : '/categories',
     'APP_CART' : '/cart',
     'ANNOUNCE_LIST' : '/announces',
+    'ANNOUNCE_DETAILS' : '/announces/:id',
 }
 
 export {PATH_LIST}

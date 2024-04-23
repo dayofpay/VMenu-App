@@ -11,6 +11,7 @@ import CategoryDetails from './components/PageComponents/Categories/CategoryDeta
 import CategoryList from './components/PageComponents/Categories/CategoryList';
 import Cart from './components/PageComponents/Cart/Cart';
 import Announces from './components/PageComponents/Announces/List';
+import AnnounceDetails from './components/PageComponents/Announces/Details';
 function App() {
 
 return (
@@ -27,6 +28,7 @@ return (
                 <Route path={PATH_LIST.APP_PRODUCT} element={<ShowProductDetails />}/>
                 <Route path={PATH_LIST.APP_CART} element={<Cart/>}/>
                 <Route path={PATH_LIST.ANNOUNCE_LIST} element={<Announces/>}/>
+                <Route path={PATH_LIST.ANNOUNCE_DETAILS} element={<AnnounceDetails/>}/>
             </Route>
         </Routes>
         </Suspense>

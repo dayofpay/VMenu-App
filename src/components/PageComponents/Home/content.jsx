@@ -191,6 +191,6 @@ return (
 )
 }
 
-const HomeV2 = withObjectData(HomeContent);
+const HomeV2 = HomeContent
 
 export default HomeV2;

@@ -36,6 +36,6 @@ function ShowBanner({objectData}) {
     )
 }
 
-const Banner = withObjectData(ShowBanner);
+const Banner = ShowBanner;
 
 export default Banner;

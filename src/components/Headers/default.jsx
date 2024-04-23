@@ -57,5 +57,5 @@ return (
 )
 }
 
-const Header = withObjectData(DefaultHeader);
+const Header = DefaultHeader;
 export default Header;

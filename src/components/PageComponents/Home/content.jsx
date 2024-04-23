@@ -48,7 +48,7 @@ return (
 								<div className="swiper-wrapper">
 									{
 									objectData?.objectAnnounces.map((announce, index) => (
-									<div className="swiper-slide" key={index}>
+									<div className="swiper-slide" key={index} data-aos="fade-up">
 										<div className="card add-banner" style={{
           backgroundImage: `url(http://localhost:3300/uploads/${announce.entry_image})`
         }}>
@@ -85,7 +85,7 @@ return (
 						<div className="swiper-btn-center-lr">
 							<div className="swiper categorie-swiper">
 								<div className="swiper-wrapper">
-									{objectData.categories.map((category,index) => ( <div className="swiper-slide">
+									{objectData.categories.map((category,index) => ( <div className="swiper-slide" data-aos="fade-down">
 										<Link to={`/category/${category.entry_id}`}>
 											<div key={index} className="categore-box" style={{backgroundImage: `url(http://localhost:3300/uploads/${category.category_background_image})`}}>
 												{/* <svg width="24" height="24" viewBox="0 0 19 23" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -110,7 +110,7 @@ return (
 					</div>
 					<div className="row g-3 mb-3">
 						{objectData.products.map((product,index) => (
-						<div className="col-6" key={index}>
+						<div className="col-6" key={index} data-aos="zoom-out-right">
 							<div className="card-item style-1">
 								<div className="dz-media">
 									<img src={`http://localhost:3300/uploads/${JSON.parse(product.item_images)[0]}`}

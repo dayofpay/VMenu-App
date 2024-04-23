@@ -10,6 +10,9 @@ import { Link } from "react-router-dom";
 const ShowCart = ({ objectData }) => {
     const [cart, setCart] = usePersistedState('cart', []);
     const [cartPrototype, setCartPrototype] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [discountPrice, setDiscountPrice] = useState(0);
+    const [totalDiscounts, setTotalDiscounts] = useState(0);
 
     useEffect(() => {
         const getProductData = async () => {
@@ -25,6 +28,37 @@ const ShowCart = ({ objectData }) => {
             setCartPrototype(filteredProducts);
         });
     }, [cart, objectData]);
+
+    useEffect(() => {
+        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        let totalDiscountsCount = 0;
+
+        let totalPrice = cartItems.reduce((acc, cartItem) => {
+            const product = cartPrototype.find(product => product.item_id === cartItem.productId);
+
+            if (product && product.item_price && cartItem.productQuantity) {
+                return acc + (product.item_price * cartItem.productQuantity);
+            } else {
+                return acc;
+            }
+        }, 0);
+
+        let discountPrice = cartItems.reduce((acc, cartItem) => {
+            const product = cartPrototype.find(product => product.item_id === cartItem.productId);
+
+            if (product && product.item_price && product.has_discount && cartItem.productQuantity) {
+                const discountedPrice = (product.item_price * (100 - product.discount_percentage)) / 100;
+                totalDiscountsCount++; // Increment the count of items with discounts
+                return acc + (discountedPrice * cartItem.productQuantity);
+            } else {
+                return acc + (product?.item_price * cartItem.productQuantity || 0);
+            }
+        }, 0);
+
+        setTotalPrice(totalPrice);
+        setDiscountPrice(discountPrice);
+        setTotalDiscounts(totalDiscountsCount); // Set the total number of items with discounts
+    }, [cartPrototype]);
 
     const handleDecrement = (productId) => {
         decrementCartQuantity(productId);
@@ -55,6 +89,7 @@ const ShowCart = ({ objectData }) => {
             prevCart.filter((item) => item.productId !== productId)
         );
     };
+
     
 
     if (!objectData) {
@@ -86,52 +121,67 @@ const ShowCart = ({ objectData }) => {
 	<div className="page-content">
         <div className="container bottom-content shop-cart-wrapper"> 
         <div className="item-list style-2">
-                <ul>
-                    {cartPrototype.map((product, index) => (
-                        <li key={index}>
-                            <div className="item-content">
-                                <div className="item-media media media-60">
-                                    <img src={`http://localhost:3300/uploads/${JSON.parse(product?.item_images)[0]}`} alt="logo" />
+            {cartPrototype.length === 0 ? (
+                        <div className="row justify-content-center">
+                        <div className="col-12 col-md-6">
+                            <div className="card text-center">
+                                <img src="/assets/images/pages/cart/cart.png" className="card-img-top" alt="Empty Cart Image" />
+                                <div className="card-body">
+                                    <h5 className="card-title">Вашата количка е празна</h5>
+                                    <p className="card-text">Моля, добавете продукти в количката си, за да продължите пазаруването.</p>
+                                    <Link to="/" className="btn btn-primary">Продължи пазаруването</Link>
                                 </div>
-                                <div className="item-inner">
-                                    <div className="item-title-row">
-                                        <h5 className="item-title sub-title"><a href="product-detail.html">{product?.item_name}</a></h5>
-                                        <div className="item-subtitle text-soft">{product?.category_names[0]}</div>
+                            </div>
+                        </div>
+                    </div>
+            ) : (
+                <ul>
+                {cartPrototype.map((product, index) => (
+                    <li key={index}>
+                        <div className="item-content">
+                            <div className="item-media media media-60">
+                                <img src={`http://localhost:3300/uploads/${JSON.parse(product?.item_images)[0]}`} alt="logo" />
+                            </div>
+                            <div className="item-inner">
+                                <div className="item-title-row">
+                                    <h5 className="item-title sub-title"><a href="product-detail.html">{product?.item_name}</a></h5>
+                                    <div className="item-subtitle text-soft">{product?.category_names[0]}</div>
+                                </div>
+                                <div className="item-footer">
+                                    <div className="d-flex align-items-center">
+                                        {product?.has_discount ? (
+                                            <>
+                                                <h6 className="me-2">BGN {(product?.item_price - (product?.discount_percentage *
+                                                    product?.item_price) / 100).toFixed(2)}</h6>
+                                                <del className="off-text"><h6>BGN {Number(product?.item_price).toFixed(2)}</h6></del>
+                                            </>
+                                        ) : (
+                                            <><h6>BGN {Number(product?.item_price).toFixed(2)}</h6></>
+                                        )}
                                     </div>
-                                    <div className="item-footer">
-                                        <div className="d-flex align-items-center">
-                                            {product?.has_discount ? (
-                                                <>
-                                                    <h6 className="me-2">BGN {(product?.item_price - (product?.discount_percentage *
-                                                        product?.item_price) / 100).toFixed(2)}</h6>
-                                                    <del className="off-text"><h6>BGN {Number(product?.item_price).toFixed(2)}</h6></del>
-                                                </>
-                                            ) : (
-                                                <><h6>BGN {Number(product?.item_price).toFixed(2)}</h6></>
-                                            )}
+                                    <div className="d-flex align-items-center">
+                                        <div className="product-quantity">
+                                            <button type="button" className="quantity-btn" onClick={() => handleDecrement(product?.item_id)}>-</button>
+                                            <input
+                                                type="text"
+                                                name={ProductDetailsKeys.PRODUCT_QUANTITY}
+                                                className="quantity-input"
+                                                value={cart[index]?.productQuantity}
+                                                readOnly
+                                            />
+                                            <button type="button" className="quantity-btn" onClick={() => handleIncrement(product?.item_id)}>+</button>
                                         </div>
-                                        <div className="d-flex align-items-center">
-                                            <div className="product-quantity">
-                                                <button type="button" className="quantity-btn" onClick={() => handleDecrement(product?.item_id)}>-</button>
-                                                <input
-                                                    type="text"
-                                                    name={ProductDetailsKeys.PRODUCT_QUANTITY}
-                                                    className="quantity-input"
-                                                    value={cart[index]?.productQuantity}
-                                                    readOnly
-                                                />
-                                                <button type="button" className="quantity-btn" onClick={() => handleIncrement(product?.item_id)}>+</button>
-                                            </div>
-                                        </div>
-                                        <div className="d-flex align-items-center">
-    <i className="fa fa-trash" style={{color:'red',marginLeft:'2em'}} onClick={() => handleRemove(product?.item_id)}></i>
-                                        </div>
+                                    </div>
+                                    <div className="d-flex align-items-center">
+<i className="fa fa-trash" style={{color:'red',marginLeft:'2em'}} onClick={() => handleRemove(product?.item_id)}></i>
                                     </div>
                                 </div>
                             </div>
-                        </li>
-                    ))}
-                </ul>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+            )}
             </div>
         </div>
 		<div className="footer fixed ">
@@ -139,27 +189,27 @@ const ShowCart = ({ objectData }) => {
 				<div className="view-title mb-2">
 					<ul>
 						<li>
-							<span className="text-soft">Subtotal</span>
-							<span className="text-soft">$54.76</span>
+							<span className="text-soft">Междинна сума</span>
+							<span className="text-soft">BGN {Number(totalPrice).toFixed(2)}</span>
 						</li>
 						<li>
-							<span className="text-soft">TAX (2%)</span>
-							<span className="text-soft">-$1.08</span>
+							<span className="text-soft">Отстъпки</span>
+							<span className="text-soft">-BGN {Number(totalPrice - discountPrice).toFixed(2)}</span>
 						</li>
 						<li>
-							<h5>Total</h5>
-							<h5>$53.68</h5>
+							<h5>Общо</h5>
+							<h5>BGN {Number(totalPrice - (totalPrice-discountPrice)).toFixed(2)}</h5>
 						</li>
 						<li>
 							<a href="#" className="promo-bx">
-								Apply Promotion Code
-								<span>2 Promos</span>
+								Използвани отстъпки
+								<span>Възползвате се от {totalDiscounts} отстъпки</span>
 							</a>
 						</li>
 					</ul>
 				</div>
 				<div className="footer-btn d-flex align-items-center">
-					<a href="checkout.html" className="btn btn-primary flex-1">CHECKOUT</a>
+					<a href="checkout.html" className="btn btn-primary flex-1">ПОРЪЧАЙ</a>
 				</div>
 			</div>
 		</div>		

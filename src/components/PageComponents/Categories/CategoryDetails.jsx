@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getProductsByCategory } from "../../../services/productServices";
 import { ProductHasDiscount } from "../../../utils/DateUtils";
 import LoadingAnimation from "../../Animations/Loading";
+import '../../Animations/Packages/slideInFromLeft.css';
 const ShowCategoryData = ({
     objectData
 }) => {
@@ -64,7 +65,7 @@ const ShowCategoryData = ({
 			<div className="dz-list style-3">						
 				<ul>
 					{categoryData.map((product,index) => (
-                        <li key={index}>
+                        <li key={index} style={{animation: '1s ease-out 0s 1 slideInFromLeft'}}>
 						<div className="item-content">
 							<div className="item-media media media-95"><img src={`http://localhost:3300/uploads/${JSON.parse(product.item_images)[0]}`} alt="logo"/>
 								<a href="javascript:void(0);" className="item-bookmark icon-2">

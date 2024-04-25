@@ -8,6 +8,12 @@ const PATH_LIST = {
     'APP_CART' : '/cart',
     'ANNOUNCE_LIST' : '/announces',
     'ANNOUNCE_DETAILS' : '/announces/:id',
+    'APP_CHECKOUT' : '/checkout',
 }
 
-export {PATH_LIST}
+
+const SERVER_ENDPOINTS = {
+    'PRODUCTION_SERVER' : 'https://app.vmenu.bg',
+    'DEVELOPMENT_SERVER' : 'http://localhost:3300',
+}
+export {PATH_LIST,SERVER_ENDPOINTS}

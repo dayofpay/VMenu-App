@@ -5,6 +5,7 @@ import SetOptions from './components/Options/SetOptions';
 import RequireObjectState from './contexts/ObjectStateCTX';
 import { CartProvider } from './contexts/CartCTX';
 import { PATH_LIST } from './utils/pathList';
+import Checkout from './components/PageComponents/Checkout/Checkout';
 const Home = lazy(() => import('./Pages/Home'));
 const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
 const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
@@ -29,6 +30,7 @@ return (
                 <Route path={PATH_LIST.APP_CART} element={<Cart/>}/>
                 <Route path={PATH_LIST.ANNOUNCE_LIST} element={<Announces/>}/>
                 <Route path={PATH_LIST.ANNOUNCE_DETAILS} element={<AnnounceDetails/>}/>
+                <Route path={PATH_LIST.APP_CHECKOUT} element={<Checkout/>}/>
             </Route>
         </Routes>
      </Suspense>

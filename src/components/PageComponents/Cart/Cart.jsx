@@ -6,6 +6,7 @@ import { ProductDetailsKeys } from "../../../keys/formKeys";
 import LoadingAnimation from "../../Animations/Loading";
 import usePersistedState from "../../../hooks/usePersistedState";
 import { Link } from "react-router-dom";
+import { PATH_LIST } from "../../../utils/pathList";
 
 const ShowCart = ({ objectData }) => {
     const [cart, setCart] = usePersistedState('cart', []);
@@ -209,7 +210,7 @@ const ShowCart = ({ objectData }) => {
 					</ul>
 				</div>
 				<div className="footer-btn d-flex align-items-center">
-					<a href="checkout.html" className="btn btn-primary flex-1">ПОРЪЧАЙ</a>
+					<Link to={PATH_LIST.APP_CHECKOUT} className="btn btn-primary flex-1">ПОРЪЧАЙ</Link>
 				</div>
 			</div>
 		</div>		

@@ -1,0 +1,41 @@
+.payment-type {
+    margin-bottom: 1.5rem;
+  }
+  
+  .payment-type-label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  .payment-type-select {
+    position: relative;
+    width: 100%;
+  }
+  
+  .payment-type-select select {
+    width: 21em;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    font-size: 1rem;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  .payment-type-select select:focus {
+    outline: none;
+    border-color: #4d90fe;
+  }
+  
+  .payment-type-select i {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  

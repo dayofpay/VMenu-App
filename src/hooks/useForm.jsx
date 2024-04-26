@@ -55,6 +55,10 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
           console.log("Submit Handler Status - ✅!");
         }
       }
+
+      else{
+        console.log('Validation failed');
+      }
     } catch (error) {
       console.error("An unexpected error occurred:", error);
       setErrors({ form: error.message });

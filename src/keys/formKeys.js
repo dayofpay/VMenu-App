@@ -7,5 +7,11 @@ const ProductDetailsKeys = {
     PRODUCT_IMAGE: 'productImage',
     PRODUCT_ID: 'productId',
     };
-
-export {ProductDetailsKeys}
+const CheckoutKeys = {
+    CHECKOUT_NAME: 'checkoutName',
+    CHECKOUT_EMAIL: 'checkoutEmail',
+    CHECKOUT_PHONE: 'checkoutPhone',
+    CHECKOUT_PAYMENT: 'checkoutPayment',
+    CHECKOUT_COMMENT: 'checkoutComment',
+};
+export {ProductDetailsKeys,CheckoutKeys}

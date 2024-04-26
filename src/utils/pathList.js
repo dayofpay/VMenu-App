@@ -9,6 +9,11 @@ const PATH_LIST = {
     'ANNOUNCE_LIST' : '/announces',
     'ANNOUNCE_DETAILS' : '/announces/:id',
     'APP_CHECKOUT' : '/checkout',
+    'FINAL_CHECKOUT' : '/checkout/final',
+}
+
+const ERROR_PATHS = {
+    'CHECKOUT_ERROR' : '/checkout/error',
 }
 
 
@@ -16,4 +21,4 @@ const SERVER_ENDPOINTS = {
     'PRODUCTION_SERVER' : 'https://app.vmenu.bg',
     'DEVELOPMENT_SERVER' : 'http://localhost:3300',
 }
-export {PATH_LIST,SERVER_ENDPOINTS}
+export {PATH_LIST,SERVER_ENDPOINTS,ERROR_PATHS}

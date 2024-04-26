@@ -4,8 +4,9 @@ import LoadingAnimation from './components/Animations/Loading';
 import SetOptions from './components/Options/SetOptions';
 import RequireObjectState from './contexts/ObjectStateCTX';
 import { CartProvider } from './contexts/CartCTX';
-import { PATH_LIST } from './utils/pathList';
+import { ERROR_PATHS, PATH_LIST } from './utils/pathList';
 import Checkout from './components/PageComponents/Checkout/Checkout';
+import ShowCheckoutError from './components/PageComponents/Errors/CheckoutError';
 const Home = lazy(() => import('./Pages/Home'));
 const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
 const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
@@ -13,6 +14,7 @@ const CategoryList = lazy(() => import('./components/PageComponents/Categories/C
 const Cart = lazy(() => import('./components/PageComponents/Cart/Cart'));
 const Announces = lazy(() => import('./components/PageComponents/Announces/List'));
 const AnnounceDetails = lazy(() => import('./components/PageComponents/Announces/Details'));
+const FinalCheckoutPage = lazy(() => import('./components/PageComponents/Checkout/Final'));
 function App() {
 
 return (
@@ -31,6 +33,8 @@ return (
                 <Route path={PATH_LIST.ANNOUNCE_LIST} element={<Announces/>}/>
                 <Route path={PATH_LIST.ANNOUNCE_DETAILS} element={<AnnounceDetails/>}/>
                 <Route path={PATH_LIST.APP_CHECKOUT} element={<Checkout/>}/>
+                <Route path={PATH_LIST.FINAL_CHECKOUT} element={<FinalCheckoutPage/>}/>
+                <Route path={ERROR_PATHS.CHECKOUT_ERROR} element={<ShowCheckoutError/>}/>
             </Route>
         </Routes>
      </Suspense>

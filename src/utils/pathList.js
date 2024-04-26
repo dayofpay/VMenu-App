@@ -14,6 +14,7 @@ const PATH_LIST = {
 
 const ERROR_PATHS = {
     'CHECKOUT_ERROR' : '/checkout/error',
+    'QR_ERROR' : '/qr/error',
     '*' : '/404',
 }
 

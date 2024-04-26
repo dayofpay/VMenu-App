@@ -4,9 +4,10 @@ import {
 
   } from 'react-router-dom';
 import * as storage from '../utils/memory';
+import { ERROR_PATHS, PATH_LIST } from '../utils/pathList';
 
 const RequireObjectState = ({
-    redirectPath = '/error',
+    redirectPath = ERROR_PATHS.QR_ERROR,
   }) => {
 
     const restaurantId = localStorage.getItem('restaurantId');

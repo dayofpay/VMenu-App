@@ -7,6 +7,7 @@ import { CartProvider } from './contexts/CartCTX';
 import { ERROR_PATHS, PATH_LIST } from './utils/pathList';
 import Checkout from './components/PageComponents/Checkout/Checkout';
 import ShowCheckoutError from './components/PageComponents/Errors/CheckoutError';
+import { NotFound } from './components/PageComponents/Errors/NotFound';
 const Home = lazy(() => import('./Pages/Home'));
 const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
 const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
@@ -36,6 +37,7 @@ return (
                 <Route path={PATH_LIST.FINAL_CHECKOUT} element={<FinalCheckoutPage/>}/>
                 <Route path={ERROR_PATHS.CHECKOUT_ERROR} element={<ShowCheckoutError/>}/>
             </Route>
+            <Route path='*' element={<NotFound/>}/>
         </Routes>
      </Suspense>
     </CartProvider>

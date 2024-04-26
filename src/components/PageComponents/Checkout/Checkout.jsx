@@ -60,7 +60,7 @@ const ShowCheckout = ({objectData}) => {
                             </path>
                         </svg>
                     </Link>
-                    <h5 className="title mb-0 text-nowrap">Checkout</h5>
+                    <h5 className="title mb-0 text-nowrap">Финализиране на поръчка</h5>
                 </div>
                 <div className="mid-content">
                 </div>
@@ -109,7 +109,7 @@ const ShowCheckout = ({objectData}) => {
                     </div>
                     <div className="input-group mb-3">
                         <textarea className="form-control" placeholder="Бележки към поръчката ..." rows="4"
-                            name={CheckoutKeys.CHECKOUT_COMMENT} onChange={onChange} value={values[CheckoutKeys.CHECKOUT_COMMENT]} required></textarea>
+                            name={CheckoutKeys.CHECKOUT_COMMENT} onChange={onChange} value={values[CheckoutKeys.CHECKOUT_COMMENT]}></textarea>
                     </div>
                     <div className="footer fixed ">
                         <div className="container">

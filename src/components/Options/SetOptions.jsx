@@ -20,7 +20,7 @@ const SetOptions = () => {
        await createVisitor().then((result) => {
         if(result.hasError){
           if(result.error_code === 'VMENU_TABLE_NOT_FOUND'){
-            navigate(ERROR_PATHS.QR_ERROR)
+            navigate(ERROR_PATHS.OBJECT_ERROR)
           }
           else{
             navigate(ERROR_PATHS.QR_ERROR)

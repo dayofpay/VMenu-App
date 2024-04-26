@@ -130,17 +130,7 @@ return (
 												product.item_price) / 100).toFixed(2)} <br /><span
 													class="badge w-100 light badge-light">Намален от {Number(product.item_price).toFixed(2)} ЛВ</span></li>
 											) : ( <li className="price text-accent">BGN {Number(product.item_price).toFixed(2)}</li>)}
-											<li className="review">
-												<span className="text-soft font-10">(243)</span>
-												<i className="fa fa-star"></i>
-											</li>
 										</ul>
-									</div>
-									<div className="mt-2">
-										<a className="btn btn-primary add-btn light" href="#">Добави в количката</a>
-										{/* <div className="dz-stepper border-1 rounded-stepper stepper-fill">
-											<input className="stepper" type="text" name="demo3" readOnly />
-										</div> */}
 									</div>
 								</div>
 							</div>

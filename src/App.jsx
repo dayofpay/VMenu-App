@@ -9,6 +9,7 @@ import Checkout from './components/PageComponents/Checkout/Checkout';
 import ShowCheckoutError from './components/PageComponents/Errors/CheckoutError';
 import { NotFound } from './components/PageComponents/Errors/NotFound';
 import { QRError } from './components/PageComponents/Errors/QRError';
+import { TableError } from './components/PageComponents/Errors/TableError';
 const Home = lazy(() => import('./Pages/Home'));
 const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
 const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
@@ -40,6 +41,7 @@ return (
             </Route>
             <Route path='*' element={<NotFound/>}/>
             <Route path={ERROR_PATHS.QR_ERROR} element={<QRError/>}/>
+            <Route path={ERROR_PATHS.OBJECT_ERROR} element={<TableError/>}/>
         </Routes>
      </Suspense>
     </CartProvider>

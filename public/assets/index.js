@@ -16,7 +16,7 @@ var PwaValue = getCookie(PwaKey);
 /* for ios start*/
 function isThisDeviceRunningiOS(){
   if (['iPad Simulator', 'iPhone Simulator','iPod Simulator', 'iPad','iPhone','iPod'].includes(navigator.platform)){
-	installText.innerHTML = 'Install W3Grocery pre-build grocery mobile App template to your home screen for easy access click to safari share option "Add to Home Screen".';
+	installText.innerHTML = 'Инсталирайте нашето приложение, като натиснете на иконата със стрелката надолу и след това на "Добави в началния екран"';
 	pwaBtn.remove();
 	return true;
   }

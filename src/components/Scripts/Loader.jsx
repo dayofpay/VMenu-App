@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { APP_PAGES } from '../../utils/pageData';
-
-const ScriptLoader = ({ page }) => {
+import reactManifest from 'react-manifest';
+const ScriptLoader = ({ page, objectData }) => {
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
+  const [manifestData, setManifestData] = useState(null);
 
   useEffect(() => {
     const loadScript = (src) => {
@@ -14,6 +15,35 @@ const ScriptLoader = ({ page }) => {
         script.onerror = reject;
         document.body.appendChild(script);
       });
+    };
+
+    const loadManifest = async () => {
+      const restaurantId = Number(localStorage.getItem('restaurantId'));
+      const tableId = Number(localStorage.getItem('tableId'));
+      const startUrl = `${restaurantId}/${tableId}`;
+
+      const fetchedManifestData = {
+        "background_color": "#fff",
+        "description": `Приложение на заведение ${objectData.objectInformation.object_name}`,
+        "display": "fullscreen",
+        "icons": [
+          {
+            "src": `http://localhost:3300/uploads/${objectData.objectInformation.object_image}`,
+            "sizes": "192x192",
+            "type": "image/png"
+          },
+          {
+            "src": `http://localhost:3300/uploads/${objectData.objectInformation.object_image}`,
+            "sizes": "512x512",
+            "type": "image/png"
+          }
+        ],
+        "name": `${objectData.objectInformation.object_name} - Мобилно приложение`,
+        "short_name": `${objectData.objectInformation.object_name}`,
+        "start_url": `https://app.vmenu.bg/${startUrl}`,
+      };
+      reactManifest.update(fetchedManifestData,'#manifest-placeholder');
+      setManifestData(fetchedManifestData);
     };
 
     const loadScripts = async () => {
@@ -56,14 +86,19 @@ const ScriptLoader = ({ page }) => {
       }
     };
 
+    loadManifest();
     loadScripts();
 
     return () => {
       // Cleanup logic if needed
     };
-  }, [page]);
+  }, [page, objectData]);
 
-  return scriptsLoaded ? <PageContent page={page} /> : null; // Render the page content only if scripts are loaded
+  return (
+    <>
+      {scriptsLoaded ? <PageContent page={page} /> : null} 
+    </>
+  );
 };
 
 const PageContent = ({ page }) => {

@@ -7,6 +7,7 @@ import Header from "../components/Headers/default"
 import HomeV2 from "../components/PageComponents/Home/content"
 import withObjectData from "../HOC/withObjectInfo"
 import LoadingAnimation from "../components/Animations/Loading"
+import PWAFooter from "../components/Utils/PWAInitialize"
 
 
 function ShowHome({objectData}){
@@ -15,12 +16,13 @@ function ShowHome({objectData}){
     }
     return (
         <>
-        <ScriptLoader page={APP_PAGES.HOME_PAGE}/>
+        <ScriptLoader page={APP_PAGES.HOME_PAGE} objectData={objectData}/>
         <Header objectData={objectData}/> 
         <DefaultSidebar objectData={objectData}/>
         <DefaultBanner objectData={objectData}/>
         <HomeV2 objectData={objectData}/>
         <ShowAppMenu objectData={objectData}/>
+        <PWAFooter objectData={objectData}/>
         </>
     )
 }

@@ -186,7 +186,7 @@ W3Grocery = function(){
     		}); 
 		}
 	}
-    
+    handlePWAModal();
 	// Search Form ============
 	var handleSearch = function(){
         $('.search-input .form-control').on('change paste keyup',function(){

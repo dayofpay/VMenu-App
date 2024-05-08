@@ -75,7 +75,7 @@ export default function ProductDetails() {
 			try {
 			  setValues((prevValues) => ({
 				...prevValues,
-				[ProductDetailsKeys.PRODUCT_ID]: productData?.["item_id"] || "Loading...",
+				[ProductDetailsKeys.PRODUCT_ID]: productData?.["item_id"] || "Зареждане...",
 				[ProductDetailsKeys.PRODUCT_QUANTITY] : productQuantity,
 			  }));
 			  setProductExists(storage.getItem('cart').some((product) => product.productId === productData.item_id))

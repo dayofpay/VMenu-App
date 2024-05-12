@@ -1,9 +1,18 @@
 // Register Service worker to control making site work offline
-if ('serviceWorker' in navigator) {
-	navigator.serviceWorker
-	.register('app.js')
-	.then(() => { console.log('Service Worker Registered'); });
+function registerServiceWorker(){
+	console.log('Registering service worker');
+	if ('serviceWorker' in navigator) {
+		try{
+			navigator.serviceWorker
+			.register('./app.js')
+			.then(() => { console.log('Service Worker Registered'); });
+		}catch(error){
+			console.log('Service Worker Registration Failed');
+		
+		}
+	}
 }
+
 
 // Code to handle install prompt on desktop
 let deferredPrompt;
@@ -22,6 +31,7 @@ function isThisDeviceRunningiOS(){
   }
 }
 isThisDeviceRunningiOS();
+registerServiceWorker();
 /* for ios end*/
 
 window.addEventListener('beforeinstallprompt', (e) => {

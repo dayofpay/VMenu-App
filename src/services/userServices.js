@@ -1,7 +1,7 @@
 import * as request from '../lib/request';
 import * as storage from '../utils/memory';
 export async function createVisitor(){
-    const endpoint = 'http://localhost:3300/api/visitors/set';
+    const endpoint = 'http://192.168.0.105:3300/api/visitors/set';
     const table_ID = JSON.parse(localStorage.getItem('tableId'));
     const object_id = JSON.parse(localStorage.getItem('restaurantId'));
     try{
@@ -21,7 +21,7 @@ export async function createVisitor(){
 
 
 export async function createCheckout(data){
-    const endpoint = 'http://localhost:3300/api/orders/create';
+    const endpoint = 'http://192.168.0.105:3300/api/orders/create';
 
     const table_ID = JSON.parse(localStorage.getItem('tableId'));
     const object_id = JSON.parse(localStorage.getItem('restaurantId'));

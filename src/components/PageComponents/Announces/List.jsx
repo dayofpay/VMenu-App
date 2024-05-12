@@ -71,7 +71,7 @@ const ShowAnnounces = ({objectData}) => {
             <li className="list pb-3 border-bottom mb-3" key={index}>
             <Link to={`/announces/${announce.entry_id}`}>
                 <div className="media media-80 me-2">
-                    <img className="rounded" src={`http://localhost:3300/uploads/${announce?.entry_image}`} alt="/"/>
+                    <img className="rounded" src={`http://192.168.0.105:3300/uploads/${announce?.entry_image}`} alt="/"/>
                 </div>
                 <div className="blog-content">
                     <h6 className="mb-0">{announce?.entry_headline}.</h6>

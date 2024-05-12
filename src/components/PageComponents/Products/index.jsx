@@ -139,7 +139,7 @@ return (
 						<div className="swiper-slide" key={index}>
 							<div className="dz-banner-heading">
 								<div className="overlay-black-light">
-									<img src={`http://localhost:3300/uploads/${image}`} className="bnr-img"
+									<img src={`http://192.168.0.105:3300/uploads/${image}`} className="bnr-img"
 										alt="bg-image" />
 								</div>
 							</div>

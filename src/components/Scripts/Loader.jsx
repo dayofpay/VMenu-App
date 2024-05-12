@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { APP_PAGES } from '../../utils/pageData';
-import reactManifest from 'react-manifest';
+
 const ScriptLoader = ({ page, objectData }) => {
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
-  const [manifestData, setManifestData] = useState(null);
+
 
   useEffect(() => {
     const loadScript = (src) => {
@@ -15,35 +15,6 @@ const ScriptLoader = ({ page, objectData }) => {
         script.onerror = reject;
         document.body.appendChild(script);
       });
-    };
-
-    const loadManifest = async () => {
-      const restaurantId = Number(localStorage.getItem('restaurantId'));
-      const tableId = Number(localStorage.getItem('tableId'));
-      const startUrl = `${restaurantId}/${tableId}`;
-
-      const fetchedManifestData = {
-        "background_color": "#fff",
-        "description": `Приложение на заведение ${objectData.objectInformation.object_name}`,
-        "display": "fullscreen",
-        "icons": [
-          {
-            "src": `http://localhost:3300/uploads/${objectData.objectInformation.object_image}`,
-            "sizes": "192x192",
-            "type": "image/png"
-          },
-          {
-            "src": `http://localhost:3300/uploads/${objectData.objectInformation.object_image}`,
-            "sizes": "512x512",
-            "type": "image/png"
-          }
-        ],
-        "name": `${objectData.objectInformation.object_name} - Мобилно приложение`,
-        "short_name": `${objectData.objectInformation.object_name}`,
-        "start_url": `https://app.vmenu.bg/${startUrl}`,
-      };
-      reactManifest.update(fetchedManifestData,'#manifest-placeholder');
-      setManifestData(fetchedManifestData);
     };
 
     const loadScripts = async () => {
@@ -61,6 +32,8 @@ const ScriptLoader = ({ page, objectData }) => {
             await loadScript('/assets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js');
             await loadScript('/assets/js/settings.js');
             await loadScript('/assets/js/custom.js');
+            await loadScript('/assets/app.js');
+            await loadScript('/assets/index.js');
             break;
           case APP_PAGES.PRODUCT_DETAILS_PAGE:
             await loadScript("/assets/js/jquery.js");
@@ -86,7 +59,7 @@ const ScriptLoader = ({ page, objectData }) => {
       }
     };
 
-    loadManifest();
+
     loadScripts();
 
     return () => {

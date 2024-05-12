@@ -6,6 +6,7 @@ import LoadingAnimation from "../Animations/Loading";
 	}
 return (
 <header className="header">
+<link rel="manifest" id="manifest" href={`http://192.168.0.105:3300/api/manifest/${objectData.objectInformation.object_id}`}  />
 	<div className="main-bar">
 		<div className="container">
 			<div className="header-content">

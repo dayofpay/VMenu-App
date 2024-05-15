@@ -141,33 +141,8 @@ return (
 
 				</div>
 
-				<h6 className="title-head mb-3">Other Login w3Grocery package</h6>
-				<div className="row g-3">
-					<div className="col-6">
-						<div className="package-box box-1">
-							<div className="media media-70">
-								<img src="assets/images/package/shop.svg" alt="image" />
-							</div>
-							<h6 className="title-head">W3 Vendor</h6>
-							<p className="sub-title">Continue With Vendor</p>
-							<a href="vendors/onboarding.html" className="btn package-btn">Click Now
-								<i className="fa-solid fa-arrow-right ms-2"></i>
-							</a>
-						</div>
-					</div>
-					<div className="col-6">
-						<div className="package-box box-2">
-							<div className="media media-70">
-								<img src="assets/images/package/boy.svg" alt="image" />
-							</div>
-							<h6 className="title-head">W3 Driver</h6>
-							<p className="sub-title">Continue With Driver</p>
-							<a href="driver/onboarding.html" className="btn package-btn">Click Now
-								<i className="fa-solid fa-arrow-right ms-2"></i>
-							</a>
-						</div>
-					</div>
-				</div>
+
+				
 
 			</div>
 		</div>

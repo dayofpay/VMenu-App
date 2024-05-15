@@ -1,56 +1,61 @@
 <!doctype html>
 <html lang="en">
-  <head>
-	
-    <!-- Meta -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, minimal-ui, viewport-fit=cover">
-    <meta name="theme-color" content="#92E136">
-    <meta name="author" content="DexignZone"> 
-    <meta name="robots" content="index, follow"> 
-      <meta name="keywords" content="android, ios, mobile, application template, progressive web app, ui kit, multiple color, dark layout">
-    <meta name="description" content="W3Grocery - Complete solution of some popular application like - grocery app, shop vendor app, driver app and progressive web app">
-    <meta property="og:title" content="W3Grocery: Pre-Build Grocery Mobile App Template ( Bootstrap 5 + PWA )">
-    <meta property="og:description" content="W3Grocery - Complete solution of some popular application like - grocery app, shop vendor app, driver app and progressive web app">
-    <meta property="og:image" content="https://w3grocery.dexignzone.com/xhtml/social-image.png">
-    <meta name="format-detection" content="telephone=no">
-    <!-- Favicons Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.png">
+<head>
+  <!-- Meta -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, minimal-ui, viewport-fit=cover">
+  <meta name="theme-color" content="#92E136">
+  <meta name="author" content="DexignZone"> 
+  <meta name="robots" content="index, follow"> 
+  <meta name="keywords" content="android, ios, mobile, application template, progressive web app, ui kit, multiple color, dark layout">
+  <meta name="description" content="W3Grocery - Complete solution of some popular application like - grocery app, shop vendor app, driver app and progressive web app">
+  <meta property="og:title" content="W3Grocery: Pre-Build Grocery Mobile App Template ( Bootstrap 5 + PWA )">
+  <meta property="og:description" content="W3Grocery - Complete solution of some popular application like - grocery app, shop vendor app, driver app and progressive web app">
+  <meta property="og:image" content="https://w3grocery.dexignzone.com/xhtml/social-image.png">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="">
+  <!-- Favicons Icon -->
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.png">
 
+  <!-- Dynamically set the manifest file -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const objectId = Number(JSON.parse(localStorage.getItem('restaurantId'))) || 1;
+    const tableId = Number(JSON.parse(localStorage.getItem('tableId'))) || 1;
+    const manifestUrl = `http://192.168.0.105:3300/api/manifest/${objectId}/${tableId}`;
+    document.write('<link rel="manifest" href="' + manifestUrl + '">');
+  </script>
+  <!-- End of manifest script -->
 
-      <!-- Title -->
-    <title>W3Grocery: Pre-Build Grocery Mobile App Template ( Bootstrap 5 + PWA )</title>
-      
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-    <!-- Global CSS -->
-    <link href="/assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css">
-    <link rel="stylesheet" href="/assets/vendor/swiper/swiper-bundle.min.css">
-      
-    <!-- Stylesheets -->
-      <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
-    
-      <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  </head>
-  <body data-theme-color="color-primary">
-    <div id="root">
+  <!-- Global CSS -->
+  <link href="/assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css">
+  <link rel="stylesheet" href="/assets/vendor/swiper/swiper-bundle.min.css">
 
-    </div>
-    <script type="module" src="/src/main.jsx"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init();
-    </script>
-<script src="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons-react/dist/index.umd.min.js"></script>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 
-  </body>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+</head>
+<body data-theme-color="color-primary">
+  <div id="root"></div>
+
+  <script type="module" src="/src/main.jsx"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons-react/dist/index.umd.min.js"></script>
+</body>
 </html>

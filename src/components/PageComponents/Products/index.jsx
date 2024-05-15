@@ -31,6 +31,7 @@ export default function ProductDetails() {
 	const [categoryNames, setCategoryNames] = useState([]);
 	const [productQuantity,setProductQuantity] = useState(1);
 	const [productExists,setProductExists] = useState(false);
+	const objectData = storage.getItem('objectData');
 	useEffect(() => {
 		document.title = "Детайли за продукт";
 		const getProduct = async () => {
@@ -217,7 +218,7 @@ return (
 			</div>
 		</div>
 
-		<div className="footer fixed">
+		<div className="footer fixed" style={{visibility: objectData.license.data.plan_id === 1 ? 'hidden' : 'visible' }}>
 			<div className="container">
 				<button type="submit" className={!productExists ? "btn btn-primary text-start w-100" : "btn btn-danger text-start w-100"}>
 					<svg className="cart me-4" width="16" height="16" viewBox="0 0 24 24" fill="none"

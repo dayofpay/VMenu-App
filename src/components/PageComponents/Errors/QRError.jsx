@@ -8,6 +8,12 @@ export const QRError = () => {
         localStorage.clear();
         isMemoryReset(true);
     }
+
+    const setDefaultObject = () => {
+        console.log('setting default object');
+        localStorage.setItem('restaurantId',2);
+        localStorage.setItem('tableId',1);
+    }
     return (
         <>
 <header className="header">
@@ -64,6 +70,16 @@ export const QRError = () => {
                                             </div>
                                             <div className="dz-inner">
                                                 <span className="title">Позвънете на техническа поддръжка</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);" onClick={setDefaultObject} className="item-content item-link">
+                                            <div className="dz-icon">
+                                                <img src="/assets/images/avatar/1.jpg" alt="/"/>
+                                            </div>
+                                            <div className="dz-inner">
+                                                <span className="title">Задайте заведение по подразбиране</span>
                                             </div>
                                         </a>
                                     </li>

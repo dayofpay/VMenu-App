@@ -17,6 +17,8 @@ const ScriptLoader = ({ page, objectData }) => {
       });
     };
 
+   
+
     const loadScripts = async () => {
       try {
         switch (page) {

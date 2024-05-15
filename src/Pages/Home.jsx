@@ -16,6 +16,7 @@ function ShowHome({objectData}){
     }
     return (
         <>
+        <title>Мобилно приложение на {objectData.objectInformation.object_name}</title>
         <ScriptLoader page={APP_PAGES.HOME_PAGE} objectData={objectData}/>
         <Header objectData={objectData}/> 
         <DefaultSidebar objectData={objectData}/>

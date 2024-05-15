@@ -19,7 +19,7 @@ const ShowCart = ({ objectData }) => {
         const getProductData = async () => {
             const filteredProducts = await Promise.all(
                 cart.map(async (product) => {
-                    return objectData.products.find((item) => item.item_id === product?.productId);
+                    return objectData.allProducts.find((item) => item.item_id === product?.productId);
                 })
             );
             return filteredProducts;
@@ -96,7 +96,9 @@ const ShowCart = ({ objectData }) => {
     if (!objectData.objectInformation) {
         return <LoadingAnimation />;
     }
-
+    cartPrototype.map((product, index) => {
+        console.log(product)
+    })
     return (
         <>
 <header className="header">
@@ -210,7 +212,7 @@ const ShowCart = ({ objectData }) => {
 					</ul>
 				</div>
 				<div className="footer-btn d-flex align-items-center">
-					<Link to={PATH_LIST.APP_CHECKOUT} className="btn btn-primary flex-1">ПОРЪЧАЙ</Link>
+					<Link to={PATH_LIST.APP_CHECKOUT} className={totalPrice > 0 ? 'btn btn-primary flex-1' : 'btn btn-primary flex-1 disabled'}>ПОРЪЧАЙ</Link>
 				</div>
 			</div>
 		</div>		

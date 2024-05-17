@@ -73,7 +73,7 @@ export const QRError = () => {
                                             </div>
                                         </a>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <a href="javascript:void(0);" onClick={setDefaultObject} className="item-content item-link">
                                             <div className="dz-icon">
                                                 <img src="/assets/images/avatar/1.jpg" alt="/"/>
@@ -82,7 +82,7 @@ export const QRError = () => {
                                                 <span className="title">Задайте заведение по подразбиране</span>
                                             </div>
                                         </a>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <a href="javascript:void(0);" onClick={resetMemory} className="item-content item-link">
                                             <div className="dz-icon">

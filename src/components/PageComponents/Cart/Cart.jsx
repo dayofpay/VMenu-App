@@ -143,7 +143,7 @@ const ShowCart = ({ objectData }) => {
                     <li key={index}>
                         <div className="item-content">
                             <div className="item-media media media-60">
-                                <img src={`http://192.168.0.105:3300/uploads/${JSON.parse(product?.item_images)[0]}`} alt="logo" />
+                                <img src={`https://v-menu.eu/uploads/${JSON.parse(product?.item_images)[0]}`} alt="logo" />
                             </div>
                             <div className="item-inner">
                                 <div className="item-title-row">

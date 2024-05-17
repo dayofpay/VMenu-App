@@ -53,6 +53,19 @@ const ScriptLoader = ({ page, objectData }) => {
           // Add cases for other pages if needed
           default:
             console.error("Invalid page name:", page);
+            await loadScript("/assets/js/jquery.js");
+            await loadScript('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js');
+            await loadScript('/assets/vendor/bootstrap-select/dist/js/bootstrap-select.min.js');
+            await loadScript('/assets/vendor/swiper/swiper-bundle.min.js');
+            await loadScript('/assets/vendor/nouislider/nouislider.min.js');
+            await loadScript('/assets/js/dz.carousel.js');
+            await loadScript('/assets/vendor/wnumb/wNumb.js');
+            await loadScript('/assets/js/noui-slider.init.js');
+            await loadScript('/assets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js');
+            await loadScript('/assets/js/settings.js');
+            await loadScript('/assets/js/custom.js');
+            await loadScript('/assets/app.js');
+            await loadScript('/assets/index.js');
             break;
         }
         setScriptsLoaded(true); // Set the state to indicate that scripts are loaded

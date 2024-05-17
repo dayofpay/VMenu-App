@@ -37,7 +37,7 @@ const ShowCategoryList = ({objectData}) => {
 				    {objectData.categories.map((category,index) => (
 				    <li key={index}>
 				        <Link to={`/category/${category.entry_id}`} className="categore-box box-lg" style={{
-          backgroundImage: `url(http://192.168.0.105:3300/uploads/${category.category_background_image})`
+          backgroundImage: `url(https://v-menu.eu/uploads/${category.category_background_image})`
         }}>
 				        <i className={category.category_mini_image}
 				            style={{marginBottom:'1px', height:'48px',width:'35px',fontSize:'32px',color:`${category.category_color}`}}></i>

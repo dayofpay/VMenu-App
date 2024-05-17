@@ -140,7 +140,7 @@ return (
 						<div className="swiper-slide" key={index}>
 							<div className="dz-banner-heading">
 								<div className="overlay-black-light">
-									<img src={`http://192.168.0.105:3300/uploads/${image}`} className="bnr-img"
+									<img src={`https://v-menu.eu/uploads/${image}`} className="bnr-img"
 										alt="bg-image" />
 								</div>
 							</div>
@@ -176,7 +176,7 @@ return (
 							</li>
 							<li>
 								<a className="d-flex delivery" href="#">
-								<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trending-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+								<svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trending-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M3 17l6 -6l4 4l8 -8" />
   <path d="M14 7l7 0l0 7" />

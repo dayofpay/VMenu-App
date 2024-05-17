@@ -53,7 +53,7 @@ const ShowDetails = ({objectData}) => {
 		<div className="container">
 			<div className="blog-detail">
 				<div className="media-box mb-3">
-					<img src={`http://192.168.0.105:3300/uploads/${announceData.entry_image}`} alt="/"/>
+					<img src={`https://v-menu.eu/uploads/${announceData.entry_image}`} alt="/"/>
 					<div className="media-content">
 						<h2>{announceData.entry_headline}</h2>
 						<div className="d-flex align-items-center">

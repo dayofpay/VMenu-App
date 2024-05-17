@@ -21,7 +21,7 @@ const ERROR_PATHS = {
 
 
 const SERVER_ENDPOINTS = {
-    'PRODUCTION_SERVER' : 'https://app.vmenu.bg',
+    'PRODUCTION_SERVER' : 'https://app.vmenu.eu',
     'DEVELOPMENT_SERVER' : 'https://v-menu.eu',
 }
 export {PATH_LIST,SERVER_ENDPOINTS,ERROR_PATHS}

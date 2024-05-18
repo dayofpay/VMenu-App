@@ -163,7 +163,7 @@ return (
 							</div>
 						</div>
 						<ul className="item-inner">
-							<li>
+							{/* <li>
 								<div className="reviews-info">
 									<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
 										xmlns="http://www.w3.org/2000/svg">
@@ -183,7 +183,7 @@ return (
 </svg>
 									<h6 className="mb-0 ms-2">НАБИРАЩ ПОПУЛЯРНОСТ</h6>
 								</a>
-							</li>
+							</li> */}
 						</ul>
 					</div>
 					<div className="item-list-2">

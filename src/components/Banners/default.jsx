@@ -16,7 +16,7 @@ function ShowBanner({objectData}) {
 			<div className="container inner-wrapper">
 				<div className="dz-info">
 					<span className="text-dark d-block">{time}</span>
-					<h2 className="name mb-0 title"> Владислав {/*Гост на {objectData.objectInformation.object_name}*/} 👋</h2>
+					<h2 className="name mb-0 title"> Гост {/*Гост на {objectData.objectInformation.object_name}*/} 👋</h2>
 				</div>
 				<Link to={PATH_LIST.ANNOUNCE_LIST} className="notify-cart">
 					<span className="font-18 font-w600 text-dark">{objectData.objectAnnounces.length}</span>

@@ -163,6 +163,20 @@ return (
 							</div>
 						</div>
 						<ul className="item-inner">
+						<li>
+							<a className="d-flex delivery" href="#">
+							<i class="fa-solid fa-eye"></i>
+								<h6 className="mb-0 ms-2">{productData.product_views} човека са разглеждали този продукт</h6>
+							</a>
+						</li>
+						{productData.hasDiscount ? (
+						<li>
+								<div className="reviews-info">
+								<i class="fa-solid fa-tags"></i>
+									<h6 className="reviews">В момента намален</h6>
+								</div>
+						</li>)
+						 : (null)}
 							{/* <li>
 								<div className="reviews-info">
 									<svg width="24" height="24" viewBox="0 0 24 24" fill="none"

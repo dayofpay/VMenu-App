@@ -21,6 +21,7 @@ import { ProductDetailsKeys } from "../../../keys/formKeys";
 import useForm from "../../../hooks/useForm";
 import * as storage from '../../../utils/memory';
 import LoadingAnimation from "../../Animations/Loading";
+import { getEnv } from "../../../utils/appData";
 export default function ProductDetails() {
 	const {
 		id
@@ -140,7 +141,7 @@ return (
 						<div className="swiper-slide" key={index}>
 							<div className="dz-banner-heading">
 								<div className="overlay-black-light">
-									<img src={`https://v-menu.eu/uploads/${image}`} className="bnr-img"
+									<img src={`${getEnv()}/uploads/${image}`} className="bnr-img"
 										alt="bg-image" />
 								</div>
 							</div>

@@ -1,7 +1,8 @@
 import * as request from '../lib/request';
+import { getEnv } from '../utils/appData';
 import * as storage from '../utils/memory';
 export async function createVisitor(){
-    const endpoint = 'https://v-menu.eu/api/visitors/set';
+    const endpoint = `${getEnv()}/api/visitors/set`;
     const table_ID = JSON.parse(localStorage.getItem('tableId'));
     const object_id = JSON.parse(localStorage.getItem('restaurantId'));
     try{
@@ -21,7 +22,7 @@ export async function createVisitor(){
 
 
 export async function createCheckout(data){
-    const endpoint = 'https://v-menu.eu/api/orders/create';
+    const endpoint = `${getEnv()}/api/orders/create`;
 
     const table_ID = JSON.parse(localStorage.getItem('tableId'));
     const object_id = JSON.parse(localStorage.getItem('restaurantId'));

@@ -1,4 +1,5 @@
 import withObjectData from "../../HOC/withObjectInfo"
+import { getEnv } from "../../utils/appData";
 import LoadingAnimation from "../Animations/Loading";
 
 const PWAFooter = ({objectData}) => {
@@ -13,7 +14,7 @@ const PWAFooter = ({objectData}) => {
 			<div className="offcanvas offcanvas-bottom pwa-offcanvas">
 				<div className="container">
 					<div className="offcanvas-body small">
-						<img className="logo" src={`https://v-menu.eu/uploads/${objectData.objectInformation.object_image}`} alt={`${objectData.objectInformation.object_name}`}/>
+						<img className="logo" src={`${getEnv()}/uploads/${objectData.objectInformation.object_image}`} alt={`${objectData.objectInformation.object_name}`}/>
 						<h6 className="title font-w600">Добавете "{objectData.objectInformation.object_name}" като приложения на началният ви екран</h6>
 						<p className="pwa-text">Ако желаете да инсталирате нашето приложения, без да се налага да сканирате QR Кода на текущата маса, можете да инсталирате апликацията на вашето устройство дирекнто от бутона по-долу !</p>
 						<small>* Важно: Сесията ще бъде активна само за масата на която се намирате в момента (Маса №{localStorage.getItem('tableId')})</small>

@@ -5,6 +5,7 @@ import { getAnnounceData } from "../../../services/announceServices";
 import { Link, useParams } from "react-router-dom";
 import { TimeBetween } from "../../../utils/DateUtils";
 import ProductDescription from "../Products/ProductDescription";
+import { getEnv } from "../../../utils/appData";
 
 const ShowDetails = ({objectData}) => {
 
@@ -53,7 +54,7 @@ const ShowDetails = ({objectData}) => {
 		<div className="container">
 			<div className="blog-detail">
 				<div className="media-box mb-3">
-					<img src={`https://v-menu.eu/uploads/${announceData.entry_image}`} alt="/"/>
+					<img src={`${getEnv()}/uploads/${announceData.entry_image}`} alt="/"/>
 					<div className="media-content">
 						<h2>{announceData.entry_headline}</h2>
 						<div className="d-flex align-items-center">

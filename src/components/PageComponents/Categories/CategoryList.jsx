@@ -7,6 +7,7 @@ import '../../Styles/foundation-icons.min.css';
 import '../../Styles/open-iconic.min.css';
 import '../../Styles/tabler-icons.min.css';
 import GeneratePrefix from "../../../utils/categoryPrefix";
+import { getEnv } from "../../../utils/appData";
 const ShowCategoryList = ({objectData}) => {
 
     return (
@@ -37,7 +38,7 @@ const ShowCategoryList = ({objectData}) => {
 				    {objectData.categories.map((category,index) => (
 				    <li key={index}>
 				        <Link to={`/category/${category.entry_id}`} className="categore-box box-lg" style={{
-          backgroundImage: `url(https://v-menu.eu/uploads/${category.category_background_image})`
+          backgroundImage: `url(${getEnv()}/uploads/${category.category_background_image})`
         }}>
 				        <i className={category.category_mini_image}
 				            style={{marginBottom:'1px', height:'48px',width:'35px',fontSize:'32px',color:`${category.category_color}`}}></i>

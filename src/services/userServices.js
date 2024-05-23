@@ -44,3 +44,25 @@ export async function createCheckout(data){
         return error;
     }
 }
+
+
+export async function createCall(data){
+    const endpoint = `${getEnv()}/api/calls/create`;
+
+    const table_ID = JSON.parse(localStorage.getItem('tableId'));
+    const object_id = JSON.parse(localStorage.getItem('restaurantId'));
+
+    try{
+        const response = await request.post(endpoint,{
+            object_id,
+            call_reason: data.call_reason,
+            table: table_ID,
+        })
+        return {hasError: false, msg: response.message}
+    }
+    catch(error){
+        console.error('Error while trying to create call',error);
+
+        return {hasError: true, msg: response.message};
+    }
+}

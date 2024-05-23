@@ -6,14 +6,30 @@ import '../../Styles/feather-icons.min.css';
 import '../../Styles/foundation-icons.min.css';
 import '../../Styles/open-iconic.min.css';
 import '../../Styles/tabler-icons.min.css';
+
 import GeneratePrefix from "../../../utils/categoryPrefix";
 import { PATH_LIST } from "../../../utils/pathList";
 import { getEnv } from "../../../utils/appData";
+import { useState } from "react";
+import { CallKeys } from "../../../keys/formKeys";
+import { createCall } from "../../../services/userServices";
 const HomeContent = ({
 		objectData
 	}) => {
 		if(!objectData.objectInformation) {
 			return <LoadingAnimation/>
+		}
+		const [callMessage,setCallMessage] = useState('');
+
+		const handleCall = (action) => {
+			createCall({call_reason: action}).then((result) => {
+				if(result.hasError === false){
+					setCallMessage(result.msg);
+				}
+				else{
+					setCallMessage(result.msg);
+				}
+			})
 		}
 return (
 <>
@@ -38,7 +54,108 @@ return (
 				</div>
 
 				<div className="dashboard-area">
+					{objectData.license.data.plan_id !== 1 ? (
+					<button type="button" className="btn w-100 btn-primary mb-2" data-bs-toggle="modal"
+						data-bs-target="#callModal">Повикване на сервитьор</button>
+						) : (null)}
+					<div className="modal fade" id="callModal" style={{display: 'none'}}>
+						<div className="modal-dialog" role="document">
+							<div className="modal-content">
+								<div className="modal-header">
+									<h5 className="modal-title">Повикване</h5>
+									<button className="btn-close" data-bs-dismiss="modal">
+										<i className="fa-solid fa-xmark"></i>
+									</button>
+								</div>
+								<form>
+									<div className="modal-body">
+										{callMessage && <div className="alert alert-success">{callMessage}</div>}
+										<div className="row">
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.CHANGE_ASH_TRAY)}>
+													Смяна на пепелник
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.REQUEST_BILL)}>
+													Поискване на сметка
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.CHANGE_CUTLERY)}>
+													Смяна на прибори
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.REFILL_WATER)}>
+													Попълване на вода
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.CLEAN_TABLE)}>
+													Изчистване на масата
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.REFILL_NAPKINS)}>
+													Попълване на салфетки
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.ADDITIONAL_CHAIR)}>
+													Допълнителен стол
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.CLEAN_SPILL)}>
+													Почистване на разливка
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.ADDITIONAL_CONDIMENTS)}>
+													Допълнителни подправки
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.REQUEST_WAITER_HELP)}>
+													Помощ от сервитьор
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.CALL_MANAGER)}>
+													Повикване на управител
+												</button>
+											</div>
+											<div className="col-6 mb-3">
+												<button type="button" className="btn btn-success w-100" onClick={()=>
+													handleCall(CallKeys.REPORT_ORDER_ISSUE)}>
+													Сигнал за проблем с поръчка
+												</button>
+											</div>
 
+										</div>
+
+
+									</div>
+								</form>
+								<div className="modal-footer">
+									<button type="button" className="btn btn-sm btn-danger light"
+										data-bs-dismiss="modal">Отказ</button>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div className="m-b10">
 						<div className="swiper-btn-center-lr">
 							<div className="swiper tag-group mt-4 recomand-swiper">

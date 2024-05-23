@@ -14,4 +14,20 @@ const CheckoutKeys = {
     CHECKOUT_PAYMENT: 'checkoutPayment',
     CHECKOUT_COMMENT: 'checkoutComment',
 };
-export {ProductDetailsKeys,CheckoutKeys}
+
+const CallKeys = {
+    CHANGE_ASH_TRAY: 'changeAshTray',
+    REQUEST_BILL: 'requestBill',
+    CHANGE_CUTLERY: 'changeCutlery',
+    REFILL_WATER: 'refillWater',
+    CLEAN_TABLE: 'cleanTable',
+    REFILL_NAPKINS: 'refillNapkins',
+    ADDITIONAL_CHAIR: 'additionalChair',
+    CLEAN_SPILL: 'cleanSpill',
+    ADDITIONAL_CONDIMENTS: 'additionalCondiments',
+    REQUEST_WAITER_HELP: 'requestWaiterHelp',
+    CALL_MANAGER: 'callManager',
+    REPORT_ORDER_ISSUE: 'reportOrderIssue',
+};
+
+export {ProductDetailsKeys,CheckoutKeys,CallKeys}

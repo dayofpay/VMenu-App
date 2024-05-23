@@ -4,6 +4,7 @@ import LoadingAnimation from './components/Animations/Loading';
 import SetOptions from './components/Options/SetOptions';
 import RequireObjectState from './contexts/ObjectStateCTX';
 import { CartProvider } from './contexts/CartCTX';
+import { CallProvider } from './contexts/CallCTX';
 import { ERROR_PATHS, PATH_LIST } from './utils/pathList';
 import Checkout from './components/PageComponents/Checkout/Checkout';
 import ShowCheckoutError from './components/PageComponents/Errors/CheckoutError';
@@ -24,6 +25,7 @@ return (
 
 <>
     <CartProvider>
+        <CallProvider>
      <Suspense fallback={<LoadingAnimation />}>
         <Routes>
             <Route path={PATH_LIST.APP_SET_OPTIONS} element={<SetOptions />}/>
@@ -44,6 +46,7 @@ return (
             <Route path={ERROR_PATHS.OBJECT_ERROR} element={<TableError/>}/>
         </Routes>
      </Suspense>
+     </CallProvider>
     </CartProvider>
 </>
 

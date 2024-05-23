@@ -4,10 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import usePersistedState from "../hooks/usePersistedState";
 import { ERROR_PATHS, PATH_LIST } from "../utils/pathList";
-import { ProductDetailsKeys } from "../keys/formKeys";
 import * as storage from '../utils/memory';
 import { createCheckout } from "../services/userServices";
-import FinalCheckoutPage from "../components/PageComponents/Checkout/Final";
 import React from "react";
 export const CartContext = createContext();
 

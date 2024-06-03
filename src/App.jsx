@@ -25,7 +25,7 @@ return (
 
 <>
     <CartProvider>
-        <CallProvider>
+
      <Suspense fallback={<LoadingAnimation />}>
         <Routes>
             <Route path={PATH_LIST.APP_SET_OPTIONS} element={<SetOptions />}/>
@@ -46,7 +46,7 @@ return (
             <Route path={ERROR_PATHS.OBJECT_ERROR} element={<TableError/>}/>
         </Routes>
      </Suspense>
-     </CallProvider>
+
     </CartProvider>
 </>
 

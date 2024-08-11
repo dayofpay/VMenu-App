@@ -9,7 +9,7 @@ const ShowFinalPage = ({objectData}) => {
 			<div className="payment-box">
 				<i className="fa-solid fa-check mb-4"></i>
 				<h5 className="text-white">Успешно заявена поръчка!</h5>	
-				<p>Вашата поръчка беше успешно създадена. Моля, очаквайте, докато нашият екип я обработи и подготви за вас. </p>
+				<p>Вашата поръчка беше успешно създадена. Моля, изчакайте, докато нашият екип я обработи и подготви за вас. </p>
 				<Link to="/" className="delivery-btn mx-auto">Връщане обратно
 					<span className="next ms-auto">
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

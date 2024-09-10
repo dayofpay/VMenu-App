@@ -1,0 +1,102 @@
+/* General table styling */
+.table {
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+}
+
+.table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 1em;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Responsive design for screens wider than 768px */
+@media (max-width: 768px) {
+    .table {
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+        border-radius: 0;
+    }
+
+    .table table {
+        display: block;
+        width: 100%;
+    }
+
+    .table th, .table td {
+        white-space: nowrap;
+    }
+}
+
+/* Responsive design for mobile devices */
+@media (max-width: 576px) {
+    .table thead {
+        display: none;
+    }
+
+    .table tbody tr {
+        display: block;
+        margin-bottom: 1em;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .table td {
+        display: block;
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border: none;
+        padding: 0.75em 1em;
+    }
+
+    .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1em;
+        top: 0;
+        width: 45%;
+        padding-right: 1em;
+        text-align: left;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .table tr:hover {
+        background-color: transparent;
+    }
+}
+
+/* Additional styling for smaller screens */
+@media (max-width: 360px) {
+    .table td {
+        padding: 0.5em 1em;
+    }
+
+    .table td::before {
+        padding-right: 0.75em;
+    }
+}

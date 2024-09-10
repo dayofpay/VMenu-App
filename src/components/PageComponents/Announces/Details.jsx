@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { TimeBetween } from "../../../utils/DateUtils";
 import ProductDescription from "../Products/ProductDescription";
 import { getEnv } from "../../../utils/appData";
-
+import '../../Styles/Tables.css';
 const ShowDetails = ({objectData}) => {
 
     if(!objectData){

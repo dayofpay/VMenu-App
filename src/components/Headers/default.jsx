@@ -68,11 +68,11 @@ return (
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <h6>SSID:</h6>
-                                        <p className="fw-bold">{objectData.MODULES.OBJECT_INFO.object_data.FEATURES.WIFI_SSID}</p>
+                                        <p className="fw-bold">{objectData?.MODULES?.OBJECT_INFO.FEATURES.WIFI_SSID}</p>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <h6>Парола:</h6>
-                                        <p className="fw-bold">{objectData.MODULES.OBJECT_INFO.object_data.FEATURES.WIFI_PASSCODE}</p>
+                                        <p className="fw-bold">{objectData?.MODULES?.OBJECT_INFO.FEATURES.WIFI_PASSCODE}</p>
                                     </div>
                                 </div>
                             </div>
@@ -90,8 +90,8 @@ return (
                             <div className="card-body">
                                 <div className="row g-2">
                                     <div className="col-12 mb-2">
-                                        <a href={`tel:${objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.MANAGER_PHONE_NUMBER}`} className="btn btn-phone btn-icon-text w-100">
-                                            <i className="fa fa-phone"></i> {objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.MANAGER_PHONE_NUMBER || 'Не е наличен'}
+                                        <a href={`tel:${objectData?.MODULES?.OBJECT_INFO.CONTACTS.MANAGER_PHONE_NUMBER}`} className="btn btn-phone btn-icon-text w-100">
+                                            <i className="fa fa-phone"></i> {objectData?.MODULES?.OBJECT_INFO.CONTACTS.MANAGER_PHONE_NUMBER || 'Не е наличен'}
                                         </a>
                                     </div>
                                 </div>
@@ -109,30 +109,30 @@ return (
                             </div>
                             <div className="card-body">
                                 <div className="row g-2">
-                                    {objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.SOCIAL_FACEBOOK && (
+                                    {objectData?.MODULES?.OBJECT_INFO.CONTACTS.SOCIAL_FACEBOOK && (
                                         <div className="col-6">
-                                            <a href={objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.SOCIAL_FACEBOOK} target="_blank" rel="noopener noreferrer" className="btn btn-facebook btn-icon-text w-100">
+                                            <a href={objectData?.MODULES?.OBJECT_INFO.CONTACTS.SOCIAL_FACEBOOK} target="_blank" rel="noopener noreferrer" className="btn btn-facebook btn-icon-text w-100">
                                                 <i className="fab fa-facebook-f"></i> Facebook
                                             </a>
                                         </div>
                                     )}
-                                    {objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.SOCIAL_INSTAGRAM && (
+                                    {objectData?.MODULES?.OBJECT_INFO.CONTACTS.SOCIAL_INSTAGRAM && (
                                         <div className="col-6">
-                                            <a href={objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.SOCIAL_INSTAGRAM} target="_blank" rel="noopener noreferrer" className="btn btn-instagram btn-icon-text w-100">
+                                            <a href={objectData?.MODULES?.OBJECT_INFO.CONTACTS.SOCIAL_INSTAGRAM} target="_blank" rel="noopener noreferrer" className="btn btn-instagram btn-icon-text w-100">
                                                 <i className="fab fa-instagram"></i> Instagram
                                             </a>
                                         </div>
                                     )}
-                                    {objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.SOCIAL_TIKTOK && (
+                                    {objectData?.MODULES?.OBJECT_INFO.CONTACTS.SOCIAL_TIKTOK && (
                                         <div className="col-6">
-                                            <a href={objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.SOCIAL_TIKTOK} target="_blank" rel="noopener noreferrer" className="btn btn-tiktok btn-icon-text w-100">
+                                            <a href={objectData?.MODULES?.OBJECT_INFO.CONTACTS.SOCIAL_TIKTOK} target="_blank" rel="noopener noreferrer" className="btn btn-tiktok btn-icon-text w-100">
                                                 <i className="fab fa-tiktok"></i> TikTok
                                             </a>
                                         </div>
                                     )}
-                                    {objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.SOCIAL_TWITTER && (
+                                    {objectData?.MODULES?.OBJECT_INFO.CONTACTS.SOCIAL_TWITTER && (
                                         <div className="col-6">
-                                            <a href={objectData.MODULES.OBJECT_INFO.object_data.CONTACTS.SOCIAL_TWITTER} target="_blank" rel="noopener noreferrer" className="btn btn-twitter btn-icon-text w-100">
+                                            <a href={objectData?.MODULES?.OBJECT_INFO.CONTACTS.SOCIAL_TWITTER} target="_blank" rel="noopener noreferrer" className="btn btn-twitter btn-icon-text w-100">
                                                 <i className="fab fa-twitter"></i> Twitter
                                             </a>
                                         </div>
@@ -146,7 +146,7 @@ return (
                 <div className="row">
                     <div className="col-12">
                         <h6><i className="fa-solid fa-info-circle"></i> Допълнителна Информация:</h6>
-                        <div dangerouslySetInnerHTML={{ __html: objectData.MODULES.OBJECT_INFO.object_data.DESIGN_MODULE.DATA }} />
+                        <div dangerouslySetInnerHTML={{ __html: objectData?.MODULES?.OBJECT_INFO.DESIGN_MODULE.DATA }} />
                     </div>
                 </div>
             </div>

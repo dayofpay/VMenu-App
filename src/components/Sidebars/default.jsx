@@ -1,15 +1,17 @@
+import { Link } from "react-router-dom";
+
 export default function DefaultSidebar() {
     return (
         <>
 		<div className="dark-overlay"></div>
 <div className="sidebar style-2">
-			<a href="index.html" className="side-menu-logo">
+			<Link to="/" className="side-menu-logo">
 				<img src="assets/images/logo-sidebar.svg" alt="logo"/>
-			</a>
+			</Link>
 			<ul className="nav navbar-nav">
 				<li className="nav-label">Main Menu</li>
 				<li>
-					<a className="nav-link" href="index.html">
+					<Link className="nav-link" to="index.html">
 						<span className="dz-icon">
 							<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
 								fill="#000000">
@@ -18,7 +20,7 @@ export default function DefaultSidebar() {
 							</svg>
 						</span>
 						<span>Home</span>
-					</a>
+					</Link>
 				</li>
 				<li>
 					<a className="nav-link" href="package.html">

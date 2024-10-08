@@ -1,0 +1,25 @@
+
+.info-button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.info-button svg {
+    fill: white;
+}
+
+.info-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.info-button:active {
+    transform: scale(0.95);
+}

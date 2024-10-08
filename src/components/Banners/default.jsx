@@ -5,7 +5,7 @@ import { PATH_LIST } from "../../utils/pathList";
 
 function ShowBanner({objectData}) {
 	const timeType = new Date().getHours();
-	const time = timeType < 12 ? 'Добро Утро, ' : timeType < 18 ? 'Добър Вечер, ' : 'Добър Вечер, ';
+	const time = timeType < 12 ? 'Добро Утро, ' : 'Добър Вечер, ';
 
 	if(!objectData){
 		return <LoadingAnimation/>
@@ -31,8 +31,9 @@ function ShowBanner({objectData}) {
 						</svg>
 					</div>
 				</Link>
-			</div>
-		</div>
+
+				</div>
+				</div>
     )
 }
 

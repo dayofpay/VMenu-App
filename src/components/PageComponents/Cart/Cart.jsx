@@ -147,7 +147,7 @@ const ShowCart = ({ objectData }) => {
                             </div>
                             <div className="item-inner">
                                 <div className="item-title-row">
-                                    <h5 className="item-title sub-title"><a href="product-detail.html">{product?.item_name}</a></h5>
+                                    <h5 className="item-title sub-title"><Link to={`/products/${product?.item_id}`}>{product?.item_name}</Link></h5>
                                     <div className="item-subtitle text-soft">{product?.category_names[0]}</div>
                                 </div>
                                 <div className="item-footer">

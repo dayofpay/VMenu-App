@@ -1,0 +1,29 @@
+/* AllergeneList.css */
+
+
+
+
+.allergene-icon {
+    margin-right: 10px;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+}
+
+.icon-image {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+.default-icon {
+    font-size: 24px;
+}
+
+.allergene-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 18px;
+}

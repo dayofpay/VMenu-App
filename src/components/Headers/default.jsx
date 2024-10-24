@@ -1,3 +1,5 @@
+
+import OBJECT_TYPES from "../../utils/objectTypes";
 import LoadingAnimation from "../Animations/Loading";
  function DefaultHeader({objectData}) {
 
@@ -50,7 +52,7 @@ return (
     <div className="modal-dialog" role="document">
         <div className="modal-content">
             <div className="modal-header">
-                <h5 className="modal-title">Информация за ресторанта</h5>
+                <h5 className="modal-title">Информация за {OBJECT_TYPES?.[objectData?.objectInformation?.object_type]} {objectData?.objectInformation?.object_name}</h5>
                 <button className="btn-close" data-bs-dismiss="modal">
                     <i className="fa-solid fa-xmark"></i>
                 </button>

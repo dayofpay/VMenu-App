@@ -23,7 +23,7 @@ function ShowHome({objectData}){
         <DefaultBanner objectData={objectData}/>
         <HomeV2 objectData={objectData}/>
         <ShowAppMenu objectData={objectData}/>
-        <PWAFooter objectData={objectData}/>
+        {/* TEMPORARY DISABLED <PWAFooter objectData={objectData}/> */}
         </>
     )
 }

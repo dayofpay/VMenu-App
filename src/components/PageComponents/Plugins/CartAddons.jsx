@@ -1,25 +1,25 @@
 import { useState, useEffect } from 'react';
 import "../../Styles/CartAddons.css";
 
-// Функция за изчисляване на общата цена на добавките
+
 const calculateTotalPrice = (addonsList) => {
     return addonsList.reduce((total, addon) => total + (addon.addon_price * addon.addon_quantity), 0);
 };
 
 const CartAddons = ({ product, handleRemoveAddon,selectedAddons }) => {
     const [addons, setAddons] = useState(getAddonsForProduct(product?.item_id));
-    const [totalPrice, setTotalPrice] = useState(calculateTotalPrice(addons)); // Добавяме състояние за общата цена
+    const [totalPrice, setTotalPrice] = useState(calculateTotalPrice(addons));
 
     useEffect(() => {
         const updatedAddons = getAddonsForProduct(product?.item_id);
         setAddons(updatedAddons);
-        setTotalPrice(calculateTotalPrice(updatedAddons)); // Актуализираме общата цена при промяна на добавките
+        setTotalPrice(calculateTotalPrice(updatedAddons));
     }, [product]);
     useEffect(() => {
         const updatedAddons = getAddonsForProduct(product?.item_id);
         setAddons(updatedAddons);
-        setTotalPrice(calculateTotalPrice(updatedAddons)); // Актуализираме общата цена при промяна на добавките
-    }, [selectedAddons, product]); // Добавяме selectedAddons като зависимост
+        setTotalPrice(calculateTotalPrice(updatedAddons));
+    }, [selectedAddons, product]);
     
     // Функция за премахване на добавка
 
@@ -45,7 +45,7 @@ const CartAddons = ({ product, handleRemoveAddon,selectedAddons }) => {
                         ))}
                     </ul>
                     <div className="total-price">
-                        <strong>Обща цена: {totalPrice.toFixed(2)} лв.</strong> {/* Показваме общата цена */}
+                        <strong>Обща цена: {totalPrice.toFixed(2)} лв.</strong> 
                     </div>
                 </div>
             )}
@@ -53,7 +53,7 @@ const CartAddons = ({ product, handleRemoveAddon,selectedAddons }) => {
     );
 };
 
-// Функция за получаване на добавките от localStorage
+
 const getAddonsForProduct = (productId) => {
     const selectedAddons = JSON.parse(localStorage.getItem('selectedAddons')) || [];
     const productAddons = selectedAddons.filter(addon => addon.item_id === productId);

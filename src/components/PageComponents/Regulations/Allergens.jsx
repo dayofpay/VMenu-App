@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import '../../Styles/AllergeneList.css';
-// import '../../Styles/bootstrap.min.css'; // Make sure Bootstrap is imported
 
 const Allergens = ({ productData, ALLERGENES_LIST }) => {
 const [showAllergens, setShowAllergens] = useState(false);

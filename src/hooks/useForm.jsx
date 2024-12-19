@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function useForm(submitHandler, initialValues, validatorSettings) {
-  const [values, setValues] = useState(initialValues);
+  const [values, setValues] = useState(initialValues || {});
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -11,8 +11,8 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
 
     let validationErrors = {};
 
-    Object.keys(validatorSettings).forEach((fieldName) => {
-      const errorMessage = validatorSettings[fieldName](values[fieldName]);
+    Object.keys(validatorSettings || {}).forEach((fieldName) => {
+      const errorMessage = validatorSettings[fieldName] && validatorSettings[fieldName](values[fieldName]);
       if (errorMessage) {
         validationErrors[fieldName] = errorMessage;
       } else {
@@ -25,26 +25,29 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
   };
 
   const onChange = (event) => {
-    console.log('change');
-    const fieldName = event.target.name;
-    const fieldValue = event.target.value;
-    setValues((state) => ({
-      ...state,
-      [fieldName]: fieldValue,
-    }));
+    const fieldName = event.target?.name;
+    const fieldValue = event.target?.value;
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [fieldName]: undefined,
-    }));
+    if (fieldName && fieldValue !== undefined) {
+      setValues((state) => ({
+        ...state,
+        [fieldName]: fieldValue,
+      }));
+
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: undefined,
+      }));
+    }
   };
 
   const onSubmit = async (event) => {
-    event.preventDefault();
+    event?.preventDefault();
+
     try {
       const isValid = validate();
       if (isValid) {
-        const result = await submitHandler(values);
+        const result = await submitHandler?.(values);
         if (result && !result.success) {
           setErrors((prevErrors) => ({
             ...prevErrors,
@@ -54,14 +57,12 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
         } else {
           console.log("Submit Handler Status - ✅!");
         }
-      }
-
-      else{
+      } else {
         console.log('Validation failed');
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);
-      setErrors({ form: error.message });
+      setErrors({ form: error?.message });
     }
   };
 

@@ -50,6 +50,7 @@ export const CartProvider = ({
 
         if(!result.hasError){
             storage.removeItem('cart');
+            storage.removeItem('selectedAddons');
             navigate(PATH_LIST.FINAL_CHECKOUT)
         }
 

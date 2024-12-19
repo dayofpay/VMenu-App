@@ -8,22 +8,31 @@ import { createVisitor } from "../services/userServices";
 export default function withObjectData(Component) {
   return function EnhancedComponent(props) {
     const [objectData, setObjectData] = usePersistedState('objectData', {});
+    
     useEffect(() => {
-      const fetchObjectData = async () => {
+      (async () => {
         try {
-            const restaurantId = JSON.parse(storage.getItem('restaurantId'));
-            const response = await getObjectData(Number(restaurantId));
-            setObjectData(response.objectData)
+          const restaurantId = storage.getItem('restaurantId');
+          
+          if (restaurantId === null) {
+            throw new Error('Restaurant ID is null');
+          }
+
+          const response = await getObjectData(Number(restaurantId));
+          setObjectData(response.objectData);
         } catch (error) {
           console.error('Error while trying to fetch object data:', error);
           localStorage.clear();
         }
-      };
-
-      fetchObjectData();
+      })();
     }, []);
+
+    if (objectData === null) {
+      throw new Error('objectData is null');
+    }
 
     return <Component {...props} objectData={objectData} />;
   };
   
 }
+

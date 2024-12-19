@@ -1,99 +1,132 @@
 import {
-useContext,
-useEffect,
+    useContext,
+    useEffect,
 } from "react";
-import { Link } from "react-router-dom";
 import {
-useNavigate,
-useParams
+    Link
 } from "react-router-dom";
 import {
-getProductData
+    useNavigate,
+    useParams
+} from "react-router-dom";
+import {
+	getProductAddonsList,
+    getProductData
 } from "../../../services/productServices";
 import {
-useState
+    useState
 } from "react";
 import ProductDescription from "./ProductDescription";
 import '../../Styles/ProductQuantity.css';
 import '../../Styles/AllergeneList.css';
-import { incrementQuantity,decrementQuantity } from "../../../handlers/ProductQuantityHR";
+import {
+    incrementQuantity,
+    decrementQuantity
+} from "../../../handlers/ProductQuantityHR";
 import CartContext from "../../../contexts/CartCTX";
-import { ProductDetailsKeys } from "../../../keys/formKeys";
+import {
+    ProductDetailsKeys
+} from "../../../keys/formKeys";
 import useForm from "../../../hooks/useForm";
 import * as storage from '../../../utils/memory';
 import LoadingAnimation from "../../Animations/Loading";
-import { getEnv } from "../../../utils/appData";
-import { ALLERGENES_LIST } from "../../../utils/regulations";
+import {
+    getEnv
+} from "../../../utils/appData";
+import {
+    ALLERGENES_LIST
+} from "../../../utils/regulations";
 import Allergens from "../Regulations/Allergens";
+import ProductAddons from "../Plugins/Addons";
 export default function ProductDetails() {
-const {
-id
-} = useParams();
-const navigate = useNavigate();
-const {cartUpdateHandler,cartDeleteHandler} = useContext(CartContext);
-const [productData, setProductData] = useState({});
-const [categoryNames, setCategoryNames] = useState([]);
-const [productQuantity,setProductQuantity] = useState(1);
-const [productExists,setProductExists] = useState(false);
-const objectData = storage.getItem('objectData');
-useEffect(() => {
-document.title = "Детайли за продукт";
-const getProduct = async () => {
-try {
-const data = await getProductData(id);
-setProductData(data);
-const updatedCategoryNames = [...categoryNames]; // Create a new array
-data.category_names.forEach(category => {
-updatedCategoryNames.push(category); // Push each category name to the new array
-});
-setCategoryNames(updatedCategoryNames); // Update state with the new array
-} catch (error) {
-// Handle error
-console.error("Error fetching product data:", error);
-}
-}
+    const {
+        id
+    } = useParams();
+    const navigate = useNavigate();
+    const {
+        cartUpdateHandler,
+        cartDeleteHandler
+    } = useContext(CartContext);
+    const [productData, setProductData] = useState({});
+    const [categoryNames, setCategoryNames] = useState([]);
+    const [productQuantity, setProductQuantity] = useState(1);
+    const [productExists, setProductExists] = useState(false);
+	const [productAddons,setProductAddons] = useState([]);
+    const objectData = storage.getItem('objectData');
+    useEffect(() => {
+        document.title = "Детайли за продукт";
+        const getProduct = async () => {
+            try {
+                const data = await getProductData(id);
+                setProductData(data);
+                const updatedCategoryNames = [...categoryNames]; // Create a new array
+                data.category_names.forEach(category => {
+                    updatedCategoryNames.push(category); // Push each category name to the new array
+                });
+                setCategoryNames(updatedCategoryNames); // Update state with the new array
+            } catch (error) {
+                // Handle error
+                console.error("Error fetching product data:", error);
+            }
+        }
 
-getProduct();
-}, [id]);
-console.log(productExists);
-const {values,onChange, onSubmit,setValues } = useForm(
-async () => {
-try {
-if(!productExists){
-await cartUpdateHandler(values,setProductExists);
-console.log('Product does not exist');
-}
-else{
-await cartDeleteHandler(values,setProductExists);
-}
-} catch (error) {
-throw new Error(error);
-}
-},
+		const getProductAddons = async () => {
+			try {
+				const data = await getProductAddonsList(id);
+				setProductAddons(data);
+			} catch (error) {
+				// Handle error
+				console.error("Error fetching product data:", error);
+			}
+		}
+		getProductAddons();
+        getProduct();
+    }, [id]);
+    console.log(productExists);
+    const {
+        values,
+        onChange,
+        onSubmit,
+        setValues
+    } = useForm(
+        async () => {
+                try {
+                    if (!productExists) {
+                        await cartUpdateHandler(values, setProductExists);
+                        console.log('Product does not exist');
+                    } else {
+                        await cartDeleteHandler(values, setProductExists);
+                    }
+                } catch (error) {
+                    throw new Error(error);
+                }
+            },
 
-{
-[ProductDetailsKeys.PRODUCT_ID]: productData.item_id,
-[ProductDetailsKeys.PRODUCT_QUANTITY] : productQuantity,
-},
-);
-useEffect(() => {
-try {
-setValues((prevValues) => ({
-...prevValues,
-[ProductDetailsKeys.PRODUCT_ID]: productData?.["item_id"] || "Зареждане...",
-[ProductDetailsKeys.PRODUCT_QUANTITY] : productQuantity,
-}));
-setProductExists(storage.getItem('cart').some((product) => product.productId === productData.item_id))
-} catch (error) {
-navigate('/');
-}
-}, [productData,productQuantity]);
-if(!productData.item_images){
-return(
-<LoadingAnimation />
-)
+            {
+                [ProductDetailsKeys.PRODUCT_ID]: productData.item_id,
+                [ProductDetailsKeys.PRODUCT_QUANTITY]: productQuantity,
+            },
+    );
+    useEffect(() => {
+        try {
+            setValues((prevValues) => ({
+                ...prevValues,
+                [ProductDetailsKeys.PRODUCT_ID]: productData?.["item_id"] || "Зареждане...",
+                [ProductDetailsKeys.PRODUCT_QUANTITY]: productQuantity,
+            }));
+            setProductExists(storage.getItem('cart').some((product) => product.productId === productData.item_id))
+        } catch (error) {
+            navigate('/');
+        }
+    }, [productData, productQuantity]);
+    if (!productData.item_images) {
+        return ( <
+            LoadingAnimation / >
+        )
 
-}
+    }
+
+	
 
 return (
 
@@ -242,7 +275,7 @@ return (
 
 					</div>
 					<Allergens productData={productData} ALLERGENES_LIST={ALLERGENES_LIST} />
-
+					{objectData.license.data.plan_id > 1 ? <ProductAddons productData={productData} ADDONS_LIST={productAddons} /> : null}
 				</div>
 			</div>
 

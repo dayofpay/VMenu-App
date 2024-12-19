@@ -6,21 +6,15 @@ const ProductHasDiscount = (timestamp) => {
 }
 
 const TimeBetween = (dateOne, dateTwo) => {
-    const DATE_OBJ1 = new Date(dateOne);
-    const DATE_OBJ2 = new Date(dateTwo);
+    const DAY_MS = 1000 * 60 * 60 * 24;
+    const timeDifference = Date.parse(dateTwo) - Date.parse(dateOne);
+    const dayDifference = Math.floor(timeDifference / DAY_MS);
 
-    const TIME_DIFFERENCE = DATE_OBJ2.getTime() - DATE_OBJ1.getTime();
-    const DAY_DIFFERENCE = Math.round(TIME_DIFFERENCE / (1000 * 3600 * 24));
+    if (dayDifference === 0) return 'Качено днес';
+    if (dayDifference === 1) return 'Качено вчера';
+    if (dayDifference < 7) return `Качено преди ${dayDifference} дни`;
 
-    if (DAY_DIFFERENCE === 0) {
-        return 'Качено днес';
-    } else if (DAY_DIFFERENCE === 1) {
-        return 'Качено вчера';
-    } else if (DAY_DIFFERENCE < 7) {
-        return `Качено преди ${DAY_DIFFERENCE} дни`;
-    } else {
-        return DATE_OBJ1.toLocaleDateString();
-    }
+    return new Date(dateOne).toLocaleDateString();
 }
 
 export {ProductHasDiscount,TimeBetween}

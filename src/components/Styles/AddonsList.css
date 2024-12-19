@@ -1,0 +1,144 @@
+/* Styling for the Addons section */
+.addons-section {
+  margin-top: 20px;
+}
+
+.addons-section .card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Card header styles */
+.addons-section .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* Card body with padding */
+.addons-section .card-body {
+  padding: 20px;
+}
+
+/* Button to toggle addons */
+.addons-section .btn.toggle-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addons-section .btn.toggle-btn:hover {
+  background-color: #0056b3;
+}
+
+.addons-section .btn i {
+  font-size: 18px;
+}
+
+/* Addons list container */
+.addons-section .addons-list {
+  margin-top: 20px;
+}
+
+.addons-section .addons-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.addons-section .addons-list li {
+  padding-bottom: 20px;
+}
+
+/* Each addon item */
+.addons-section .addon-item {
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  transition: background-color 0.3s;
+}
+
+.addons-section .addon-item:hover {
+  background-color: #e9ecef;
+}
+
+/* Addon icon styling */
+.addons-section .addon-icon {
+  font-size: 24px;
+  color: #007bff;
+  margin-right: 20px;
+}
+
+/* Default icon styling */
+.addons-section .default-icon {
+  font-size: 24px;
+  color: #007bff;
+}
+
+/* Addon details container */
+.addons-section .addon-details {
+  flex-grow: 1;
+}
+
+.addons-section .addon-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #343a40;
+}
+
+.addons-section .addon-description {
+  font-size: 14px;
+  color: #6c757d;
+  margin-top: 5px;
+}
+
+.addons-section .addon-price {
+  font-size: 14px;
+  font-weight: bold;
+  color: #28a745;
+  margin-top: 10px;
+}
+
+.addons-section .addon-status {
+  font-size: 14px;
+  color: #dc3545;
+  margin-top: 5px;
+}
+
+/* Alert for no addons */
+.addons-section .alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Add transition effect for collapsing the addons list */
+.addons-section .collapse {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.addons-section .collapse.show {
+  opacity: 1;
+}
+
+.addons-section .collapse {
+  opacity: 0;
+}

@@ -1,8 +1,8 @@
 import React from 'react';
-
+import '../../Styles/CKContent.css'
 const ProductDescription = ({ description }) => {
   return (
-    <div dangerouslySetInnerHTML={{ __html: description }} />
+    <div className='ck-content' dangerouslySetInnerHTML={{ __html: description }} />
   );
 };
 

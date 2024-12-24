@@ -1,6 +1,7 @@
 
 import OBJECT_TYPES from "../../utils/objectTypes";
 import LoadingAnimation from "../Animations/Loading";
+import '../Styles/CKContent.css';
  function DefaultHeader({objectData}) {
 
 	if(!objectData.objectInformation) {
@@ -152,7 +153,7 @@ return (
     <div className="row">
         <div className="col-12">
             <h6><i className="fa-solid fa-info-circle"></i> Допълнителна Информация:</h6>
-            <div dangerouslySetInnerHTML={{ __html: objectData?.MODULES?.OBJECT_INFO?.DESIGN_MODULE?.DATA || 'Няма допълнителна информация' }} />
+            <div className="ck-content" dangerouslySetInnerHTML={{ __html: objectData?.MODULES?.OBJECT_INFO?.DESIGN_MODULE?.DATA || 'Няма допълнителна информация' }} />
         </div>
     </div>
 </div>

@@ -1,0 +1,135 @@
+
+.checkout .card {
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+  }
+  
+  .checkout .card-header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .checkout .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .checkout .card-body {
+    padding: 20px;
+  }
+  
+
+  .checkout .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .checkout .input-group-text {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    padding: 10px;
+    color: #007bff;
+  }
+  
+  .checkout .form-control {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .checkout .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+
+  .checkout .payment-type-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .checkout .payment-type-select {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .checkout .payment-type-select select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+  }
+  
+  .checkout .payment-type-select i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #007bff;
+  }
+  
+
+  .checkout textarea.form-control {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+
+  .checkout .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  
+  .checkout .alert-danger .btn-close {
+    color: #721c24;
+  }
+  
+
+  .checkout .footer-btn {
+    margin-top: 20px;
+  }
+  
+  .checkout .footer-btn .btn {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  .checkout .footer-btn .btn:hover {
+    background-color: #0056b3;
+  }
+  
+
+  @media (max-width: 768px) {
+    .input-group-text, .form-control, .payment-type-select select {
+      font-size: 0.9rem;
+    }
+  
+    .card-body {
+      padding: 15px;
+    }
+  
+    .footer-btn .btn {
+      font-size: 1rem;
+    }
+  }
+  

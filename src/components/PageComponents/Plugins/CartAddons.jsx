@@ -53,7 +53,7 @@ const CartAddons = ({ product, handleRemoveAddon,selectedAddons }) => {
     );
 };
 
-
+ 
 const getAddonsForProduct = (productId) => {
     const selectedAddons = JSON.parse(localStorage.getItem('selectedAddons')) || [];
     const productAddons = selectedAddons.filter(addon => addon.item_id === productId);

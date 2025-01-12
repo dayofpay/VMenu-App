@@ -1,16 +1,3 @@
-const GeneratePrefix = (itemCount) => {
-    if(itemCount === 0){
-        return 'Продукта'
-    }
-
-    if(itemCount === 1){
-        return 'Продукт'
-    }
-
-    if(itemCount > 1){
-        return 'Продукти'
-    }
-
-}
+const GeneratePrefix = itemCount => ['Продукта', 'Продукт', 'Продукти'][Math.min(itemCount, 2)];
 
 export default GeneratePrefix

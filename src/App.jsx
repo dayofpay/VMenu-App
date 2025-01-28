@@ -4,13 +4,13 @@ import LoadingAnimation from './components/Animations/Loading';
 import SetOptions from './components/Options/SetOptions';
 import RequireObjectState from './contexts/ObjectStateCTX';
 import { CartProvider } from './contexts/CartCTX';
-import { CallProvider } from './contexts/CallCTX';
 import { ERROR_PATHS, PATH_LIST } from './utils/pathList';
 import Checkout from './components/PageComponents/Checkout/Checkout';
 import ShowCheckoutError from './components/PageComponents/Errors/CheckoutError';
 import { NotFound } from './components/PageComponents/Errors/NotFound';
 import { QRError } from './components/PageComponents/Errors/QRError';
 import { TableError } from './components/PageComponents/Errors/TableError';
+import ProfilePage from './components/PageComponents/Auth/Profile';
 const Home = lazy(() => import('./Pages/Home'));
 const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
 const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
@@ -40,6 +40,7 @@ return (
                 <Route path={PATH_LIST.APP_CHECKOUT} element={<Checkout/>}/>
                 <Route path={PATH_LIST.FINAL_CHECKOUT} element={<FinalCheckoutPage/>}/>
                 <Route path={ERROR_PATHS.CHECKOUT_ERROR} element={<ShowCheckoutError/>}/>
+                <Route path={PATH_LIST.AUTH_PROFILE} element={<ProfilePage/>}/>
             </Route>
             <Route path='*' element={<NotFound/>}/>
             <Route path={ERROR_PATHS.QR_ERROR} element={<QRError/>}/>

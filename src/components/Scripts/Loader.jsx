@@ -49,6 +49,7 @@ const ScriptLoader = ({ page, objectData }) => {
             await loadScript('/assets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js');
             await loadScript('/assets/js/settings.js');
             await loadScript('/assets/js/custom.js');
+            await loadScript('/assets/app.js');
             break;
           // Add cases for other pages if needed
           default:

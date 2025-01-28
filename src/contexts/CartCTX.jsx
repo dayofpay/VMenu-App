@@ -14,7 +14,6 @@ export const CartProvider = ({
 
 }) => {
     const navigate = useNavigate();
-    const [objectData,setObjectData] = usePersistedState('objectData',{});
 
     /**
      * This function is responsible for updating the cart. It takes in the data of the product to be added

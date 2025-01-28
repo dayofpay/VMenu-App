@@ -38,6 +38,8 @@ import {
 } from "../../../utils/regulations";
 import Allergens from "../Regulations/Allergens";
 import ProductAddons from "../Plugins/Addons";
+import { hasAddon } from "../../../services/objectServices";
+import PERK_LIST from "../../../utils/perkAddons";
 export default function ProductDetails() {
     const {
         id
@@ -52,6 +54,7 @@ export default function ProductDetails() {
     const [productQuantity, setProductQuantity] = useState(1);
     const [productExists, setProductExists] = useState(false);
 	const [productAddons,setProductAddons] = useState([]);
+	
     const objectData = storage.getItem('objectData');
     useEffect(() => {
         document.title = "Детайли за продукт";
@@ -275,11 +278,10 @@ return (
 
 					</div>
 					<Allergens productData={productData} ALLERGENES_LIST={ALLERGENES_LIST} />
-					{objectData.license.data.plan_id > 1 ? <ProductAddons productData={productData} ADDONS_LIST={productAddons} /> : null}
+					{hasAddon(PERK_LIST.ADDONS) ? <ProductAddons productData={productData} ADDONS_LIST={productAddons} /> : null}
 				</div>
 			</div>
-
-			<div className="footer fixed"
+			{hasAddon(PERK_LIST.CART) ? <div className="footer fixed"
 				style={{visibility: objectData.license.data.plan_id === 1 ? 'hidden' : 'visible' }}>
 				<div className="container">
 					<button type="submit" className={!productExists ? "btn btn-primary text-start w-100"
@@ -299,7 +301,8 @@ return (
 						{!productExists ? ('ДОБАВИ В КОЛИЧКАТА'): ('ПРЕМАХНИ ОТ КОЛИЧКАТА')}
 					</button>
 				</div>
-			</div>
+			</div> : (null)}
+			
 		</div>
 	</form>
 

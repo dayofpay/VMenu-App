@@ -112,6 +112,23 @@ const ShowCart = ({ objectData }) => {
     setCart((prevCart) =>
       prevCart.filter((item) => item.productId !== productId)
     );
+    console.log(JSON.parse(localStorage.getItem('selectedAddons')));
+    
+    // JSON.parse(localStorage.getItem('selectedAddons')).map((addon) => {
+    //   if(addon.item_id === productId){
+    //     handleRemoveAddon(addon.item_id);
+      
+    // }
+    // })
+
+    for(let addon in JSON.parse(localStorage.getItem('selectedAddons'))){
+      if(JSON.parse(localStorage.getItem('selectedAddons'))[addon].item_id === productId){
+        // get copy of the addons without the addon we want to remove
+        const updatedAddons = JSON.parse(localStorage.getItem('selectedAddons')).filter((addon) => addon.item_id !== productId);
+        localStorage.setItem("selectedAddons", JSON.stringify(updatedAddons));
+        setSelectedAddons(updatedAddons);
+      }
+    }
   };
 
   const handleRemoveAddon = (addonId) => {

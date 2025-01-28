@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import withobjectData from '../../../HOC/withObjectInfo';
 import LoadingAnimation from '../../Animations/Loading';
 import { TimeBetween } from '../../../utils/DateUtils';
+import ShowAppMenu from '../../AppMenus/defaultMenu';
 
 const ShowAnnounces = ({objectData}) => {
 
@@ -93,6 +94,7 @@ const ShowAnnounces = ({objectData}) => {
     </div>
 </div>
 </div>
+<ShowAppMenu/>
         </>
     )
 }

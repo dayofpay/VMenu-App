@@ -8,6 +8,7 @@ import '../../Styles/open-iconic.min.css';
 import '../../Styles/tabler-icons.min.css';
 import GeneratePrefix from "../../../utils/categoryPrefix";
 import { getEnv } from "../../../utils/appData";
+import ShowAppMenu from "../../AppMenus/defaultMenu";
 const ShowCategoryList = ({objectData}) => {
 
     return (
@@ -51,6 +52,7 @@ const ShowCategoryList = ({objectData}) => {
 			</div>
 		</div>
 	</div>
+	<ShowAppMenu/>
         </>
 
     )

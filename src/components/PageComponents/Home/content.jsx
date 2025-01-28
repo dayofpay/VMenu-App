@@ -6,13 +6,15 @@ import '../../Styles/feather-icons.min.css';
 import '../../Styles/foundation-icons.min.css';
 import '../../Styles/open-iconic.min.css';
 import '../../Styles/tabler-icons.min.css';
-
+import '../../Styles/LatestProducts.css'
 import GeneratePrefix from "../../../utils/categoryPrefix";
 import { PATH_LIST } from "../../../utils/pathList";
 import { getEnv } from "../../../utils/appData";
 import { useState } from "react";
 import { CallKeys } from "../../../keys/formKeys";
 import { createCall } from "../../../services/userServices";
+import { hasAddon } from "../../../services/objectServices";
+import PERK_LIST from "../../../utils/perkAddons";
 const HomeContent = ({
 		objectData
 	}) => {
@@ -23,12 +25,7 @@ const HomeContent = ({
 
 		const handleCall = (action) => {
 			createCall({call_reason: action}).then((result) => {
-				if(result.hasError === false){
-					setCallMessage(result.msg);
-				}
-				else{
-					setCallMessage(result.msg);
-				}
+				!result.hasError ? setCallMessage(result.msg) : setCallMessage(result.msg);
 			})
 		}
 return (
@@ -41,23 +38,21 @@ return (
 				<div className="search-box mb-4">
 					<div className="mb-3 input-group input-radius">
 						<span className="input-group-text">
-							<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-								xmlns="http://www.w3.org/2000/svg">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path
 									d="M10.9395 1.9313C5.98074 1.9313 1.94141 5.97063 1.94141 10.9294C1.94141 15.8881 5.98074 19.9353 10.9395 19.9353C13.0575 19.9353 15.0054 19.193 16.5449 17.9606L20.293 21.7067C20.4821 21.888 20.7347 21.988 20.9967 21.9854C21.2587 21.9827 21.5093 21.8775 21.6947 21.6924C21.8801 21.5073 21.9856 21.2569 21.9886 20.9949C21.9917 20.7329 21.892 20.4802 21.7109 20.2908L17.9629 16.5427C19.1963 15.0008 19.9395 13.0498 19.9395 10.9294C19.9395 5.97063 15.8982 1.9313 10.9395 1.9313ZM10.9395 3.93134C14.8173 3.93134 17.9375 7.05153 17.9375 10.9294C17.9375 14.8072 14.8173 17.9352 10.9395 17.9352C7.06162 17.9352 3.94141 14.8072 3.94141 10.9294C3.94141 7.05153 7.06162 3.93134 10.9395 3.93134Z"
 									fill="#7D8FAB" />
 							</svg>
 						</span>
-						<input type="text" placeholder="Потърсете продукт..."
-							className="form-control main-in ps-0 bs-0" />
+						<input type="text" placeholder="Потърсете продукт..." className="form-control main-in ps-0 bs-0" />
 					</div>
 				</div>
 
 				<div className="dashboard-area">
-					{objectData.license.data.plan_id !== 1 ? (
+					{hasAddon(PERK_LIST.CALLS) ? (
 					<button type="button" className="btn w-100 btn-primary mb-2" data-bs-toggle="modal"
 						data-bs-target="#callModal">Повикване на сервитьор</button>
-						) : (null)}
+					) : (null)}
 					<div className="modal fade" id="callModal" style={{display: 'none'}}>
 						<div className="modal-dialog" role="document">
 							<div className="modal-content">
@@ -162,22 +157,27 @@ return (
 								<div className="swiper-wrapper">
 									{
 									objectData?.objectAnnounces.map((announce, index) => (
-										<div className="swiper-slide" key={index} data-aos="fade-up">
+									<div className="swiper-slide" key={index} data-aos="fade-up">
 										<div className="card add-banner" style={{
 											backgroundImage: `url(${getEnv()}/uploads/${announce.entry_image})`
 										}}>
-											<div className="overlay" style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',backgroundColor:'rgba(0,0,0,0.2)',filter:blur('3px')}}></div> {/* Add this overlay */}
+											<div className="overlay"
+												style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',backgroundColor:'rgba(0,0,0,0.2)',filter:blur('3px')}}>
+											</div> {/* Add this overlay */}
 											<div className="circle-1"></div>
 											<div className="circle-2"></div>
 											<div className="card-body">
-												<div className="card-info" style={{textShadow:'1px 1px 2px rgba(0,0,0,0.5)'}}>
-													<span className="font-12 font-w500 text-white">{announce.entry_headline}</span>
-													<h5 data-text="Новина" className="mb-2" style={{color:'cyan'}}>{announce.entry_thumbnail_text}</h5>
+												<div className="card-info"
+													style={{textShadow:'1px 1px 2px rgba(0,0,0,0.5)'}}>
+													<span
+														className="font-12 font-w500 text-white">{announce.entry_headline}</span>
+													<h5 data-text="Новина" className="mb-2" style={{color:'cyan'}}>
+														{announce.entry_thumbnail_text}</h5>
 												</div>
 											</div>
 										</div>
 									</div>
-									
+
 									))
 									}
 								</div>
@@ -188,77 +188,88 @@ return (
 					<div className="title-bar mt-0">
 						<span className="title mb-0 font-18">Категории</span>
 						<Link className="btn-link" to={PATH_LIST.CATEGORY_LIST}>
-							<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-								xmlns="http://www.w3.org/2000/svg">
-								<path
-									d="M8.25005 20.25C8.05823 20.25 7.86623 20.1767 7.7198 20.0303C7.42673 19.7372 7.42673 19.2626 7.7198 18.9698L14.6895 12L7.7198 5.03025C7.42673 4.73719 7.42673 4.26263 7.7198 3.96975C8.01286 3.67688 8.48742 3.67669 8.7803 3.96975L16.2803 11.4698C16.5734 11.7628 16.5734 12.2374 16.2803 12.5303L8.7803 20.0303C8.63386 20.1767 8.44186 20.25 8.25005 20.25Z"
-									fill="#7D8FAB" />
-							</svg>
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M8.25005 20.25C8.05823 20.25 7.86623 20.1767 7.7198 20.0303C7.42673 19.7372 7.42673 19.2626 7.7198 18.9698L14.6895 12L7.7198 5.03025C7.42673 4.73719 7.42673 4.26263 7.7198 3.96975C8.01286 3.67688 8.48742 3.67669 8.7803 3.96975L16.2803 11.4698C16.5734 11.7628 16.5734 12.2374 16.2803 12.5303L8.7803 20.0303C8.63386 20.1767 8.44186 20.25 8.25005 20.25Z"
+								fill="#7D8FAB" />
+						</svg>
 						</Link>
 					</div>
 					<div className="categories-box">
-					<div className="swiper-btn-center-lr">
-    <div className="swiper categorie-swiper">
-        <div className="swiper-wrapper">
-            {objectData.categories.map((category, index) => (
-                <div className="swiper-slide" data-aos="fade-down" key={index}>
-                    <Link to={`/category/${category.entry_id}`}>
-                        <div className="categore-box" style={{backgroundImage: `url(${getEnv()}/uploads/${category.category_background_image})`}}>
-                            <i className={category.category_mini_image}></i>
-                            <h6 className="font-14 text-white mb-2 text-center">{category.category_name}</h6>
-                            <span className="text-white">{category.itemCount} {GeneratePrefix(category.itemCount)}</span>
-                        </div>
-                    </Link>
-                </div>
-            ))}
-        </div>
-    </div>
-</div>
-
-					</div>
-
-					<div className="title-bar">
-						<span className="title mb-0 font-18">Последни продукти</span>
-					</div>
-					<div className="row g-3 mb-3">
-						{objectData.products.map((product,index) => (
-						<div className="col-6" key={index} data-aos="zoom-out-right">
-							<div className="card-item style-1">
-								<div className="dz-media">
-									<img src={`${getEnv()}/uploads/${JSON.parse(product.item_images)[0]}`}
-										alt={product.item_name} />
-									<a href="#" className="r-btn">
-										<div className="like-button"><i className="fa-regular fa-heart"></i></div>
-									</a>
-									{product.has_discount ? ( <div className="label">-{product.discount_percentage}%
-									</div>) : (null)}
-								</div>
-								<div className="dz-content">
-									<h6 className="title mb-3"><Link to={`/products/${product.item_id}`}>{product.item_name}</Link></h6>
-									<div className="dz-meta">
-										<ul>
-											{product.has_discount ? (
-											<li className="price text-accent">BGN {(product.item_price -
-												(product.discount_percentage *
-												product.item_price) / 100).toFixed(2)} <br /><span
-													className="badge w-100 light badge-light">Намален от {Number(product.item_price).toFixed(2)} ЛВ</span></li>
-											) : ( <li className="price text-accent">BGN {Number(product.item_price).toFixed(2)}</li>)}
-										</ul>
+						<div className="swiper-btn-center-lr">
+							<div className="swiper categorie-swiper">
+								<div className="swiper-wrapper">
+									{objectData.categories.map((category, index) => (
+									<div className="swiper-slide" data-aos="fade-down" key={index}>
+										<Link to={`/category/${category.entry_id}`}> <div className="categore-box"
+											style={{backgroundImage: `url(${getEnv()}/uploads/${category.category_background_image})`}}>
+										<i className={category.category_mini_image}></i>
+										<h6 className="font-14 text-white mb-2 text-center">{category.category_name}</h6>
+										<span className="text-white">{category.itemCount}
+											{GeneratePrefix(category.itemCount)}</span>
 									</div>
+									</Link>
 								</div>
+								))}
 							</div>
 						</div>
-						))}
-
 					</div>
 
 				</div>
 
-
-				
-
+				<div className="title-bar">
+					<span className="title mb-0 font-18">Последни продукти</span>
+				</div>
+				<div className="row g-3 mb-4 latest-products">
+					{objectData.products.map((product, index) => (
+					<div className="col-6 col-md-4" key={index} data-aos="zoom-out-right">
+						<div className="card-item modern-card">
+							<div className="card-image-wrapper">
+								<img src={`${getEnv()}/uploads/${JSON.parse(product.item_images)[0]}`}
+									alt={product.item_name} className="card-image" />
+								{product.has_discount && (
+								<span className="discount-badge">-{product.discount_percentage}%</span>
+								)}
+								<button className="like-button">
+									<i className="fa-regular fa-heart"></i>
+								</button>
+							</div>
+							<div className="card-content">
+								<h6 className="product-title">
+									<Link to={`/products/${product.item_id}`}>{product.item_name} </Link> </h6> <div
+										className="price-section">
+									{product.has_discount ? (
+									<>
+										<span className="price">
+											BGN{" "}
+											{(
+											product.item_price -
+											(product.discount_percentage * product.item_price) / 100
+											).toFixed(2)}
+										</span>
+										<span className="original-price">
+											BGN {Number(product.item_price).toFixed(2)}
+										</span>
+									</>
+									) : (
+									<span className="price">BGN {Number(product.item_price).toFixed(2)}</span>
+									)}
+							</div>
+						</div>
+					</div>
+				</div>
+				))}
 			</div>
+
+
+
 		</div>
+
+
+
+
+	</div>
+	</div>
 
 	</div>
 </>

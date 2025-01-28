@@ -10,6 +10,7 @@ const PATH_LIST = {
     'ANNOUNCE_DETAILS' : '/announces/:id',
     'APP_CHECKOUT' : '/checkout',
     'FINAL_CHECKOUT' : '/checkout/final',
+    'AUTH_PROFILE' : '/profile',
 }
 
 const ERROR_PATHS = {

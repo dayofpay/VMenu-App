@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../../Styles/AddonsList.css";
 
-const ProductAddons = ({ productData, ADDONS_LIST }) => {
+const ProductAddons = ({ productData, ADDONS_LIST,productInCart }) => {
   const [showAddons, setShowAddons] = useState(false);
   const [selectedAddons, setSelectedAddons] = useState([]);
 
   useEffect(() => {
     const savedAddons = JSON.parse(localStorage.getItem("selectedAddons")) || [];
     setSelectedAddons(savedAddons);
+    
   }, [productData]);
 
   const toggleAddons = () => setShowAddons(!showAddons);
@@ -160,6 +161,7 @@ const ProductAddons = ({ productData, ADDONS_LIST }) => {
                             <button
                               className="btn btn-success btn-sm"
                               onClick={() => handleAddonToggle(addon)}
+                              disabled={!productInCart}
                             >
                               Добави
                             </button>

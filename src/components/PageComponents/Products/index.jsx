@@ -302,7 +302,7 @@ return (
 
 					</div>
 					<Allergens productData={productData} ALLERGENES_LIST={ALLERGENES_LIST} />
-					{hasAddon(PERK_LIST.ADDONS) ? <ProductAddons productData={productData} ADDONS_LIST={productAddons} /> : null}
+					{hasAddon(PERK_LIST.ADDONS) ? <ProductAddons productData={productData} ADDONS_LIST={productAddons} productInCart={storage.getItem('cart').some((product) => product.productId === productData.item_id)} /> : null}
 				</div>
 			</div>
 			{hasAddon(PERK_LIST.CART) ? <div className="footer fixed"

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import "../../Styles/CartAddons.css";
-
+import { motion, AnimatePresence } from "framer-motion";
 /**
  * Calculate the total price of the add-ons.
  * @param {Array} addonsList - List of addon objects.
@@ -42,27 +42,56 @@ const CartAddons = ({ product, handleRemoveAddon, selectedAddons }) => {
   if (addons.length === 0) return null;
 
   return (
-    <div className="addons-section">
-      <h6>Добавки:</h6>
-      <ul className="addons-list">
-        {addons.map((addon) => (
-          <li key={addon.addon_id} className="addon-item">
-            <span className="addon-name">
-              {addon.addon_name} - {addon.addon_quantity}
-            </span>
-            <button
-              className="remove-addon"
-              onClick={() => handleRemoveAddon(addon.addon_id)}
+    <section className="addons-section" aria-labelledby="addons-heading">
+      <header className="addons-header">
+        <h2 id="addons-heading">Добавки</h2>
+      </header>
+      <AnimatePresence>
+        <motion.div
+          className="addons-cards"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {addons.map((addon) => (
+            <motion.div
+              key={addon.addon_id}
+              className="addon-card"
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -10, opacity: 0 }}
+              transition={{ duration: 0.25 }}
             >
-              Премахни
-            </button>
-          </li>
-        ))}
-      </ul>
-      <div className="total-price">
-        <strong>Обща цена: {totalPrice.toFixed(2)} лв.</strong>
-      </div>
-    </div>
+              <div className="addon-content">
+                <p className="addon-title">{addon.addon_name}</p>
+                <p className="addon-quantity">x{addon.addon_quantity}</p>
+              </div>
+              <motion.button
+                className="remove-addon"
+                onClick={() => handleRemoveAddon(addon.addon_id)}
+                aria-label={`Премахни ${addon.addon_name}`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.15 }}
+              >
+                ✕
+              </motion.button>
+            </motion.div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
+      <footer className="addons-footer">
+        <motion.div
+          className="total-price"
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.25 }}
+        >
+          Обща цена: {totalPrice.toFixed(2)} лв.
+        </motion.div>
+      </footer>
+    </section>
   );
 };
 

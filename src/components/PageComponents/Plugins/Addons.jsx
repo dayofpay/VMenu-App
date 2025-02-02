@@ -12,22 +12,42 @@ const ProductAddons = ({ productData, ADDONS_LIST,productInCart }) => {
   }, [productData]);
 
   const toggleAddons = () => setShowAddons(!showAddons);
+  /**
+   * Handles the toggle of a specific addon for the product
+   * @param {Object} addon The addon object to toggle
+   */
   const handleAddonToggle = (addon) => {
     if (!addon || !addon.addon_id) return;
-
+    /**
+     * Find the existing addon for the product in the selectedAddons array
+     * by comparing the addon id and the product id
+     */
     const existingProductAddon = selectedAddons.find(
       (item) =>
         item.item_id === productData.item_id &&
         item.addons.addon_id === addon.addon_id
     );
 
+    /**
+     * If the addon is already in the selectedAddons array, remove it
+     * otherwise, add it to the array
+     */
     let updatedSelectedAddons;
 
     if (existingProductAddon) {
+      /**
+       * Remove the existing addon from the selectedAddons array
+       * by filtering out the existing addon
+       */
       updatedSelectedAddons = selectedAddons.filter(
         (item) => item !== existingProductAddon
       );
     } else {
+      /**
+       * Add the addon to the selectedAddons array
+       * by creating a new object with the product id, addon id, name, price and quantity
+       * and adding it to the array
+       */
       updatedSelectedAddons = [
         ...selectedAddons,
         {
@@ -42,16 +62,38 @@ const ProductAddons = ({ productData, ADDONS_LIST,productInCart }) => {
       ];
     }
 
+    /**
+     * Update the selectedAddons state and local storage with the new array
+     */
     setSelectedAddons(updatedSelectedAddons);
     localStorage.setItem("selectedAddons", JSON.stringify(updatedSelectedAddons));
   };
 
+  /**
+   * Handles the change of the quantity of a specific addon for the product
+   * @param {Object} addon The addon object to update
+   * @param {Number} quantity The new quantity of the addon
+   */
   const handleQuantityChange = (addon, quantity) => {
+
+    /**
+     * Create a new array of selectedAddons, mapping over the existing array
+     * and updating the addon quantity of the specific addon that is being updated
+     */
     const updatedSelectedAddons = selectedAddons.map((item) => {
+      /**
+       * Check if the current item in the array is the one that needs to be updated
+       * by comparing the item id and the addon id
+       */
       if (
         item.item_id === productData.item_id &&
         item.addons.addon_id === addon.addon_id
       ) {
+
+        /**
+         * If the item is the one that needs to be updated, return a new object
+         * with the updated addon quantity
+         */
         return {
           ...item,
           addons: {
@@ -60,9 +102,16 @@ const ProductAddons = ({ productData, ADDONS_LIST,productInCart }) => {
           },
         };
       }
+
+      /**
+       * If the item is not the one that needs to be updated, return it as is
+       */
       return item;
     });
 
+    /**
+     * Update the selectedAddons state and local storage with the new array
+     */
     setSelectedAddons(updatedSelectedAddons);
     localStorage.setItem("selectedAddons", JSON.stringify(updatedSelectedAddons));
   };

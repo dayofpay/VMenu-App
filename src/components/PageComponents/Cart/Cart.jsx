@@ -12,6 +12,8 @@ import usePersistedState from "../../../hooks/usePersistedState";
 import { Link } from "react-router-dom";
 import { PATH_LIST } from "../../../utils/pathList";
 import CartAddons from "../Plugins/CartAddons";
+import { hasAddon } from "../../../services/objectServices";
+import PERK_LIST from "../../../utils/perkAddons";
 
 /**
  * ShowCart component.
@@ -293,7 +295,7 @@ const ShowCart = ({ objectData }) => {
                         </div>
                       </div>
                     </div>
-                    {objectData.license.data.plan_id > 1 ? (
+                    {hasAddon(PERK_LIST.ADDONS) ? (
                       <CartAddons
                         product={product}
                         handleRemoveAddon={handleRemoveAddon}

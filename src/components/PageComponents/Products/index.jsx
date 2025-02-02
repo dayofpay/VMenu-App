@@ -19,6 +19,7 @@ import {
 import ProductDescription from "./ProductDescription";
 import '../../Styles/ProductQuantity.css';
 import '../../Styles/AllergeneList.css';
+import '../../Styles/ProductDetails.css'
 import {
     incrementQuantity,
     decrementQuantity
@@ -245,30 +246,53 @@ return (
 							</ul>
 						</div>
 
-						<div className="item-list-2">
-							<div className="price">
-								<span className="text-style text-soft">Цена</span>
-								{productData.hasDiscount ? (
-								<h3 className="sub-title">
-									BGN {(productData.item_price - (productData.discount_percentage *
-									productData.item_price) / 100).toFixed(2)}
-									<del>BGN {(productData.item_price).toFixed(2)}</del>
-								</h3>
-								) : (
-								<h3 className="sub-title">BGN {(productData.item_price).toFixed(2)}</h3>
-								)}
-							</div>
+						<div className="price-quantity-wrapper">
+  <div className="price-section">
+    <span className="price-label">Цена</span>
+    {productData.hasDiscount ? (
+      <div className="discount-price-group">
+        <h3 className="current-price">
+          BGN {(productData.item_price - (productData.discount_percentage * productData.item_price) / 100).toFixed(2)}
+        </h3>
+        <div className="original-price-group">
+          <span className="original-price">BGN {productData.item_price.toFixed(2)}</span>
+          <span className="discount-badge">-{productData.discount_percentage}%</span>
+        </div>
+      </div>
+    ) : (
+      <h3 className="current-price">BGN {productData.item_price.toFixed(2)}</h3>
+    )}
+  </div>
 
-							<div className="product-quantity">
-								<button type="button" className="quantity-btn" onClick={()=>
-									decrementQuantity(productQuantity,
-									setProductQuantity)}>-</button>
-								<input type="text" onChange={onChange} name={ProductDetailsKeys.PRODUCT_QUANTITY}
-									className="quantity-input" value={productQuantity} readOnly />
-								<button type="button" className="quantity-btn" onClick={()=>
-									incrementQuantity(productQuantity,
-									setProductQuantity)}>+</button> </div>
-						</div>
+  <div className="modern-quantity">
+    <button 
+      type="button" 
+      className="quantity-control minus" 
+      onClick={() => decrementQuantity(productQuantity, setProductQuantity)}
+      aria-label="Reduce quantity"
+    >
+      <span className="control-icon">−</span>
+    </button>
+    <div className="quantity-display">
+      <input
+        type="text"
+        name={ProductDetailsKeys.PRODUCT_QUANTITY}
+        value={productQuantity}
+        readOnly
+        className="quantity-input"
+        aria-label="Current quantity"
+      />
+    </div>
+    <button 
+      type="button" 
+      className="quantity-control plus"
+      onClick={() => incrementQuantity(productQuantity, setProductQuantity)}
+      aria-label="Increase quantity"
+    >
+      <span className="control-icon">+</span>
+    </button>
+  </div>
+</div>
 						{productData.hasDiscount ? (
 						<div className="d-flex align-items-center justify-content-between">
 							<div className="badge bg-accent badge-lg badge-warning font-w400 px-3">В момента намален на

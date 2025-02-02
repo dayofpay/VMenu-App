@@ -225,8 +225,8 @@ return (
 					<div className="col-6 col-md-4" key={index} data-aos="zoom-out-right">
 						<div className="card-item modern-card">
 							<div className="card-image-wrapper">
-								<img src={`${getEnv()}/uploads/${JSON.parse(product.item_images)[0]}`}
-									alt={product.item_name} className="card-image" />
+								<Link to={`/products/${product.item_id}`}><img src={`${getEnv()}/uploads/${JSON.parse(product.item_images)[0]}`}
+									alt={product.item_name} className="card-image" /></Link>
 								{product.has_discount && (
 								<span className="discount-badge">-{product.discount_percentage}%</span>
 								)}

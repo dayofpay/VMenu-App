@@ -5,7 +5,18 @@ import { PATH_LIST } from "../../utils/pathList";
 
 function ShowBanner({objectData}) {
 	const timeType = new Date().getHours();
-	const time = timeType < 12 ? 'Добро Утро, ' : 'Добър Вечер, ';
+	const getTime = (time) => {
+		if(time >= 0 && time < 12){
+			return 'Добро Утро,';
+		}
+		else if(time >= 12 && time < 18){
+			return 'Добър Ден,';
+		}
+		else{
+			return 'Добър Вечер,';
+		}
+	}
+	const time = getTime(timeType);
 
 	if(!objectData){
 		return <LoadingAnimation/>

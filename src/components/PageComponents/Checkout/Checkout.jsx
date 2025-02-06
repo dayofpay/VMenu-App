@@ -5,7 +5,6 @@ import CartContext from "../../../contexts/CartCTX";
 import { CheckoutKeys } from "../../../keys/formKeys";
 import { Link } from "react-router-dom";
 import "../../Styles/Checkout.css";
-import ShowAppMenu from "../../AppMenus/defaultMenu";
 const ShowCheckout = ({ objectData }) => {
   const { checkoutHandler } = useContext(CartContext);
   const { values, onChange, onSubmit } = useForm(checkoutHandler, {
@@ -428,7 +427,6 @@ const ShowCheckout = ({ objectData }) => {
                     </button>
                   </div>
                 </form>
-                <ShowAppMenu />
               </div>
             )}
 

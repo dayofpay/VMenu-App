@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import ShowAppMenu from "../../AppMenus/defaultMenu";
 import withObjectData from "../../../HOC/withObjectInfo";
 import { getEnv } from "../../../utils/appData";
+import TranslateAPI from "../Plugins/TranslateAPI";
 
 
 const Profile = ({objectData}) => {
@@ -64,6 +65,22 @@ const Profile = ({objectData}) => {
 			</div>   
 			<div class="profile-content border-0">
 				<ul>
+					<li>
+					<div class="card">
+                        <div class="card-header border-0 pb-0">
+                            <h5 class="card-title">💬 Select Language</h5>
+                        </div>
+                        <div class="card-body">
+						<TranslateAPI/>
+                        </div>
+                    </div>
+					</li>
+					<li>
+						<Link to="/cart">
+							<i class="fa-solid fa-bag-shopping"></i>	
+							Моята количка
+						</Link>
+					</li>
 					{/* <li>
 						<a href="/orders">
 							<i class="fa-solid fa-clock"></i>

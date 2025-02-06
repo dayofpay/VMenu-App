@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import withObjectData from "../../HOC/withObjectInfo";
 import LoadingAnimation from "../Animations/Loading";
 import { PATH_LIST } from "../../utils/pathList";
+import TranslateMenu from "../PageComponents/Plugins/TranslateAPI";
 
 function ShowBanner({objectData}) {
 	const timeType = new Date().getHours();
@@ -24,6 +24,7 @@ function ShowBanner({objectData}) {
     return (
 
 		<div className="author-notification">
+			
 			<div className="container inner-wrapper">
 				<div className="dz-info">
 					<span className="text-dark d-block">{time}</span>

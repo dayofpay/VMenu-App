@@ -1,44 +1,87 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import withObjectData from "../../../HOC/withObjectInfo";
+import LoadingAnimation from "../../Animations/Loading";
 
-function TranslateAPI() {
+function TranslateAPI({ objectData }) {
+  const [isTranslationEnabled, setIsTranslationEnabled] = useState(true);
+
   useEffect(() => {
-    // Define the callback function for Google Translate initialization
-    window.googleTranslateElementInit = () => {
-      new window.google.translate.TranslateElement(
-        {
+    if (!objectData) {
+      return;
+    }
+
+    const objectLanguageJSObject = objectData?.MODULES?.OBJECT_INFO?.ENABLED_LANGUAGES;
+
+    if (!objectLanguageJSObject) {
+      setIsTranslationEnabled(false);
+      return;
+    }
+
+    console.log(objectLanguageJSObject, "objectLanguageJSObject");
+
+    let languageOptions = objectLanguageJSObject.useAllAvailableLanguages
+      ? {
           pageLanguage: "bg",
           autoDisplay: true,
-          includedLanguages: "hi,en,bn,ar,ja,iw,bg",
           layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-        },
-        "google_translate_element"
-      );
+        }
+      : {
+          pageLanguage: "bg",
+          autoDisplay: true,
+          layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+          includedLanguages: [
+            "bg",
+            ...(Array.isArray(objectLanguageJSObject?.options)
+              ? objectLanguageJSObject?.options
+              : objectLanguageJSObject?.options?.split(",") || ["en"]),
+          ].join(","),
+        };
+
+    window.googleTranslateElementInit = () => {
+      new window.google.translate.TranslateElement(languageOptions, "google_translate_element");
     };
 
-    // Check if the Google Translate script is already added to avoid reloading it
     const script = document.createElement("script");
     script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
     script.async = true;
     document.head.appendChild(script);
 
-    // Cleanup function to reset Google Translate when leaving the page
     return () => {
       const translateElement = document.getElementById("google_translate_element");
       if (translateElement) {
-        translateElement.innerHTML = ''; // Clear the existing translate element
+        translateElement.innerHTML = "";
       }
     };
-  }, []); // Empty dependency ensures this runs only once
+  }, []);
+
+  const resetTranslation = () => {
+    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.reload();
+  };
 
   return (
     <HelmetProvider>
-      <Helmet>
-        {/* Google Translate script is injected dynamically in the effect */}
-      </Helmet>
-      <div id="google_translate_element"></div>
+      <Helmet>{/* V-MENU.API.TRANSLATION */}</Helmet>
+      {isTranslationEnabled ? (
+        <>
+          <div id="google_translate_element"></div>
+          <button
+            onClick={resetTranslation}
+            className="btn btn-primary"
+            style={{ marginTop: "10px", padding: "5px 10px" }}
+          >
+            Reset Options
+          </button>
+        </>
+      ) : (
+        <div style={{ color: "#d9534f", fontWeight: "bold", marginTop: "10px" }}>
+          🌍 Translation is not enabled for this object.
+        </div>
+      )}
     </HelmetProvider>
   );
 }
 
-export default TranslateAPI;
+const ShowTranslateAPI = withObjectData(TranslateAPI);
+export default ShowTranslateAPI;

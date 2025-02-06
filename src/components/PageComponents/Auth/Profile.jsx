@@ -71,7 +71,7 @@ const Profile = ({objectData}) => {
                             <h5 class="card-title">💬 Select Language</h5>
                         </div>
                         <div class="card-body">
-						<TranslateAPI/>
+						<TranslateAPI objectData={objectData}/>
                         </div>
                     </div>
 					</li>

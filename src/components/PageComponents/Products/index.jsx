@@ -265,7 +265,7 @@ export default function ProductDetails() {
                     )}
                   </div>
 
-                  <div className="modern-quantity">
+                  {hasAddon(PERK_LIST.CART) ? (                  <div className="modern-quantity">
                     <button
                       type="button"
                       className="quantity-control minus"
@@ -296,7 +296,7 @@ export default function ProductDetails() {
                     >
                       <span className="control-icon">+</span>
                     </button>
-                  </div>
+                  </div>) : null}
                 </div>
                 {productData.hasDiscount ? (
                   <div className="d-flex align-items-center justify-content-between">

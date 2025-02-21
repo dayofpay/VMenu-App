@@ -1,6 +1,8 @@
 import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
+import Swiper from "swiper";
+import "swiper/swiper-bundle.css";
 import {
   getProductAddonsList,
   getProductData,
@@ -10,6 +12,7 @@ import ProductDescription from "./ProductDescription";
 import "../../Styles/ProductQuantity.css";
 import "../../Styles/AllergeneList.css";
 import "../../Styles/ProductDetails.css";
+import "../../Styles/Swiper.css"
 import {
   incrementQuantity,
   decrementQuantity,
@@ -42,11 +45,11 @@ export default function ProductDetails() {
       try {
         const data = await getProductData(id);
         setProductData(data);
-        const updatedCategoryNames = [...categoryNames]; // Create a new array
+        const updatedCategoryNames = [...categoryNames];
         data.category_names.forEach((category) => {
-          updatedCategoryNames.push(category); // Push each category name to the new array
+          updatedCategoryNames.push(category);
         });
-        setCategoryNames(updatedCategoryNames); // Update state with the new array
+        setCategoryNames(updatedCategoryNames);
       } catch (error) {
         // Handle error
         console.error("Error fetching product data:", error);
@@ -102,6 +105,18 @@ export default function ProductDetails() {
       navigate("/");
     }
   }, [productData, productQuantity]);
+  useEffect(() => {
+    new Swiper(".demo-swiper", {
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      loop: true,
+      autoplay: {
+        delay: 3000,
+      },
+    });
+  }, []);
   if (!productData.item_images) {
     return <LoadingAnimation />;
   }
@@ -151,7 +166,7 @@ export default function ProductDetails() {
             value={productData.item_id}
           />
           <div className="content-body bottom-content">
-            <div className="swiper-btn-center-lr my-0">
+          <div className="swiper-btn-center-lr my-0">
               <div className="swiper demo-swiper">
                 <div className="swiper-wrapper">
                   {Array.from(JSON.parse(productData.item_images)).map(

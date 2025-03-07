@@ -8,6 +8,7 @@ import "../../../Styles/foundation-icons.min.css";
 import "../../../Styles/open-iconic.min.css";
 import "../../../Styles/tabler-icons.min.css";
 import "../../../Styles/LatestProducts.css";
+import "../../../Styles/Accent.css"
 import GeneratePrefix from "../../../utils/../../utils/categoryPrefix";
 import { PATH_LIST } from "../../../../utils/pathList";
 import { getEnv } from "../../../../utils/appData";
@@ -16,10 +17,13 @@ import { CallKeys } from "../../../../keys/formKeys";
 import { createCall } from "../../../../services/userServices";
 import { hasAddon } from "../../../../services/objectServices";
 import PERK_LIST from "../../../../utils/perkAddons";
+import { useEffect } from "react";
+import { getProductsByCategory } from "../../../../services/productServices"
 const HomeContent = ({ objectData }) => {
-  console.log(objectData,'OBJECT DATA');
   
   const [callMessage, setCallMessage] = useState("");
+  const categoryHighlight = objectData.MODULES.OBJECT_INFO.LANDING_PAGE_SETTINGS.PRESENTATION_LAYER_SETTINGS.MODE_SETTINGS.SELECTED_CATEGORY;
+  console.log(categoryHighlight);
   const handleCall = (action) => {
     createCall({ call_reason: action }).then((result) => {
       !result.hasError
@@ -27,8 +31,21 @@ const HomeContent = ({ objectData }) => {
         : setCallMessage(result.msg);
     });
   };
+      const [categoryData,setCategoryData] = useState([]);
+      const [categoryItems,setCategoryItems] = useState([]);
+      useEffect(() => {
+          const getData = async() => {
+            setCategoryData(categoryHighlight.CATEGORY);
+            const categoryItemList = await getProductsByCategory(categoryHighlight.CATEGORY);
+            setCategoryItems(categoryItemList.categoryData[0]);
+          }
+  
+          getData();
+      },[objectData])
   const landingPageSettings = objectData.MODULES.OBJECT_INFO.LANDING_PAGE_SETTINGS;
-    
+  const accentSettings = landingPageSettings.ACCENT_TEXT_SETTINGS;
+  console.log(accentSettings);
+  
   return (
     <>
       <div className="page-content">
@@ -342,69 +359,83 @@ const HomeContent = ({ objectData }) => {
               </div>
 
               <div className="title-bar">
-                <span className="title mb-0 font-18">Последни продукти</span>
-              </div>
+  {accentSettings.SHOW_ACCENT_TEXT && (
+    <span
+      className={`title mb-0 font-18 ${
+        accentSettings.ACCENT_TEXT_STYLE === "bold"
+          ? "accent-text-bold"
+          : accentSettings.ACCENT_TEXT_STYLE === "italic"
+          ? "accent-text-italic"
+          : accentSettings.ACCENT_TEXT_STYLE === "highlight"
+          ? "accent-text-highlight"
+          : "accent-text-default"
+      }`}
+    >
+      {accentSettings.ACCENT_TEXT_CONTENT}
+    </span>
+  )}
+</div>
               <div className="row g-3 mb-4 latest-products">
-                {objectData.products.map((product, index) => (
-                  <div
-                    className="col-6 col-md-4"
-                    key={index}
-                    data-aos="zoom-out-right"
-                  >
-                    <div className="card-item modern-card">
-                      <div className="card-image-wrapper">
-                        <Link to={`/products/${product.item_id}`}>
-                          {" "}
-                          <img
-                            src={`${getEnv()}/uploads/${
-                              JSON.parse(product.item_images)[0]
-                            }`}
-                            alt={product.item_name}
-                            className="card-image"
-                          />
-                        </Link>
-                        {product.has_discount && (
-                          <span className="discount-badge">
-                            -{product.discount_percentage}%
+            {categoryItems.map((product, index) => (
+              <div
+                className="col-6 col-md-4"
+                key={index}
+                data-aos="zoom-out-right"
+              >
+                <div className="card-item modern-card">
+                  <div className="card-image-wrapper">
+                    <Link to={`/products/${product.item_id}`}>
+                      {" "}
+                      <img
+                        src={`${getEnv()}/uploads/${
+                          JSON.parse(product.item_images)[0]
+                        }`}
+                        alt={product.item_name}
+                        className="card-image"
+                      />
+                    </Link>
+                    {product.discount_percentage > 0 && (
+                      <span className="discount-badge">
+                        -{product.discount_percentage}%
+                      </span>
+                    )}
+                    <button className="like-button">
+                      <i className="fa-regular fa-heart"></i>
+                    </button>
+                  </div>
+                  <div className="card-content">
+                    <h6 className="product-title">
+                      <Link to={`/products/${product.item_id}`}>
+                        {product.item_name}{" "}
+                      </Link>{" "}
+                    </h6>{" "}
+                    <div className="price-section">
+                      {product.discount_percentage > 0 ? (
+                        <>
+                          <span className="price">
+                            BGN{" "}
+                            {(
+                              product.item_price -
+                              (product.discount_percentage *
+                                product.item_price) /
+                                100
+                            ).toFixed(2)}
                           </span>
-                        )}
-                        <button className="like-button">
-                          <i className="fa-regular fa-heart"></i>
-                        </button>
-                      </div>
-                      <div className="card-content">
-                        <h6 className="product-title">
-                          <Link to={`/products/${product.item_id}`}>
-                            {product.item_name}{" "}
-                          </Link>{" "}
-                        </h6>{" "}
-                        <div className="price-section">
-                          {product.has_discount ? (
-                            <>
-                              <span className="price">
-                                BGN{" "}
-                                {(
-                                  product.item_price -
-                                  (product.discount_percentage *
-                                    product.item_price) /
-                                    100
-                                ).toFixed(2)}
-                              </span>
-                              <span className="original-price">
-                                BGN {Number(product.item_price).toFixed(2)}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="price">
-                              BGN {Number(product.item_price).toFixed(2)}
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                          <span className="original-price">
+                            BGN {Number(product.item_price).toFixed(2)}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="price">
+                          BGN {Number(product.item_price).toFixed(2)}
+                        </span>
+                      )}
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
+            ))}
+</div>
             </div>
           </div>
         </div>
@@ -413,6 +444,6 @@ const HomeContent = ({ objectData }) => {
   );
 };
 
-const HomeV2 = HomeContent;
+const HomeV2_FeaturedCategory = HomeContent;
 
-export default HomeV2;
+export default HomeV2_FeaturedCategory;

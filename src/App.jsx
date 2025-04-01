@@ -11,6 +11,7 @@ import { NotFound } from './components/PageComponents/Errors/NotFound';
 import { QRError } from './components/PageComponents/Errors/QRError';
 import { TableError } from './components/PageComponents/Errors/TableError';
 import ProfilePage from './components/PageComponents/Auth/Profile';
+import { CooldownProvider } from './contexts/CoolDownCTX';
 const Home = lazy(() => import('./Pages/Home'));
 const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
 const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
@@ -25,7 +26,7 @@ return (
 
 <>
     <CartProvider>
-
+        <CooldownProvider>
      <Suspense fallback={<LoadingAnimation />}>
         <Routes>
             <Route path={PATH_LIST.APP_SET_OPTIONS} element={<SetOptions />}/>
@@ -46,8 +47,9 @@ return (
             <Route path={ERROR_PATHS.QR_ERROR} element={<QRError/>}/>
             <Route path={ERROR_PATHS.OBJECT_ERROR} element={<TableError/>}/>
         </Routes>
-     </Suspense>
 
+     </Suspense>
+</CooldownProvider>
     </CartProvider>
 </>
 

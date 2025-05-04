@@ -626,70 +626,76 @@ const HomeContent = ({ objectData }) => {
                 </div>
               </div>
 
-              <div className="title-bar">
-                <span className="title mb-0 font-18">Последни продукти</span>
-              </div>
-              <div className="row g-3 mb-4 latest-products">
-                {objectData.products.map((product, index) => (
-                  <div
-                    className="col-6 col-md-4"
-                    key={index}
-                    data-aos="zoom-out-right"
-                  >
-                    <div className="card-item modern-card">
-                      <div className="card-image-wrapper">
-                        <Link to={`/products/${product.item_id}`}>
-                          {" "}
-                          <img
-                            src={`${getEnv()}/uploads/${
-                              JSON.parse(product.item_images)[0]
-                            }`}
-                            alt={product.item_name}
-                            className="card-image"
-                          />
-                        </Link>
-                        {product.has_discount && (
-                          <span className="discount-badge">
-                            -{product.discount_percentage}%
-                          </span>
-                        )}
-                        <button className="like-button">
-                          <i className="fa-regular fa-heart"></i>
-                        </button>
-                      </div>
-                      <div className="card-content">
-                        <h6 className="product-title">
-                          <Link to={`/products/${product.item_id}`}>
-                            {product.item_name}{" "}
-                          </Link>{" "}
-                        </h6>{" "}
-                        <div className="price-section">
-                          {product.has_discount ? (
-                            <>
-                              <span className="price">
-                                BGN{" "}
-                                {(
-                                  product.item_price -
-                                  (product.discount_percentage *
-                                    product.item_price) /
-                                    100
-                                ).toFixed(2)}
-                              </span>
-                              <span className="original-price">
-                                BGN {Number(product.item_price).toFixed(2)}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="price">
-                              BGN {Number(product.item_price).toFixed(2)}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <div className="title-bar d-flex justify-content-between align-items-center mb-3">
+  <span className="title mb-0 font-18">Последни продукти</span>
+</div>
+
+<div className="row g-3 mb-4 latest-products">
+  {objectData.products.map((product, index) => (
+    <div className="col-6 col-md-4" key={index} data-aos="zoom-out-right">
+      <div className="card-item modern-card">
+        <div className="card-image-wrapper">
+          <Link to={`/products/${product.item_id}`}>
+            <img
+              src={`${getEnv()}/uploads/${JSON.parse(product.item_images)[0]}`}
+              alt={product.item_name}
+              className="card-image"
+            />
+          </Link>
+          {product.has_discount && (
+            <span className="discount-badge">
+              -{product.discount_percentage}%
+            </span>
+          )}
+          <button className="like-button">
+            <i className="fa-regular fa-heart"></i>
+          </button>
+        </div>
+        <div className="card-content">
+          <h6 className="product-title">
+            <Link to={`/products/${product.item_id}`}>
+              {product.item_name}
+            </Link>
+          </h6>
+          <div className="price-section">
+            {product.has_discount ? (
+              <>
+                <span className="price">
+                  BGN {(
+                    product.item_price -
+                    (product.discount_percentage * product.item_price) / 100
+                  ).toFixed(2)}
+                </span>
+                <span className="original-price">
+                  BGN {Number(product.item_price).toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span className="price">
+                BGN {Number(product.item_price).toFixed(2)}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+
+    <div className="text-center mt-4">
+      <Link to="/categories" className="view-all-btn btn btn-outline-primary rounded-pill px-4 py-2" style={{
+          borderWidth: '2px',
+          fontWeight: '600',
+          letterSpacing: '0.5px',
+          transition: 'all 0.3s ease',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+      Разгледай всички предложения
+      <i className="fas fa-arrow-right ms-2"></i>
+      </Link>
+    </div>
             </div>
           </div>
         </div>

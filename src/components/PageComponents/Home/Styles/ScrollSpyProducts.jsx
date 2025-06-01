@@ -286,9 +286,6 @@ return (
                         {product.has_discount && (
                           <span className="discount-badge">-{product.discount_percentage}%</span>
                         )}
-                        <button className="like-button">
-                          <i className="fa-regular fa-heart"></i>
-                        </button>
                       </div>
                       <div className="card-content">
                         <h6 className="product-title">
@@ -340,9 +337,6 @@ return (
                           {product.has_discount && (
                             <span className="discount-badge">-{product.discount_percentage}%</span>
                           )}
-                          <button className="like-button">
-                            <i className="fa-regular fa-heart"></i>
-                          </button>
                         </div>
                         <div className="card-content">
                           <h6 className="product-title">

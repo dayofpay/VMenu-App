@@ -165,7 +165,7 @@ function DefaultHeader({objectData}) {
                 fontFamily: 'sans-serif',
                 backgroundColor: 'rgba(0,0,0,0.02)'
             }}>
-                Поддържано и разработвано от V-DEVS
+                Поддържано и разработвано от V-MENU
             </div>
         </header>
     )

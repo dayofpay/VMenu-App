@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../Styles/AddonsList.css";
+import { do_action } from "../../../services/userServices";
 
 const ProductAddons = ({ productData, ADDONS_LIST,productInCart }) => {
   const [showAddons, setShowAddons] = useState(false);
@@ -11,7 +12,11 @@ const ProductAddons = ({ productData, ADDONS_LIST,productInCart }) => {
     
   }, [productData]);
 
-  const toggleAddons = () => setShowAddons(!showAddons);
+  const toggleAddons = () => {
+    setShowAddons(!showAddons);
+    const button_name = showAddons ? "Покажи добавки" : "Скрий добавки";
+    do_action("click_button",{button_name:button_name});
+  }
   /**
    * Handles the toggle of a specific addon for the product
    * @param {Object} addon The addon object to toggle
@@ -35,6 +40,8 @@ const ProductAddons = ({ productData, ADDONS_LIST,productInCart }) => {
     let updatedSelectedAddons;
 
     if (existingProductAddon) {
+      do_action("remove_addon", { addon_name: addon.addon_name });
+
       /**
        * Remove the existing addon from the selectedAddons array
        * by filtering out the existing addon
@@ -48,6 +55,8 @@ const ProductAddons = ({ productData, ADDONS_LIST,productInCart }) => {
        * by creating a new object with the product id, addon id, name, price and quantity
        * and adding it to the array
        */
+      do_action("add_addon", { addon_name: addon.addon_name });
+
       updatedSelectedAddons = [
         ...selectedAddons,
         {
@@ -66,6 +75,7 @@ const ProductAddons = ({ productData, ADDONS_LIST,productInCart }) => {
      * Update the selectedAddons state and local storage with the new array
      */
     setSelectedAddons(updatedSelectedAddons);
+    do_action("add_addon", {addon_name: addon.addon_name});
     localStorage.setItem("selectedAddons", JSON.stringify(updatedSelectedAddons));
   };
 

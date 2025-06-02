@@ -28,6 +28,7 @@ import Allergens from "../Regulations/Allergens";
 import ProductAddons from "../Plugins/Addons";
 import { hasAddon } from "../../../services/objectServices";
 import PERK_LIST from "../../../utils/perkAddons";
+import { do_action } from "../../../services/userServices";
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -69,14 +70,15 @@ export default function ProductDetails() {
     getProduct();
   }, [id]);
   console.log(productExists);
-  
   const { values, onChange, onSubmit, setValues } = useForm(
     async () => {
       try {
         if (!productExists) {
           await cartUpdateHandler(values, setProductExists);
+          do_action("add_to_cart", {product_id: productData.item_id});
           console.log("Product does not exist");
         } else {
+          do_action("remove_from_cart", {product_id: productData.item_id});
           await cartDeleteHandler(values, setProductExists);
         }
       } catch (error) {
@@ -118,6 +120,12 @@ export default function ProductDetails() {
       },
     });
   }, []);
+useEffect(() => {
+  if (productData?.item_id) {
+    do_action("product_view", { product_id: productData.item_id,product_name: productData.item_name });
+  }
+}, [productData?.item_id]);
+
   if (!productData.item_images) {
     return <LoadingAnimation />;
   }

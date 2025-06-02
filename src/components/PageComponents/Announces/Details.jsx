@@ -7,6 +7,7 @@ import { TimeBetween } from "../../../utils/DateUtils";
 import ProductDescription from "../Products/ProductDescription";
 import { getEnv } from "../../../utils/appData";
 import '../../Styles/Tables.css';
+import { do_action } from "../../../services/userServices";
 const ShowDetails = ({objectData}) => {
 
     if(!objectData){
@@ -21,6 +22,7 @@ const ShowDetails = ({objectData}) => {
             })
         }
 
+		do_action("view_announce", {announce_id: id,announce_name: announceData.announce_name});
         getAnnounceInfo();
     },[id]);
 

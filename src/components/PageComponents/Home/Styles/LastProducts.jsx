@@ -13,7 +13,7 @@ import { PATH_LIST } from "../../../../utils/pathList";
 import { getEnv } from "../../../../utils/appData";
 import { useState, useEffect, useContext } from "react";
 import { CallKeys } from "../../../../keys/formKeys";
-import { createCall } from "../../../../services/userServices";
+import { createCall, do_action } from "../../../../services/userServices";
 import { hasAddon } from "../../../../services/objectServices";
 import PERK_LIST from "../../../../utils/perkAddons";
 import { getProductsByCategory } from "../../../../services/productServices";
@@ -97,6 +97,7 @@ const HomeContent = ({ objectData }) => {
     
 
     createCall({ call_reason: action }).then((result) => {
+      do_action("call_waiter", { call_reason: action });
       setIsLoading(false);
       !result.hasError
         ? setCallMessage(result.msg)

@@ -3,12 +3,18 @@ import ShowAppMenu from "../../AppMenus/defaultMenu";
 import withObjectData from "../../../HOC/withObjectInfo";
 import { getEnv } from "../../../utils/appData";
 import TranslateAPI from "../Plugins/TranslateAPI";
+import { useEffect } from "react";
+import { do_action } from "../../../services/userServices";
 
 
 const Profile = ({objectData}) => {
     if(!objectData){
         return <LoadingAnimation/>;
     }
+
+	useEffect(() => {
+		do_action("visit_page", {page_name:"Профил"});
+	},[objectData.objectInformation])
     return (
         <div class="page-wraper">
     

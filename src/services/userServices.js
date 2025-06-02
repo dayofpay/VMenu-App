@@ -65,7 +65,8 @@ export async function createVisitor() {
          */
         return {
             hasError: false,
-            msg: response.message
+            msg: response.message,
+            user_token: response.USER_TOKEN
         }
     } catch (error) {
         /**
@@ -126,5 +127,38 @@ export async function createCall(data){
         console.error('Error while trying to create call',error);
 
         return {hasError: true, msg: response.message};
+    }
+}
+
+
+/**
+ * Logs an action by making a POST request to the server.
+ *
+ * @param {string} action_type - The type of action being logged.
+ * @param {object} action_data - The data associated with the action.
+ * @param {string} [action_comment] - The comment associated with the action.
+ * @param {string} [token] - The user token from local storage. If not provided, it will be taken from local storage.
+ * @returns {Promise<object>} - The server response if the request is successful.
+ */
+export async function do_action(action_type, action_data, action_comment = null, token = localStorage.getItem('user_token')) {
+    // Define the endpoint for logging actions
+    const endpoint = `${getEnv()}/api/actions/log`;
+
+    try {
+        // Make a POST request to the server with the action details and token
+        const response = await request.post(endpoint, {
+            action_type,
+            action_data,
+            action_comment,
+            token_id: token,
+        });
+
+        console.log(response);
+        
+        // Return the server response
+        return response;
+    } catch (error) {
+        // Log any errors that occur during the request
+        console.error('Error while trying to create action log', error);
     }
 }

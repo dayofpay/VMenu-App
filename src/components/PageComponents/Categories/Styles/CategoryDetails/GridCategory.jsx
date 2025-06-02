@@ -6,6 +6,7 @@ import { ProductHasDiscount } from "../../../../../utils/DateUtils";
 import LoadingAnimation from "../../../../Animations/Loading";
 import '../../../../Animations/Packages/slideInFromLeft.css';
 import '../../../../Styles/CategoryDetails.css';
+import { do_action } from "../../../../../services/userServices";
 
 const ShowCategoryData = ({ objectData }) => {
     const { id } = useParams();
@@ -17,6 +18,7 @@ const ShowCategoryData = ({ objectData }) => {
             const productData = await getProductsByCategory(id);
             setCategoryData(productData.categoryData[0]);
             setCategoryName(productData.categoryData[1].categoryName);
+            do_action("view_category", { category_name: productData.categoryData[1].categoryName,category_id: productData.categoryData[1].category_id });
         };
 
         getData();

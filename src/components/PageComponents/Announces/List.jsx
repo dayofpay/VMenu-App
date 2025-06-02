@@ -3,6 +3,8 @@ import withobjectData from '../../../HOC/withObjectInfo';
 import LoadingAnimation from '../../Animations/Loading';
 import { TimeBetween } from '../../../utils/DateUtils';
 import ShowAppMenu from '../../AppMenus/defaultMenu';
+import { useEffect } from 'react';
+import { do_action } from '../../../services/userServices';
 
 const ShowAnnounces = ({objectData}) => {
 
@@ -10,6 +12,9 @@ const ShowAnnounces = ({objectData}) => {
         return <LoadingAnimation/>
     }
 
+    useEffect(() => {
+        do_action("view_announces",{announces: objectData?.objectAnnounces});
+    },[objectData.objectAnnounces])
     console.log(objectData);
     return (
         <>

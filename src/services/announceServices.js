@@ -1,5 +1,6 @@
 import * as request from '../lib/request';
 import { getEnv } from '../utils/appData';
+import { do_action } from './userServices';
 
 
 // This function is for fetching announcement data from the server
@@ -16,6 +17,8 @@ export async function getAnnounceData(announceId) {
         console.log(response);
         
         // Return the response from the server
+
+        do_action("view_announce", {announce_id: announceId});
         return response;
     } catch (error) {
         // Log any error encountered during the request

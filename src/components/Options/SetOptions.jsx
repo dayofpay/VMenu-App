@@ -27,7 +27,10 @@ const SetOptions = () => {
           }
         }
         else{
+          console.log(result,'RES');
+          
           storage.setItem('visitorData', result);
+          storage.setItem('user_token', result.user_token);
         }
       });
     }

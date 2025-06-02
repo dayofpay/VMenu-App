@@ -1,3 +1,4 @@
+import { do_action } from '../services/userServices';
 import * as storage from '../utils/memory';
 
 /**
@@ -18,6 +19,8 @@ export const decrementCartQuantity = (productId) => {
         // Save the updated cart back to local storage
         storage.setItem('cart', cartStorage);
     }
+
+    do_action("click_button", {button_name:"Намаляне на количество",quantity: cartStorage[idx].productQuantity});
 }
 
 
@@ -43,6 +46,7 @@ export const incrementCartQuantity = (productId) => {
         // Save the updated cart back to local storage
         storage.setItem('cart', cartStorage);
     }
+    do_action("click_button", {button_name:"Увеличаване на количество",quantity: product.productQuantity});
 };
 
 /**
@@ -64,6 +68,8 @@ export const removeCartItem = (productId) => {
         // Save the updated cart back to local storage
         storage.setItem('cart', cartStorage);
     }
+
+    do_action("click_button", {button_name:"Премахване на продукт",quantity: productId});
 };
 
 /**
@@ -74,4 +80,6 @@ export const removeCartItem = (productId) => {
 export const clearCart = () => {
     // Remove the cart from local storage
     storage.removeItem('cart');
+
+    do_action("click_button", {button_name:"Премахване на всички продукти"});
 };

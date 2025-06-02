@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../Styles/AllergeneList.css';
+import { do_action } from '../../../services/userServices';
 
 const Allergens = ({ productData, ALLERGENES_LIST }) => {
 const [showAllergens, setShowAllergens] = useState(false);
@@ -7,6 +8,8 @@ const [showAllergens, setShowAllergens] = useState(false);
 // Toggle function to show/hide allergens
 const toggleAllergens = () => {
 setShowAllergens(!showAllergens);
+const button_name = showAllergens ? "Скрий алергени" : "Покажи алергени";
+do_action("click_button",{button_name:button_name});
 };
 
 // Parse allergens from product data

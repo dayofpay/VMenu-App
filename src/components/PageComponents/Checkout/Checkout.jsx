@@ -5,6 +5,7 @@ import CartContext from "../../../contexts/CartCTX";
 import { CheckoutKeys } from "../../../keys/formKeys";
 import { Link } from "react-router-dom";
 import "../../Styles/Checkout.css";
+import { do_action } from "../../../services/userServices";
 const ShowCheckout = ({ objectData }) => {
   const { checkoutHandler } = useContext(CartContext);
   const { values, onChange, onSubmit } = useForm(checkoutHandler, {
@@ -83,6 +84,7 @@ const ShowCheckout = ({ objectData }) => {
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     }
+    do_action("click_button", { button_name: "Преминете към плащане" });
   };
 
   // Handle navigation to the previous step in the checkout process
@@ -92,6 +94,7 @@ const ShowCheckout = ({ objectData }) => {
       // Decrement the current step to navigate to the previous step
       setCurrentStep(currentStep - 1);
     }
+    do_action("click_button", { button_name: "Предишна стъпка" });
   };
 
   // This function is called when the user selects a payment method from the dropdown menu.
@@ -102,6 +105,8 @@ const ShowCheckout = ({ objectData }) => {
     onChange({
       target: { name: CheckoutKeys.CHECKOUT_PAYMENT, value: method },
     });
+
+    do_action("set_payment_method", { payment_method: method });
 
     // Close the payment popup
     setShowPaymentPopup(false);

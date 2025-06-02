@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import withObjectData from "../../../HOC/withObjectInfo";
+import { do_action } from "../../../services/userServices";
 
 const ShowFinalPage = ({objectData}) => {
+	do_action("finalized_order",{message: "Успешно заявена поръчка"});
     return (
 <div className="page-content">
 

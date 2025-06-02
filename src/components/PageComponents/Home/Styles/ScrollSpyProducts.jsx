@@ -13,7 +13,7 @@ import { PATH_LIST } from "../../../../utils/pathList";
 import { getEnv } from "../../../../utils/appData";
 import { useState } from "react";
 import { CallKeys } from "../../../../keys/formKeys";
-import { createCall } from "../../../../services/userServices";
+import { createCall, do_action } from "../../../../services/userServices";
 import { hasAddon } from "../../../../services/objectServices";
 import PERK_LIST from "../../../../utils/perkAddons";
 import { useRef,useEffect } from "react";
@@ -33,6 +33,8 @@ const [activeKey, setActiveKey] = useState('all');
 
   const handleCall = (action) => {
     createCall({ call_reason: action }).then((result) => {
+      do_action("call_waiter", { call_reason: action });
+
       !result.hasError ? setCallMessage(result.msg) : setCallMessage(result.msg);
     });
   };

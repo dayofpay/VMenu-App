@@ -229,70 +229,78 @@ const ShowCart = ({ objectData }) => {
                           </div>
                         </div>
                         <div className="item-footer">
-                          <div className="d-flex align-items-center">
-                            {product?.has_discount ? (
-                              <>
-                                <h6 className="me-2">
-                                  BGN{" "}
-                                  {(
-                                    product?.item_price -
-                                    (product?.discount_percentage *
-                                      product?.item_price) /
-                                      100
-                                  ).toFixed(2)}
-                                </h6>
-                                <del className="off-text">
-                                  <h6>
-                                    BGN {Number(product?.item_price).toFixed(2)}
-                                  </h6>
-                                </del>
-                              </>
-                            ) : (
-                              <>
-                                <h6>
-                                  BGN {Number(product?.item_price).toFixed(2)}
-                                </h6>
-                              </>
-                            )}
-                          </div>
+  <div className="d-flex align-items-center">
+    {product?.has_discount ? (
+      <>
+        <h6 className="me-2">
+          BGN{" "}
+          {(
+            product?.item_price -
+            (product?.discount_percentage * product?.item_price) / 100
+          ).toFixed(2)}
+          <span className="euro-price ms-1">
+            (€
+            {(
+              (product?.item_price -
+                (product?.discount_percentage * product?.item_price) / 100) /
+              1.95583
+            ).toFixed(2)})
+          </span>
+        </h6>
+        <del className="off-text">
+          <h6>
+            BGN {Number(product?.item_price).toFixed(2)}
+            <span className="euro-price ms-1">
+              (€{(product?.item_price / 1.95583).toFixed(2)})
+            </span>
+          </h6>
+        </del>
+      </>
+    ) : (
+      <>
+        <h6>
+          BGN {Number(product?.item_price).toFixed(2)}
+          <span className="euro-price ms-1">
+            (€{(product?.item_price / 1.95583).toFixed(2)})
+          </span>
+        </h6>
+      </>
+    )}
+  </div>
 
-                          <div className="d-flex align-items-center">
-                            <div className="product-quantity">
-                              <button
-                                type="button"
-                                className="quantity-btn"
-                                onClick={() =>
-                                  handleDecrement(product?.item_id)
-                                }
-                              >
-                                -
-                              </button>
-                              <input
-                                type="text"
-                                name={ProductDetailsKeys.PRODUCT_QUANTITY}
-                                className="quantity-input"
-                                value={cart[index]?.productQuantity}
-                                readOnly
-                              />
-                              <button
-                                type="button"
-                                className="quantity-btn"
-                                onClick={() =>
-                                  handleIncrement(product?.item_id)
-                                }
-                              >
-                                +
-                              </button>
-                            </div>
-                          </div>
-                          <div className="d-flex align-items-center">
-                            <i
-                              className="fa fa-trash"
-                              style={{ color: "red", marginLeft: "2em" }}
-                              onClick={() => handleRemove(product?.item_id)}
-                            ></i>
-                          </div>
-                        </div>
+  <div className="d-flex align-items-center">
+    <div className="product-quantity">
+      <button
+        type="button"
+        className="quantity-btn"
+        onClick={() => handleDecrement(product?.item_id)}
+      >
+        -
+      </button>
+      <input
+        type="text"
+        name={ProductDetailsKeys.PRODUCT_QUANTITY}
+        className="quantity-input"
+        value={cart[index]?.productQuantity}
+        readOnly
+      />
+      <button
+        type="button"
+        className="quantity-btn"
+        onClick={() => handleIncrement(product?.item_id)}
+      >
+        +
+      </button>
+    </div>
+  </div>
+  <div className="d-flex align-items-center">
+    <i
+      className="fa fa-trash"
+      style={{ color: "red", marginLeft: "2em" }}
+      onClick={() => handleRemove(product?.item_id)}
+    ></i>
+  </div>
+</div>
                       </div>
                     </div>
                     {hasAddon(PERK_LIST.ADDONS) ? (
@@ -310,60 +318,75 @@ const ShowCart = ({ objectData }) => {
         </div>
 
         <div className="footer fixed">
-          <div className="container">
-            <div className="view-title mb-2">
-              <ul>
-                <li>
-                  <span className="text-soft">Междинна сума</span>
-                  <span className="text-soft">
-                    BGN {Number(totalPrice).toFixed(2)}
-                  </span>
-                </li>
-                <li>
-                  <span className="text-soft">Добавки</span>
-                  <span className="text-soft">
-                    +BGN {Number(totalAddonsPrice).toFixed(2)}
-                  </span>
-                </li>
-                <li>
-                  <span className="text-soft">Отстъпки</span>
-                  <span className="text-soft">
-                    -BGN {Number(totalPrice - discountPrice).toFixed(2)}
-                  </span>
-                </li>
-                <li>
-                  <h5>Общо</h5>
-                  <h5>
-                    BGN{" "}
-                    {Number(
-                      totalPrice -
-                        (totalPrice - discountPrice) +
-                        totalAddonsPrice
-                    ).toFixed(2)}
-                  </h5>
-                </li>
-                <li>
-                  <a href="#" className="promo-bx">
-                    Използвани отстъпки
-                    <span>Възползвате се от {totalDiscounts} отстъпки</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div className="footer-btn d-flex align-items-center">
-              <Link
-                to={PATH_LIST.APP_CHECKOUT}
-                className={
-                  totalPrice > 0
-                    ? "btn btn-primary flex-1"
-                    : "btn btn-primary disabled flex-1"
-                }
-              >
-                ПРЕМИНЕТЕ КЪМ ПЛАЩАНЕ
-              </Link>
-            </div>
-          </div>
-        </div>
+  <div className="container">
+    <div className="view-title mb-2">
+      <ul>
+        <li>
+          <span className="text-soft">Междинна сума</span>
+          <span className="text-soft">
+            BGN {Number(totalPrice).toFixed(2)}
+            <span className="euro-price ms-1">
+              (€{(totalPrice / 1.95583).toFixed(2)})
+            </span>
+          </span>
+        </li>
+        <li>
+          <span className="text-soft">Добавки</span>
+          <span className="text-soft">
+            +BGN {Number(totalAddonsPrice).toFixed(2)}
+            <span className="euro-price ms-1">
+              (€{(totalAddonsPrice / 1.95583).toFixed(2)})
+            </span>
+          </span>
+        </li>
+        <li>
+          <span className="text-soft">Отстъпки</span>
+          <span className="text-soft">
+            -BGN {Number(totalPrice - discountPrice).toFixed(2)}
+            <span className="euro-price ms-1">
+              (€{( (totalPrice - discountPrice) / 1.95583 ).toFixed(2)})
+            </span>
+          </span>
+        </li>
+        <li>
+          <h5>Общо</h5>
+          <h5>
+            BGN{" "}
+            {Number(
+              totalPrice -
+                (totalPrice - discountPrice) +
+                totalAddonsPrice
+            ).toFixed(2)}
+            <span className="euro-price ms-1">
+              (€{(
+                (totalPrice - (totalPrice - discountPrice) + totalAddonsPrice) / 
+                1.95583
+              ).toFixed(2)})
+            </span>
+          </h5>
+        </li>
+        <li>
+          <a href="#" className="promo-bx">
+            Използвани отстъпки
+            <span>Възползвате се от {totalDiscounts} отстъпки</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div className="footer-btn d-flex align-items-center">
+      <Link
+        to={PATH_LIST.APP_CHECKOUT}
+        className={
+          totalPrice > 0
+            ? "btn btn-primary flex-1"
+            : "btn btn-primary disabled flex-1"
+        }
+      >
+        ПРЕМИНЕТЕ КЪМ ПЛАЩАНЕ
+      </Link>
+    </div>
+  </div>
+</div>
       </div>
     </>
   );

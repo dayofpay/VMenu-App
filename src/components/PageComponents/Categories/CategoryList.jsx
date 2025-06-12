@@ -9,9 +9,15 @@ import "../../Styles/tabler-icons.min.css";
 import GeneratePrefix from "../../../utils/categoryPrefix";
 import { getEnv } from "../../../utils/appData";
 import ShowAppMenu from "../../AppMenus/defaultMenu";
+import { useEffect } from "react";
+import { do_action } from "../../../services/userServices";
 
 
 const ShowCategoryList = ({ objectData }) => {
+
+  useEffect(() => {
+    do_action("click_button",{button_name:"Категории"});
+  },[objectData]);
   return (
     <>
       <header className="header">

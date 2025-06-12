@@ -246,68 +246,82 @@ useEffect(() => {
                 </div>
 
                 <div className="price-quantity-wrapper">
-                  <div className="price-section">
-                    <span className="price-label">Цена</span>
-                    {productData.hasDiscount ? (
-                      <div className="discount-price-group">
-                        <h3 className="current-price">
-                          BGN{" "}
-                          {(
-                            productData.item_price -
-                            (productData.discount_percentage *
-                              productData.item_price) /
-                              100
-                          ).toFixed(2)}
-                        </h3>
-                        <div className="original-price-group">
-                          <span className="original-price">
-                            BGN {productData.item_price.toFixed(2)}
-                          </span>
-                          <span className="discount-badge">
-                            -{productData.discount_percentage}%
-                          </span>
-                        </div>
-                      </div>
-                    ) : (
-                      <h3 className="current-price">
-                        BGN {productData.item_price.toFixed(2)}
-                      </h3>
-                    )}
-                  </div>
+  <div className="price-section">
+    <span className="price-label">Цена</span>
+    {productData.hasDiscount ? (
+      <div className="discount-price-group">
+        <h3 className="current-price">
+          BGN{" "}
+          {(
+            productData.item_price -
+            (productData.discount_percentage * productData.item_price) / 100
+          ).toFixed(2)}
+          <span className="euro-price">
+            (€
+            {(
+              (productData.item_price -
+                (productData.discount_percentage * productData.item_price) / 100) /
+              1.95583
+            ).toFixed(2)})
+          </span>
+        </h3>
+        <div className="original-price-group">
+          <span className="original-price">
+            BGN {productData.item_price.toFixed(2)}
+            <span className="euro-price">
+              (€{(productData.item_price / 1.95583).toFixed(2)})
+            </span>
+          </span>
+          <span className="discount-badge">
+            -{productData.discount_percentage}%
+          </span>
+        </div>
+      </div>
+    ) : (
+      <h3 className="current-price">
+        BGN {productData.item_price.toFixed(2)}
+        <span className="euro-price">
+          (€{(productData.item_price / 1.95583).toFixed(2)})
+        </span>
+      </h3>
+    )}
+  </div>
 
-                  {hasAddon(PERK_LIST.CART) ? (                  <div className="modern-quantity">
-                    <button
-                      type="button"
-                      className="quantity-control minus"
-                      onClick={() =>
-                        decrementQuantity(productQuantity, setProductQuantity)
-                      }
-                      aria-label="Reduce quantity"
-                    >
-                      <span className="control-icon">−</span>
-                    </button>
-                    <div className="quantity-display">
-                      <input
-                        type="text"
-                        name={ProductDetailsKeys.PRODUCT_QUANTITY}
-                        value={productQuantity}
-                        readOnly
-                        className="quantity-input"
-                        aria-label="Current quantity"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      className="quantity-control plus"
-                      onClick={() =>
-                        incrementQuantity(productQuantity, setProductQuantity)
-                      }
-                      aria-label="Increase quantity"
-                    >
-                      <span className="control-icon">+</span>
-                    </button>
-                  </div>) : null}
-                </div>
+  {hasAddon(PERK_LIST.CART) ? (
+    <div className="modern-quantity">
+      <button
+        type="button"
+        className="quantity-control minus"
+        onClick={() =>
+          decrementQuantity(productQuantity, setProductQuantity)
+        }
+        aria-label="Reduce quantity"
+      >
+        <span className="control-icon">−</span>
+      </button>
+      <div className="quantity-display">
+        <input
+          type="text"
+          name={ProductDetailsKeys.PRODUCT_QUANTITY}
+          value={productQuantity}
+          readOnly
+          className="quantity-input"
+          aria-label="Current quantity"
+        />
+      </div>
+      <button
+        type="button"
+        className="quantity-control plus"
+        onClick={() =>
+          incrementQuantity(productQuantity, setProductQuantity)
+        }
+        aria-label="Increase quantity"
+      >
+        <span className="control-icon">+</span>
+      </button>
+    </div>
+  ) : null}
+</div>
                 {productData.hasDiscount ? (
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="badge bg-accent badge-lg badge-warning font-w400 px-3">

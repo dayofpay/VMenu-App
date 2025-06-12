@@ -1,84 +1,167 @@
-
-
+/* Modern Addons Section */
 .addons-section {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    margin: 1.5rem auto;
-    padding: 1rem 1.25rem;
-  }
-  
-  .addons-header {
-    margin-bottom: 0.75rem;
-    text-align: center;
-  }
-  
-  .addons-header h2 {
-    font-size: 1.3rem;
-    color: #333;
-    margin: 0;
-  }
-  
-  .addons-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.addons-section:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.addons-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.addons-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.addons-header h2::before {
+  content: "➕";
+  font-size: 1.1rem;
+}
+
+.addons-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.addon-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  border: 1px solid #edf2f7;
+}
+
+.addon-card:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.addon-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.addon-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 0 0 0.15rem 0;
+  color: #1a202c;
+}
+
+.addon-price {
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin-right: 0.5rem;
+}
+
+.addon-price-euro {
+  font-size: 0.8rem;
+  color: #718096;
+}
+
+.addon-quantity {
+  font-size: 0.85rem;
+  margin: 0;
+  color: #718096;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.addon-quantity::before {
+  content: "×";
+  margin-right: 0.15rem;
+}
+
+.remove-addon {
+  background: transparent;
+  border: none;
+  color: #e53e3e;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+}
+
+.remove-addon:hover {
+  color: #c53030;
+  background: rgba(229, 62, 62, 0.1);
+  transform: scale(1.1);
+}
+
+.addons-footer {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-price {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.total-price-euro {
+  font-size: 0.85rem;
+  color: #718096;
+  margin-left: 0.5rem;
+}
+
+/* Animation for add/remove */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.addon-card {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .addons-section {
+    padding: 1rem;
   }
   
   .addon-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #f7f7f7;
-    border-radius: 8px;
-    padding: 0.6rem 0.8rem;
-    transition: transform 0.2s;
-  }
-  
-  .addon-card:hover {
-    transform: translateY(-2px);
-  }
-  
-  .addon-content {
-    display: flex;
-    flex-direction: column;
+    padding: 0.65rem 0.9rem;
   }
   
   .addon-title {
-    font-size: 1rem;
-    margin: 0;
-    color: #444;
+    font-size: 0.9rem;
   }
   
   .addon-quantity {
-    font-size: 0.85rem;
-    margin: 0;
-    color: #777;
+    font-size: 0.8rem;
   }
-  
-  .remove-addon {
-    background: transparent;
-    border: none;
-    color: #ff4d4d;
-    font-size: 1.1rem;
-    cursor: pointer;
-    padding: 0.3rem;
-    transition: color 0.3s;
-  }
-  
-  .remove-addon:hover {
-    color: #ff1a1a;
-  }
-  
-  .addons-footer {
-    margin-top: 0.75rem;
-    text-align: right;
-  }
-  
-  .total-price {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
+}

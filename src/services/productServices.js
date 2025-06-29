@@ -46,5 +46,5 @@ export async function getProductAddonsList(productId){
     const objectId = JSON.parse(localStorage.getItem('restaurantId'));
     const addons = await get(`${getEnv()}/api/addons/${objectId}/${productId}`);
 
-    return addons;
+    return addons || [];
 }

@@ -1,7 +1,7 @@
 import { SERVER_ENDPOINTS } from "./pathList";
 
 const appState = {
-    'APP_ENV' : 'DEVELOPMENT'
+    'APP_ENV' : 'PRODUCTION'
 }
 const getEnv = () => {
     return SERVER_ENDPOINTS?.[appState.APP_ENV]

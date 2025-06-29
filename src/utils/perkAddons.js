@@ -6,7 +6,8 @@ const PERK_LIST = {
     RESERVATIONS: "Reservations",
     AUDITLOG: "AuditLog",
     ADDONS: "Addons",
-    CART: "Cart"
+    CART: "Cart",
+    UPSELL: "Upsell"
 }
 //["Calls","Reports","Tasks","Customers","Reservations","AuditLog","Addons","Cart"]
 

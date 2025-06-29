@@ -166,10 +166,12 @@ const ShowCart = ({ objectData }) => {
             <div className="header-content">
               <div className="left-content">
                 <Link to="/" className="back-btn">
-                  <svg height="512" viewBox="0 0 486.65 486.65" width="512">
-                    <path d="m202.114 444.648c-8.01-.114-15.65-3.388-21.257-9.11l-171.875-171.572c-11.907-11.81-11.986-31.037-.176-42.945.058-.059.117-.118.176-.176l171.876-171.571c12.738-10.909 31.908-9.426 42.817 3.313 9.736 11.369 9.736 28.136 0 39.504l-150.315 150.315 151.833 150.315c11.774 11.844 11.774 30.973 0 42.817-6.045 6.184-14.439 9.498-23.079 9.11z" />
-                    <path d="m456.283 272.773h-425.133c-16.771 0-30.367-13.596-30.367-30.367s13.596-30.367 30.367-30.367h425.133c16.771 0 30.367 13.596 30.367 30.367s-13.596 30.367-30.367 30.367z" />
-                  </svg>
+                <svg height="512" viewBox="0 0 486.65 486.65" width="512">
+                  <path
+                    d="m202.114 444.648c-8.01-.114-15.65-3.388-21.257-9.11l-171.875-171.572c-11.907-11.81-11.986-31.037-.176-42.945.058-.059.117-.118.176-.176l171.876-171.571c12.738-10.909 31.908-9.426 42.817 3.313 9.736 11.369 9.736 28.136 0 39.504l-150.315 150.315 151.833 150.315c11.774 11.844 11.774 30.973 0 42.817-6.045 6.184-14.439 9.498-23.079 9.11z" />
+                  <path
+                    d="m456.283 272.773h-425.133c-16.771 0-30.367-13.596-30.367-30.367s13.596-30.367 30.367-30.367h425.133c16.771 0 30.367 13.596 30.367 30.367s-13.596 30.367-30.367 30.367z" />
+                </svg>
                 </Link>
                 <h5 className="title mb-0 text-nowrap">Количка</h5>
               </div>
@@ -178,215 +180,178 @@ const ShowCart = ({ objectData }) => {
         </div>
       </header>
 
-      <div className="page-content">
+      <div className="page-content" style={{paddingBottom: '150px'}}>
         <div className="container bottom-content shop-cart-wrapper">
           <div className="item-list style-2">
             {cartPrototype.length === 0 ? (
-              <div className="row justify-content-center">
-                <div className="col-12 col-md-6">
-                  <div className="card text-center">
-                    <img
-                      src="/assets/images/pages/cart/cart.png"
-                      className="card-img-top"
-                      alt="Empty Cart Image"
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">Вашата количка е празна</h5>
-                      <p className="card-text">
-                        Моля, добавете продукти в количката си, за да продължите
-                        пазаруването.
-                      </p>
-                      <Link to="/" className="btn btn-primary">
-                        Продължи пазаруването
-                      </Link>
-                    </div>
+            <div className="row justify-content-center">
+              <div className="col-12 col-md-6">
+                <div className="card text-center">
+                  <img src="/assets/images/pages/cart/cart.png" className="card-img-top" alt="Empty Cart Image" />
+                  <div className="card-body">
+                    <h5 className="card-title">Вашата количка е празна</h5>
+                    <p className="card-text">
+                      Моля, добавете продукти в количката си, за да продължите
+                      пазаруването.
+                    </p>
+                    <Link to="/" className="btn btn-primary">
+                    Продължи пазаруването
+                    </Link>
                   </div>
                 </div>
               </div>
+            </div>
             ) : (
-              <ul>
-                {cartPrototype.map((product, index) => (
-                  <li key={index}>
-                    <div className="item-content">
-                      <div className="item-media media media-60">
-                        <img
-                          src={`https://v-menu.eu/uploads/${
-                            JSON.parse(product?.item_images)[0]
-                          }`}
-                          alt="logo"
-                        />
+            <ul>
+              {cartPrototype.map((product, index) => (
+              <li key={index} className="mb-4 p-3 border rounded-3 shadow-sm bg-white">
+                <div className="d-flex flex-wrap gap-3">
+
+                  <div className="item-media">
+                    <img src={`https://v-menu.eu/uploads/${JSON.parse(product?.item_images)[0]}`}
+                      alt={product?.item_name} style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                      className="rounded-2" />
+                  </div>
+
+                  <div className="flex-grow-1 d-flex flex-column justify-content-between">
+                    <div className="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h5 className="mb-1">
+                          <Link to={`/products/${product?.item_id}`} className="text-dark text-decoration-none">
+                          {product?.item_name}
+                          </Link>
+                        </h5>
+                        <div className="text-muted small">{product?.category_names[0]}</div>
                       </div>
 
-                      <div className="item-inner">
-                        <div className="item-title-row">
-                          <h5 className="item-title sub-title">
-                            <Link to={`/products/${product?.item_id}`}>
-                              {product?.item_name}
-                            </Link>
-                          </h5>
-                          <div className="item-subtitle text-soft">
-                            {product?.category_names[0]}
-                          </div>
-                        </div>
-                        <div className="item-footer">
-  <div className="d-flex align-items-center">
-    {product?.has_discount ? (
-      <>
-        <h6 className="me-2">
-          BGN{" "}
-          {(
-            product?.item_price -
-            (product?.discount_percentage * product?.item_price) / 100
-          ).toFixed(2)}
-          <span className="euro-price ms-1">
-            (€
-            {(
-              (product?.item_price -
-                (product?.discount_percentage * product?.item_price) / 100) /
-              1.95583
-            ).toFixed(2)})
-          </span>
-        </h6>
-        <del className="off-text">
-          <h6>
-            BGN {Number(product?.item_price).toFixed(2)}
-            <span className="euro-price ms-1">
-              (€{(product?.item_price / 1.95583).toFixed(2)})
-            </span>
-          </h6>
-        </del>
-      </>
-    ) : (
-      <>
-        <h6>
-          BGN {Number(product?.item_price).toFixed(2)}
-          <span className="euro-price ms-1">
-            (€{(product?.item_price / 1.95583).toFixed(2)})
-          </span>
-        </h6>
-      </>
-    )}
-  </div>
+                      <button className="btn btn-sm btn-link text-danger p-0" onClick={()=>
+                        handleRemove(product?.item_id)}
+                        >
+                        <i className="fa fa-trash fa-lg"></i>
+                      </button>
+                    </div>
 
-  <div className="d-flex align-items-center">
-    <div className="product-quantity">
-      <button
-        type="button"
-        className="quantity-btn"
-        onClick={() => handleDecrement(product?.item_id)}
-      >
-        -
-      </button>
-      <input
-        type="text"
-        name={ProductDetailsKeys.PRODUCT_QUANTITY}
-        className="quantity-input"
-        value={cart[index]?.productQuantity}
-        readOnly
-      />
-      <button
-        type="button"
-        className="quantity-btn"
-        onClick={() => handleIncrement(product?.item_id)}
-      >
-        +
-      </button>
-    </div>
-  </div>
-  <div className="d-flex align-items-center">
-    <i
-      className="fa fa-trash"
-      style={{ color: "red", marginLeft: "2em" }}
-      onClick={() => handleRemove(product?.item_id)}
-    ></i>
-  </div>
-</div>
+                    <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+
+                      {/* Price */}
+                      <div>
+                        {product?.has_discount ? (
+                        <>
+                          <div className="text-danger fw-bold">
+                            BGN {(product.item_price - (product.discount_percentage * product.item_price) /
+                            100).toFixed(2)}
+                            <span className="euro-price text-muted ms-1">
+                              (€{((product.item_price - (product.discount_percentage * product.item_price) / 100) /
+                              1.95583).toFixed(2)})
+                            </span>
+                          </div>
+                          <div className="text-muted small">
+                            <del>
+                              BGN {product.item_price.toFixed(2)} (€{(product.item_price / 1.95583).toFixed(2)})
+                            </del>
+                          </div>
+                        </>
+                        ) : (
+                        <div className="fw-bold">
+                          BGN {product.item_price.toFixed(2)}
+                          <span className="euro-price text-muted ms-1">
+                            (€{(product.item_price / 1.95583).toFixed(2)})
+                          </span>
+                        </div>
+                        )}
+                      </div>
+
+                      {/* Quantity */}
+                      <div className="d-flex align-items-center border rounded px-2 py-1">
+                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={()=>
+                          handleDecrement(product?.item_id)}
+                          >
+                          −
+                        </button>
+                        <span className="mx-2 fw-semibold" style={{ minWidth: '30px', textAlign: 'center' }}>
+                          {cart[index]?.productQuantity}
+                        </span>
+                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={()=>
+                          handleIncrement(product?.item_id)}
+                          >
+                          +
+                        </button>
                       </div>
                     </div>
-                    {hasAddon(PERK_LIST.ADDONS) ? (
-                      <CartAddons
-                        product={product}
-                        handleRemoveAddon={handleRemoveAddon}
-                        selectedAddons={selectedAddons}
-                      />
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
+                  </div>
+                </div>
+
+                {/* Addons */}
+                {hasAddon(PERK_LIST.ADDONS) && (
+                <div className="mt-3">
+                  <CartAddons product={product} handleRemoveAddon={handleRemoveAddon} selectedAddons={selectedAddons} />
+                </div>
+                )}
+              </li>
+
+              ))}
+            </ul>
             )}
           </div>
         </div>
 
-        <div className="footer fixed">
-  <div className="container">
-    <div className="view-title mb-2">
-      <ul>
-        <li>
-          <span className="text-soft">Междинна сума</span>
-          <span className="text-soft">
-            BGN {Number(totalPrice).toFixed(2)}
-            <span className="euro-price ms-1">
-              (€{(totalPrice / 1.95583).toFixed(2)})
-            </span>
-          </span>
-        </li>
-        <li>
-          <span className="text-soft">Добавки</span>
-          <span className="text-soft">
-            +BGN {Number(totalAddonsPrice).toFixed(2)}
-            <span className="euro-price ms-1">
-              (€{(totalAddonsPrice / 1.95583).toFixed(2)})
-            </span>
-          </span>
-        </li>
-        <li>
-          <span className="text-soft">Отстъпки</span>
-          <span className="text-soft">
-            -BGN {Number(totalPrice - discountPrice).toFixed(2)}
-            <span className="euro-price ms-1">
-              (€{( (totalPrice - discountPrice) / 1.95583 ).toFixed(2)})
-            </span>
-          </span>
-        </li>
-        <li>
-          <h5>Общо</h5>
-          <h5>
-            BGN{" "}
-            {Number(
-              totalPrice -
-                (totalPrice - discountPrice) +
-                totalAddonsPrice
-            ).toFixed(2)}
-            <span className="euro-price ms-1">
-              (€{(
-                (totalPrice - (totalPrice - discountPrice) + totalAddonsPrice) / 
-                1.95583
-              ).toFixed(2)})
-            </span>
-          </h5>
-        </li>
-        <li>
-          <a href="#" className="promo-bx">
-            Използвани отстъпки
-            <span>Възползвате се от {totalDiscounts} отстъпки</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div className="footer-btn d-flex align-items-center">
-      <Link
-        to={PATH_LIST.APP_CHECKOUT}
-        className={
-          totalPrice > 0
-            ? "btn btn-primary flex-1"
-            : "btn btn-primary disabled flex-1"
-        }
-      >
-        ПРЕМИНЕТЕ КЪМ ПЛАЩАНЕ
-      </Link>
-    </div>
-  </div>
-</div>
+        <div className="cart-summary-container">
+          <div className="summary-card">
+            <div className="summary-grid">
+              <div className="summary-row">
+                <span className="summary-label">Продукти:</span>
+                <span className="summary-value">
+                  {Number(totalPrice).toFixed(2)} лв.
+                </span>
+              </div>
+
+              <div className="summary-row">
+                <span className="summary-label">Добавки:</span>
+                <span className="summary-value addons">
+                  +{Number(totalAddonsPrice).toFixed(2)} лв.
+                </span>
+              </div>
+
+              {totalDiscounts > 0 && (
+              <div className="summary-row">
+                <span className="summary-label">Отстъпки:</span>
+                <span className="summary-value discount">
+                  -{Number(totalPrice - discountPrice).toFixed(2)} лв.
+                </span>
+              </div>
+              )}
+
+              <div className="divider"></div>
+
+              <div className="summary-row total-row">
+                <span className="summary-label">Общо:</span>
+                <span className="summary-value total">
+                  {Number(discountPrice + totalAddonsPrice).toFixed(2)} лв.
+                  <span className="euro-conversion">
+                    ≈ {( (discountPrice + totalAddonsPrice) / 1.95583 ).toFixed(2)} €
+                  </span>
+                </span>
+              </div>
+
+              {totalDiscounts > 0 && (
+              <div className="promo-badge">
+                <span className="badge-icon">🎁</span>
+                <span className="badge-text">
+                  Използвани {totalDiscounts} {totalDiscounts === 1 ? 'отстъпка' : 'отстъпки'}
+                </span>
+              </div>
+              )}
+            </div>
+
+            <Link to={totalPrice> 0 ? PATH_LIST.APP_CHECKOUT : "#"}
+            className={`checkout-btn ${totalPrice > 0 ? '' : 'disabled'}`}
+            aria-disabled={totalPrice <= 0} tabIndex={totalPrice <=0 ? -1 : 0} onClick={(e)=> {
+              if (totalPrice <= 0) { e.preventDefault(); } }}>
+                <span>Продължи към плащане</span>
+                <span className="btn-arrow">→</span>
+                </Link>
+          </div>
+        </div>
       </div>
     </>
   );

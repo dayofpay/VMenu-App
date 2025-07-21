@@ -69,7 +69,7 @@ const ShowCategoryData = ({
                                         <Link to={`/products/${product.item_id}`}>{product?.item_name}</Link>
                                     </h5>
 									<div className="d-flex align-items-center">
-                                    {ProductHasDiscount(product.discount_expires) ? (
+                                    {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) ? (
                                         <>
 
 										<h6 className="me-2 mb-0">BGN {(product.item_price -
@@ -83,7 +83,7 @@ const ShowCategoryData = ({
 									</div>    
 								</div>
 								<div className="item-footer">
-                                    {ProductHasDiscount(product.discount_expires) ? (
+                                    {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) ? (
                                         <>
 									<div className="d-flex align-items-center">
 										<svg className="me-2" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

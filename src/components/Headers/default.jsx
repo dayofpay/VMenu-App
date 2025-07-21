@@ -19,7 +19,7 @@ function DefaultHeader({objectData}) {
                         <div className="mid-content"></div>
                         <div className="right-content">
                             <button className="btn w-100 btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#objectInfoModal"
-                                class="mb-2 me-2 btn btn-icon btn-primary"><i class="fa-solid fa-circle-info"></i></button>
+                                class="mb-2 me-2 btn btn-icon btn-primary"><i className="fa-solid fa-circle-info"></i></button>
                             {/*TEMPORARY REMOVED -  {objectData?.license.perksData.tc_darkMode ? (
                             <a href="#" className="theme-btn">
                                 <svg className="dark" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24"

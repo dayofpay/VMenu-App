@@ -69,7 +69,7 @@ const ShowCategoryData = ({ objectData }) => {
                                                     <Link to={`/products/${product.item_id}`}>{product.item_name}</Link>
                                                 </h5>
                                                 <div className="price-section">
-                                                    {ProductHasDiscount(product.discount_expires) ? (
+                                                    {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) ? (
                                                         <>
                                                             <h6 className="discounted-price">BGN {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)}</h6>
                                                             <del className="original-price">BGN {Number(product.item_price).toFixed(2)}</del>
@@ -79,7 +79,7 @@ const ShowCategoryData = ({ objectData }) => {
                                                     )}
                                                 </div>
                                             </div>
-                                            {ProductHasDiscount(product.discount_expires) && (
+                                            {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) && (
                                                 <div className="discount-badge">
                                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M14.6666 0.000106812H9.12485C8.75825 0.000106812 8.24587 0.212488 7.98685 0.471314L0.389089 8.06903C-0.129696 8.58723 -0.129696 9.43684 0.389089 9.95441L6.04624 15.6114C6.56385 16.1296 7.41263 16.1296 7.93103 15.6108L15.5288 8.01423C15.7876 7.75544 16 7.24224 16 6.87642V1.3335C16 0.600298 15.3998 0.000106812 14.6666 0.000106812ZM11.9998 5.33347C11.2634 5.33347 10.6664 4.73585 10.6664 4.00008C10.6664 3.26309 11.2634 2.66669 11.9998 2.66669C12.7362 2.66669 13.3334 3.26309 13.3334 4.00008C13.3334 4.73585 12.7362 5.33347 11.9998 5.33347Z" fill="#C29C1D" />

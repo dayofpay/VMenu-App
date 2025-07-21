@@ -161,23 +161,67 @@ setCategoryNames([...new Set(product.category_names)]);
           <input type="hidden" name={ProductDetailsKeys.PRODUCT_ID} value={productData.item_id} />
 
           {/* Product Gallery */}
-          <div style={styles.gallery}>
-            <div className="product-swiper" style={styles.swiper}>
-              <div className="swiper-wrapper">
-                {Array.from(JSON.parse(productData.item_images)).map(
-                (image, index) => (
-                <div className="swiper-slide" key={index} style={styles.slide}>
-                  <div style={styles.imageContainer}>
-                    <img src={`${getEnv()}/uploads/${image}`} style={styles.productImage} alt={productData.item_name}
-                      loading="lazy" />
-                  </div>
+<div style={styles.gallery}>
+  <div className="product-swiper" style={styles.swiper}>
+    <div className="swiper-wrapper">
+      {(() => {
+        try {
+          const images = typeof productData.item_images === 'string' 
+            ? JSON.parse(productData.item_images || '[]')
+            : Array.isArray(productData.item_images)
+              ? productData.item_images
+              : [];
+          
+          if (images.length === 0) {
+            return (
+              <div className="swiper-slide" style={styles.slide}>
+                <div style={styles.imageContainer}>
+                  <img 
+                    src={`https://v-menu.eu/errors/no-image.png`} 
+                    style={styles.productImage} 
+                    alt={productData.item_name || 'Продукт без изображение'}
+                    loading="lazy"
+                  />
                 </div>
-                )
-                )}
               </div>
-              <div className="swiper-pagination" style={styles.pagination}></div>
+            );
+          }
+
+          return images.map((image, index) => (
+            <div className="swiper-slide" key={index} style={styles.slide}>
+              <div style={styles.imageContainer}>
+                <img 
+                  src={`${getEnv()}/uploads/${image}`} 
+                  style={styles.productImage} 
+                  alt={`${productData.item_name} - Изображение ${index + 1}`}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.src = `https://v-menu.eu/errors/no-image.png`;
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          ));
+
+        } catch (error) {
+          return (
+            <div className="swiper-slide" style={styles.slide}>
+              <div style={styles.imageContainer}>
+                <img 
+                  src={`https://v-menu.eu/errors/no-image.png`} 
+                  style={styles.productImage} 
+                  alt="Грешка при зареждане на изображенията"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          );
+        }
+      })()}
+    </div>
+    <div className="swiper-pagination" style={styles.pagination}></div>
+  </div>
+</div>
 
           {/* Product Info */}
           <div style={styles.productInfo}>
@@ -189,8 +233,20 @@ setCategoryNames([...new Set(product.category_names)]);
 
               <div style={styles.stats}>
                 <div style={styles.statItem}>
-                  <i className="fas fa-eye" style={styles.statIcon}></i>
-                  <span>{productData.product_views} преглеждания</span>
+                            <i 
+                              className="fas fa-eye" 
+                              style={{
+                                ...styles.statIcon,
+                                visibility: productData?.settings?.VISUAL_SETTINGS?.SHOW_PRODUCT_VIEW_COUNT ? 'visible' : 'hidden'
+                              }}
+                            ></i>
+                            <span 
+                              style={{
+                                visibility: productData?.settings?.VISUAL_SETTINGS?.SHOW_PRODUCT_VIEW_COUNT ? 'visible' : 'hidden'
+                              }}
+                            >
+                              {productData?.product_views || 0} преглеждания
+                            </span>
                 </div>
 
                 {productData.hasDiscount && (
@@ -274,47 +330,103 @@ setCategoryNames([...new Set(product.category_names)]);
           </div>
 
 
-          {hasAddon(PERK_LIST.UPSELL) && Array.isArray(relatedProducts?.categoryData?.[0]) &&
-          relatedProducts.categoryData[0].length > 0 && (
-          <div style={styles.upsellSection}>
-            <h3 style={styles.upsellTitle}>
-              🔥 Най-често поръчвано заедно с "{relatedProducts.categoryData[1]?.categoryName}"
-            </h3>
-            <div style={styles.upsellGrid}>
-              {relatedProducts.categoryData[0].slice(0, 4).map((product) => (
-              <Link to={`/products/${product.item_id}`} key={product.item_id} style={styles.upsellCard}>
-              <div style={styles.upsellImageContainer}>
-                <img src={`${getEnv()}/uploads/${JSON.parse(product.item_images)[0]}`} style={styles.upsellImage}
-                  alt={product.item_name} loading="lazy" />
-              </div>
-              <div style={styles.upsellInfo}>
-                <h4 style={styles.upsellName}>{product.item_name}</h4>
-                <div style={styles.upsellPrice}>
-                  {new Date(product.discount_expires) >= new Date() && product.discount_percentage > 0 ? (
+{hasAddon(PERK_LIST.UPSELL) && (
+  productData?.settings?.upsellDetailed?.length > 0 ? (
+    <div style={styles.upsellSection}>
+      <h3 style={styles.upsellTitle}>
+        🔥 Други ястия от "нашите препоръки", които нашите гости харесват...
+      </h3>
+      <div style={styles.upsellGrid}>
+        {productData.settings.upsellDetailed.slice(0, 4).map((product) => (
+          <Link to={`/products/${product.item_id}`} key={product.item_id} style={styles.upsellCard}>
+            <div style={styles.upsellImageContainer}>
+<img 
+  src={`${getEnv()}/uploads/${
+    typeof product.item_images === 'string' 
+      ? (JSON.parse(product.item_images || '[]')[0] || 'https://v-menu.eu/errors/no-image.png')
+      : (Array.isArray(product.item_images) ? product.item_images[0] : 'https://v-menu.eu/errors/no-image.png')
+  }`} 
+  style={styles.upsellImage}
+  alt={product.item_name || 'Product image'} 
+  loading="lazy"
+  onError={(e) => {
+    e.target.src = `https://v-menu.eu/errors/no-image.png`;
+  }}
+/>
+            </div>
+            <div style={styles.upsellInfo}>
+              <h4 style={styles.upsellName}>{product.item_name}</h4>
+              <div style={styles.upsellPrice}>
+                {new Date(product.discount_expires) >= new Date() && product.discount_percentage > 0 ? (
                   <>
                     <span style={styles.upsellCurrentPrice}>
-                      {(
-                      product.item_price -
-                      (product.discount_percentage * product.item_price) / 100
-                      ).toFixed(2)} лв.
+                      {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)} лв.
                     </span>
                     <span style={styles.upsellOriginalPrice}>
                       {product.item_price.toFixed(2)} лв.
                     </span>
                   </>
-                  ) : (
+                ) : (
                   <span style={styles.upsellCurrentPrice}>
                     {product.item_price.toFixed(2)} лв.
                   </span>
+                )}
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  ) : (
+    Array.isArray(relatedProducts?.categoryData?.[0]) && relatedProducts.categoryData[0].length > 0 && (
+      <div style={styles.upsellSection}>
+        <h3 style={styles.upsellTitle}>
+          🔥 Други ястия от "{relatedProducts.categoryData[1]?.categoryName}", които нашите гости харесват...
+        </h3>
+        <div style={styles.upsellGrid}>
+          {relatedProducts.categoryData[0].slice(0, 4).map((product) => (
+            <Link to={`/products/${product.item_id}`} key={product.item_id} style={styles.upsellCard}>
+              <div style={styles.upsellImageContainer}>
+              <img 
+                src={`${getEnv()}/uploads/${
+                  typeof product.item_images === 'string' 
+                    ? (JSON.parse(product.item_images || '[]')[0] || 'https://v-menu.eu/errors/no-image.png')
+                    : (Array.isArray(product.item_images) ? product.item_images[0] : 'https://v-menu.eu/errors/no-image.png')
+                }`} 
+                style={styles.upsellImage}
+                alt={product.item_name || 'Product image'} 
+                loading="lazy"
+                onError={(e) => {
+                  e.target.src = `https://v-menu.eu/errors/no-image.png`;
+                }}
+              />
+              </div>
+              <div style={styles.upsellInfo}>
+                <h4 style={styles.upsellName}>{product.item_name}</h4>
+                <div style={styles.upsellPrice}>
+                  {new Date(product.discount_expires) >= new Date() && product.discount_percentage > 0 ? (
+                    <>
+                      <span style={styles.upsellCurrentPrice}>
+                        {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)} лв.
+                      </span>
+                      <span style={styles.upsellOriginalPrice}>
+                        {product.item_price.toFixed(2)} лв.
+                      </span>
+                    </>
+                  ) : (
+                    <span style={styles.upsellCurrentPrice}>
+                      {product.item_price.toFixed(2)} лв.
+                    </span>
                   )}
-
                 </div>
               </div>
-              </Link>
-              ))}
-            </div>
-          </div>
-          )}
+            </Link>
+          ))}
+        </div>
+      </div>
+    )
+  )
+)}
 
         </div>
 

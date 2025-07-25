@@ -1,3 +1,4 @@
+import { getEnv } from "../../utils/appData";
 import OBJECT_TYPES from "../../utils/objectTypes";
 import LoadingAnimation from "../Animations/Loading";
 import '../Styles/CKContent.css';
@@ -166,8 +167,32 @@ function DefaultHeader({objectData}) {
                 backgroundColor: 'rgba(0,0,0,0.02)'
             }}>
                 Поддържано и разработвано от V-MENU
+{objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.HEADER_SETTINGS?.SHOW_LOGO && (
+                    <div style={{
+                        marginTop: '10px',
+                        maxWidth: '100%',
+                        width: '200px',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        padding: '10px',
+                        borderRadius: '8px',
+                    }}>
+                        <img 
+                            src={objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.HEADER_SETTINGS?.SHOW_LOGO && `${getEnv() + "/uploads/" + objectData.objectInformation.object_image}`}
+                            alt="Logo" 
+                            style={{
+                                width: '200%',
+                                height: 'auto',
+                                objectFit: 'contain',
+                                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+                            }} 
+                        />
+                    </div>
+                )}
             </div>
+
         </header>
+
     )
 }
 

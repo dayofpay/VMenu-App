@@ -334,7 +334,7 @@ setCategoryNames([...new Set(product.category_names)]);
   productData?.settings?.upsellDetailed?.length > 0 ? (
     <div style={styles.upsellSection}>
       <h3 style={styles.upsellTitle}>
-        🔥 Други ястия от "нашите препоръки", които нашите гости харесват...
+        {(productData.settings.CONVERSION_BOOST_MODULES.UPSELL.TEXT).length > 0 ? productData.settings.CONVERSION_BOOST_MODULES.UPSELL.TEXT : "Нашите гости също предпочитат..."}
       </h3>
       <div style={styles.upsellGrid}>
         {productData.settings.upsellDetailed.slice(0, 4).map((product) => (

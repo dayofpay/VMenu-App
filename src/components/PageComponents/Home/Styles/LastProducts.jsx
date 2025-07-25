@@ -530,40 +530,116 @@ const HomeContent = ({ objectData }) => {
                 </svg>
                 </Link>
               </div>
-              <div className="categories-box">
-                <div className="swiper-btn-center-lr">
-                  <div className="swiper categorie-swiper">
-                    <div className="swiper-wrapper">
-                      {objectData.categories.map((category, index) => (
-                      <div className="swiper-slide" data-aos="fade-down" key={index}>
-                        <Link to={`/category/${category.entry_id}`}> {" "}
-                            <div
-                              className=" categore-box" style={{
-                                backgroundImage: `url(${getEnv()}/uploads/${
-                                  category.category_background_image
-                                })`,
-                              }}>
-                        {landingPageSettings.CATEGORY_SETTINGS
-                        .SHOW_PRODUCT_ICONS ? (
-                        <i className={category.category_mini_image}></i>
-                        ) : (
-                        ""
-                        )}
-                        <h6 className="font-14 text-white mb-2 text-center">
-                          {category.category_name}
-                        </h6>
-                        <span className="text-white">
-                          {category.itemCount}
-                          {GeneratePrefix(category.itemCount)}
-                        </span>
-                      </div>
-                      </Link>
+              <div className="categories-container">
+  <div className="swiper-btn-center-lr">
+    <div className="swiper categorie-swiper">
+      <div className="swiper-wrapper">
+        {objectData.categories.map((category, index) => (
+          <div className="swiper-slide" data-aos="fade-down" key={index}>
+            <Link to={`/category/${category.entry_id}`}>
+              <div 
+                className="category-card"
+                style={{
+                  backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url(${getEnv()}/uploads/${category.category_background_image})`
+                }}
+              >
+                <div className="card-content">
+                  {landingPageSettings.CATEGORY_SETTINGS.SHOW_PRODUCT_ICONS && (
+                    <div className="category-icon">
+                      <i className={category.category_mini_image}></i>
                     </div>
-                    ))}
+                  )}
+                  <div className="text-content">
+                    <h6 className="category-name">{category.category_name}</h6>
+                    <span className="items-count">
+                      {category.itemCount} {GeneratePrefix(category.itemCount)}
+                    </span>
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style jsx>{`
+  .categories-container {
+    padding: 20px 0;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .category-card {
+    height: 200px;
+    border-radius: 16px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-content {
+    width: 100%;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .category-icon {
+    font-size: 2.8rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .text-content {
+    text-align: center;
+  }
+  
+  .category-name {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+  
+  .items-count {
+    display: inline-block;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(4px);
+  }
+  
+  @media (max-width: 768px) {
+    .category-card {
+      height: 160px;
+    }
+    
+    .category-icon {
+      font-size: 2rem;
+    }
+    
+    .category-name {
+      font-size: 1rem;
+    }
+  }
+`}</style>
 
             <div className="title-bar d-flex justify-content-between align-items-center mb-3">
               <span className="title mb-0 font-18">Последни продукти</span>

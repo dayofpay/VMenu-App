@@ -241,12 +241,10 @@ const ShowCategoryData = ({ objectData }) => {
                                 />
                             </Link>
                             
-                            {/* Пример за Vegetarian badge (може да се добави логика) */}
                             {JSON.parse(product.settings).VISUAL_SETTINGS.SHOW_BADGES.PROMO && (
     <div style={{...styles.promotedTag, ...styles.promotedTagWithIcon}}>Промотирано</div>
                             )}
                             
-                            {/* Пример за Popular tag (може да се добави логика) */}
                             {product.product_views >= 200 && (
                                 <div style={styles.popularTag}>Популярно</div>
                             )}

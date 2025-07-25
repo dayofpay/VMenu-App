@@ -477,47 +477,100 @@ const HomeContent = ({ objectData }) => {
         </Link>
       </div>
       
-      <div className="categories-box">
-        <div className="swiper-btn-center-lr">
-          <div className="swiper categorie-swiper">
-            <div className="swiper-wrapper">
-              {objectData.categories.map((category, index) => (
-                <div
-                  className="swiper-slide"
-                  data-aos="fade-down"
-                  key={index}
-                >
-                  <Link to={`/category/${category.entry_id}`}>
-                    {" "}
-                    <div
-                      className="categore-box"
-                      style={{
-                        backgroundImage: `url(${getEnv()}/uploads/${
-                          category.category_background_image
-                        })`,
-                      }}
-                    >
-                      {landingPageSettings.CATEGORY_SETTINGS
-                        .SHOW_PRODUCT_ICONS ? (
-                        <i className={category.category_mini_image}></i>
-                      ) : (
-                        ""
-                      )}
-                      <h6 className="font-14 text-white mb-2 text-center">
-                        {category.category_name}
-                      </h6>
-                      <span className="text-white">
-                        {category.itemCount}
-                        {GeneratePrefix(category.itemCount)}
-                      </span>
+      <div className="categories-container">
+  <div className="swiper-btn-center-lr">
+    <div className="swiper categorie-swiper">
+      <div className="swiper-wrapper">
+        {objectData.categories.map((category, index) => (
+          <div
+            className="swiper-slide"
+            data-aos="fade-down"
+            key={index}
+          >
+            <Link to={`/category/${category.entry_id}`}>
+              <div
+                className="category-card"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${getEnv()}/uploads/${category.category_background_image})`,
+                }}
+              >
+                <div className="category-content">
+                  {landingPageSettings.CATEGORY_SETTINGS.SHOW_PRODUCT_ICONS && (
+                    <div className="category-icon">
+                      <i className={category.category_mini_image}></i>
                     </div>
-                  </Link>
+                  )}
+                  <h6 className="category-title">{category.category_name}</h6>
+                  <span className="product-count">
+                    {category.itemCount}
+                    {GeneratePrefix(category.itemCount)}
+                  </span>
                 </div>
-              ))}
-            </div>
+              </div>
+            </Link>
           </div>
-        </div>
+        ))}
       </div>
+    </div>
+  </div>
+</div>
+
+<style jsx>{`
+  .categories-container {
+    padding: 1rem 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .category-card {
+    height: 160px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .category-content {
+    text-align: center;
+    padding: 2rem;
+    z-index: 1;
+  }
+  
+  .category-icon {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+  
+  .category-title {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .product-count {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(5px);
+  }
+`}</style>
       
       <div className="title-bar">
         {accentSettings.SHOW_ACCENT_TEXT && (

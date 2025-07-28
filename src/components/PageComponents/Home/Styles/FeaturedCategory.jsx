@@ -35,6 +35,22 @@ const HomeContent = ({ objectData }) => {
   
   const [categoryData, setCategoryData] = useState([]);
   const [categoryItems, setCategoryItems] = useState([]);
+  const [categoryMeta, setCategoryMeta] = useState({
+    layout: { type: 'grid', columns: 3, spacing: 'medium', order: 'manual' },
+    design: { colorScheme: 'default', cardStyle: 'rounded', animation: { hover: true, type: 'lift' } },
+    content: { showBadges: true, showDescriptions: false, showCounts: true, showPrices: true },
+    advanced: { lazyLoading: true, adaptiveColors: true, responsiveBreakpoints: { mobile: 1, tablet: 2, desktop: 3 } },
+    themes: { modern: { showDiscountTags: true, showPopularityBadges: true, quickView: true }, grid: { iconSize: 'medium' }, list: { showDetails: false } },
+    meta: { version: '2.0', lastUpdated: new Date().toISOString() }
+  });
+
+  useEffect(() => {
+    const meta = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_META?.settings;
+    if (meta) {
+      setCategoryMeta(meta);
+    }
+  }, [objectData]);
+  console.log(categoryMeta.design.colorScheme);
   
   useEffect(() => {
     const getData = async() => {
@@ -146,7 +162,8 @@ const HomeContent = ({ objectData }) => {
       data-bs-toggle="modal"
       data-bs-target="#languageModal"
     >
-      <i className="fas fa-globe"></i> Избери език
+      <i className="fas fa-globe"></i> <span style={{ fontSize: '16px' }}>Избери език</span>
+
     </button>
 
     <div
@@ -530,35 +547,43 @@ const HomeContent = ({ objectData }) => {
   <div className="swiper-btn-center-lr">
     <div className="swiper categorie-swiper">
       <div className="swiper-wrapper">
-        {objectData.categories.map((category, index) => (
-          <div
-            className="swiper-slide"
-            data-aos="fade-down"
-            key={index}
-          >
-            <Link to={`/category/${category.entry_id}`}>
-              <div
-                className="category-card"
-                style={{
-                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${getEnv()}/uploads/${category.category_background_image})`,
-                }}
-              >
-                <div className="category-content">
-                  {landingPageSettings.CATEGORY_SETTINGS.SHOW_PRODUCT_ICONS && (
-                    <div className="category-icon">
-                      <i className={category.category_mini_image}></i>
-                    </div>
-                  )}
-                  <h6 className="category-title">{category.category_name}</h6>
-                  <span className="product-count">
-                    {category.itemCount}
-                    {GeneratePrefix(category.itemCount)}
-                  </span>
-                </div>
-              </div>
-            </Link>
-          </div>
-        ))}
+{objectData.categories.map((category, index) => (
+  <div className="swiper-slide" data-aos="fade-down" key={index}>
+    <Link to={`/category/${category.entry_id}`}>
+      <div
+        className="category-card"
+        style={categoryMeta.design.colorScheme === 'minimal' 
+          ? { backgroundColor: '#602920'}
+          : { 
+              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${getEnv()}/uploads/${category.category_background_image})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }
+        }
+      >
+        <div className="category-content">
+          {landingPageSettings.CATEGORY_SETTINGS.SHOW_PRODUCT_ICONS && (
+            <div className="category-icon">
+              <i className={category.category_mini_image}></i>
+            </div>
+          )}
+<h6 
+  className="category-title"
+  style={{
+    color: categoryMeta.design.colorScheme === 'minimal' ? '#eeeee7ff' : ''
+  }}
+>
+  {category.category_name}
+</h6>
+          <span className="product-count">
+            {category.itemCount}
+            {GeneratePrefix(category.itemCount)}
+          </span>
+        </div>
+      </div>
+    </Link>
+  </div>
+))}
       </div>
     </div>
   </div>
@@ -614,7 +639,7 @@ const HomeContent = ({ objectData }) => {
     display: inline-block;
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 1.25rem;
     border-radius: 20px;
     font-size: 0.9rem;
     backdrop-filter: blur(5px);
@@ -698,7 +723,227 @@ const HomeContent = ({ objectData }) => {
         ))}
       </div>
       
-      <style jsx>{`
+{categoryMeta.design.colorScheme === 'minimal' ? (
+        <style jsx>{`
+        .language-selector-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          padding: 14px 20px;
+          border-radius: 12px;
+          background: #602920;
+          color: #fff8ee;
+          font-weight: 600;
+          border: none;
+          margin-bottom: 16px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .language-selector-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+          background: linear-gradient(135deg, #c7823a, #a86d2e);
+        }
+
+        .language-selector-btn:active {
+          transform: translateY(0);
+        }
+
+        .language-selector-btn::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
+          transition: 0.5s;
+        }
+
+        .language-selector-btn:hover::before {
+          left: 100%;
+        }
+
+        .language-selector-btn i {
+          margin-right: 10px;
+          font-size: 20px;
+          transition: transform 0.3s ease;
+        }
+
+        .language-selector-btn:hover i {
+          transform: scale(1.1);
+        }
+
+
+        .language-modal .modal-content {
+          border-radius: 16px;
+          overflow: hidden;
+          border: none;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-modal .modal-header {
+          background: linear-gradient(135deg, #a86d2e, #8a5a2b);
+          color: white;
+          border-bottom: none;
+          padding: 20px;
+        }
+
+        .language-modal .modal-title {
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+        }
+
+        .language-modal .modal-title i {
+          margin-right: 10px;
+        }
+
+        .language-modal .modal-body {
+          padding: 25px;
+        }
+
+        .language-modal .btn-close {
+          filter: invert(1);
+          opacity: 0.8;
+          transition: opacity 0.2s ease;
+        }
+
+        .language-modal .btn-close:hover {
+          opacity: 1;
+        }
+
+
+        @media (max-width: 576px) {
+          .language-selector-btn {
+            padding: 12px 16px;
+            font-size: 14px;
+          }
+          
+          .language-modal .modal-body {
+            padding: 15px;
+          }
+        }
+        .server-call-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          padding: 14px 20px;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #2c82c9, #1a4f7a);
+          color: white;
+          font-weight: 600;
+          border: none;
+          margin-bottom: 16px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          transition: all 0.3s ease;
+        }
+        
+        .server-call-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+          background: linear-gradient(135deg, #3498db, #2c82c9);
+        }
+        
+        .server-call-btn i {
+          margin-right: 10px;
+          font-size: 20px;
+        }
+        
+        .call-option-btn {
+          position: relative;
+          width: 100%;
+          padding: 12px 10px;
+          border-radius: 8px;
+          background-color: #4caf50;
+          color: white;
+          font-weight: 500;
+          border: none;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+          transition: all 0.2s ease;
+          overflow: hidden;
+        }
+        
+        .call-option-btn:hover:not(:disabled) {
+          background-color: #43a047;
+          transform: translateY(-1px);
+        }
+        
+        .call-option-btn:active:not(:disabled) {
+          transform: translateY(1px);
+        }
+        
+        .call-option-btn.on-cooldown {
+          background-color: #78909c;
+          cursor: not-allowed;
+        }
+        
+        .cooldown-timer {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 4px;
+          background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .cooldown-progress {
+          height: 100%;
+          background-color: rgba(255, 255, 255, 0.5);
+          transition: width 1s linear;
+        }
+        
+        .cooldown-timer span {
+          position: absolute;
+          bottom: 8px;
+          right: 8px;
+          font-size: 10px;
+          background-color: rgba(0, 0, 0, 0.5);
+          border-radius: 4px;
+          padding: 2px 4px;
+        }
+        
+        .btn-cancel {
+          padding: 8px 16px;
+          border-radius: 6px;
+          background-color: #f44336;
+          color: white;
+          border: none;
+          font-size: 14px;
+          transition: background-color 0.2s ease;
+        }
+        
+        .btn-cancel:hover {
+          background-color: #d32f2f;
+        }
+        
+        .modal-content {
+          border-radius: 12px;
+          overflow: hidden;
+        }
+        
+        .modal-header {
+          background-color: #f5f5f5;
+          border-bottom: 1px solid #eeeeee;
+        }
+        
+        .modal-footer {
+          border-top: 1px solid #eeeeee;
+        }
+      `}</style>
+      ): (
+        <style jsx>{`
         .language-selector-btn {
           display: flex;
           align-items: center;
@@ -916,6 +1161,7 @@ const HomeContent = ({ objectData }) => {
           border-top: 1px solid #eeeeee;
         }
       `}</style>
+      )}
     </div>
   
           </div>

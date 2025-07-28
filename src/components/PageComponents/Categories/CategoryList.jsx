@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { do_action } from "../../../services/userServices";
 // VMENU_APP_PAGES_CATEGORIES 6.0.0 @VDEVSBG //
 const ShowCategoryList = ({ objectData }) => {
+  const [colorSchemeName,setColorSchemeName] = useState('');
   const [categoryMeta, setCategoryMeta] = useState({
     layout: { type: 'grid', columns: 3, spacing: 'medium', order: 'manual' },
     design: { colorScheme: 'default', cardStyle: 'rounded', animation: { hover: true, type: 'lift' } },
@@ -33,6 +34,37 @@ const ShowCategoryList = ({ objectData }) => {
     do_action("click_button", { button_name: "Категории" });
   }, [objectData]);
 
+const [aspectRatio, setAspectRatio] = useState('1/1');
+
+useEffect(() => {
+  /**
+   * Update the aspect ratio of the category list based on the screen width and the number of columns.
+   */
+  const updateAspectRatio = () => {
+    const width = window.innerWidth;
+
+    // If the number of columns is 1, use a different aspect ratio for medium and large screens.
+    if (categoryMeta.layout.columns === 1) {
+      if (width >= 768 && width <= 1024) {
+        // For medium screens, use an aspect ratio of 5:1.
+        setAspectRatio('5/1');
+      } else {
+        // For large screens, use an aspect ratio of 3:1.
+        setAspectRatio('3/1');
+      }
+    } else {
+      // For other numbers of columns, use an aspect ratio of 1:1.
+      setAspectRatio('1/1');
+    }
+  };
+
+  updateAspectRatio();
+  window.addEventListener('resize', updateAspectRatio);
+
+  return () => {
+    window.removeEventListener('resize', updateAspectRatio);
+  };
+}, [categoryMeta.layout.columns]);
 
 const getStyles = () => {
   const colorSchemes = {
@@ -43,7 +75,7 @@ const getStyles = () => {
       card: '#ffffff', 
       text: '#5a5a5a', 
       header: '#ffffff',
-      lightText: '#BF8034',
+      lightText: '#fbfaf4ff',
       accent: '#e8e8e8'
     },
     dark: { bg: '#121212', card: '#1e1e1e', text: '#e0e0e0', header: '#1e1e1e' }
@@ -53,7 +85,11 @@ const getStyles = () => {
     const cardStyle = categoryMeta.design.cardStyle;
     const animationType = categoryMeta.design.animation.type;
     const columns = Math.max(1, Math.min(5, categoryMeta.layout.columns));
-
+    useEffect(() => {
+      setColorSchemeName(categoryMeta.design.colorScheme);
+    },[categoryMeta])
+    console.log(colorSchemeName);
+    
     let borderRadius;
     switch (cardStyle) {
       case 'rounded': borderRadius = '12px'; break;
@@ -148,7 +184,7 @@ const textContrastStyles = categoryMeta.design.colorScheme === 'minimal'
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        aspectRatio: columns === 1 ? '3/1' : '1/1',
+        aspectRatio: aspectRatio,
         borderRadius: borderRadius,
         overflow: 'hidden',
         backgroundSize: 'cover',
@@ -168,7 +204,7 @@ const textContrastStyles = categoryMeta.design.colorScheme === 'minimal'
         zIndex: 1,
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+        backgroundColor: categoryMeta.design.colorScheme === 'minimal' ? '#602920' : 'rgba(0, 0, 0, 0.5)'
       },
       categoryIcon: {
         fontSize: categoryMeta.themes.grid.iconSize === 'small' ? '2rem' : 
@@ -212,6 +248,7 @@ categoryCount: {
 
   const styles = getStyles();
 
+  
   return (
     <div style={styles.container}>
       <header style={styles.header}>

@@ -1,12 +1,29 @@
 import { getEnv } from "../../utils/appData";
 import OBJECT_TYPES from "../../utils/objectTypes";
 import LoadingAnimation from "../Animations/Loading";
+import { useState,useEffect } from "react";
 import '../Styles/CKContent.css';
 
 function DefaultHeader({objectData}) {
     if(!objectData.objectInformation) {
         return <LoadingAnimation/>
     }
+  const [categoryMeta, setCategoryMeta] = useState({
+    layout: { type: 'grid', columns: 3, spacing: 'medium', order: 'manual' },
+    design: { colorScheme: 'default', cardStyle: 'rounded', animation: { hover: true, type: 'lift' } },
+    content: { showBadges: true, showDescriptions: false, showCounts: true, showPrices: true },
+    advanced: { lazyLoading: true, adaptiveColors: true, responsiveBreakpoints: { mobile: 1, tablet: 2, desktop: 3 } },
+    themes: { modern: { showDiscountTags: true, showPopularityBadges: true, quickView: true }, grid: { iconSize: 'medium' }, list: { showDetails: false } },
+    meta: { version: '2.0', lastUpdated: new Date().toISOString() }
+  });
+
+  useEffect(() => {
+    const meta = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_META?.settings;
+    if (meta) {
+      setCategoryMeta(meta);
+    }
+  }, [objectData]);
+  console.log(categoryMeta.design.colorScheme);
     console.log(objectData);
     
     return (
@@ -20,27 +37,32 @@ function DefaultHeader({objectData}) {
                         <div className="mid-content"></div>
                         <div className="right-content">
                             
-                                <button 
-                                    className="btn btn-icon btn-primary rounded-pill p-3 shadow-sm" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#objectInfoModal"
-                                    style={{
-                                        transition: 'all 0.3s ease',
-                                        border: 'none',
-                                        background: 'linear-gradient(135deg, #3a7bd5, #00d2ff)'
-                                    }}
-                                    onMouseOver={(e) => {
-                                        e.currentTarget.style.transform = 'scale(1.1)';
-                                        e.currentTarget.style.boxShadow = '0 5px 15px rgba(0, 210, 255, 0.4)';
-                                    }}
-                                    onMouseOut={(e) => {
-                                        e.currentTarget.style.transform = 'scale(1)';
-                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
-                                    }}
-                                    >
-                                    <i className="fa-solid fa-circle-info fa-xl" style={{ fontSize: '1.5rem' }}></i>
-                                    <span className="ms-2 d-none d-sm-inline">Информация</span>
-                                </button>
+<button 
+  className="btn btn-icon btn-primary rounded-pill p-3 shadow-sm" 
+  data-bs-toggle="modal" 
+  data-bs-target="#objectInfoModal"
+  style={{
+    transition: 'all 0.3s ease',
+    border: 'none',
+    background: categoryMeta.design.colorScheme === 'minimal' 
+      ? '#602920' 
+      : 'linear-gradient(135deg, #3a7bd5, #00d2ff)',
+    color: '#fff'
+  }}
+  onMouseOver={(e) => {
+    e.currentTarget.style.transform = 'scale(1.1)';
+    e.currentTarget.style.boxShadow = categoryMeta.design.colorScheme === 'minimal'
+      ? '0 5px 15px rgba(96, 41, 32, 0.4)'
+      : '0 5px 15px rgba(0, 210, 255, 0.4)';
+  }}
+  onMouseOut={(e) => {
+    e.currentTarget.style.transform = 'scale(1)';
+    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+  }}
+>
+  <i className="fa-solid fa-circle-info fa-xl" style={{ fontSize: '1.5rem' }}></i>
+  <span className="ms-2 d-none d-sm-inline">Информация</span>
+</button>
                             {/*TEMPORARY REMOVED -  {objectData?.license.perksData.tc_darkMode ? (
                             <a href="#" className="theme-btn">
                                 <svg className="dark" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24"
@@ -181,7 +203,6 @@ function DefaultHeader({objectData}) {
                 textAlign: 'center',
                 fontSize: '10px',
                 color: '#888',
-                opacity: '0.7',
                 padding: '5px 0',
                 fontFamily: 'sans-serif',
                 backgroundColor: 'rgba(0,0,0,0.02)'
@@ -204,7 +225,6 @@ function DefaultHeader({objectData}) {
                                 width: '200%',
                                 height: 'auto',
                                 objectFit: 'contain',
-                                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
                             }} 
                         />
                     </div>

@@ -11,6 +11,7 @@ const PATH_LIST = {
     'APP_CHECKOUT' : '/checkout',
     'FINAL_CHECKOUT' : '/checkout/final',
     'AUTH_PROFILE' : '/profile',
+    'REVIEW_PAGE' : '/review',
 }
 
 const ERROR_PATHS = {

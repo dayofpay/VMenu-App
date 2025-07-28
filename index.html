@@ -45,25 +45,141 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 <style>
-  body > .skiptranslate,.goog-logo-link,.gskiptranslate,.goog-te-gadget span,.goog-te-banner-frame,#goog-gt-tt, .goog-te-balloon-frame,div#goog-gt-{
-    display: none!important;
+/* Hide all Google Translate branding elements */
+body > .skiptranslate,
+.goog-logo-link,
+.goog-te-gadget span,
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-te-gadget-icon,
+.goog-te-spinner-pos,
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight,
+div#goog-gt- {
+  display: none !important;
+}
+
+/* Reset gadget container */
+.goog-te-gadget {
+  color: transparent !important;
+  font-size: 0 !important;
+}
+
+/* Beautiful select dropdown styling */
+#google_translate_element select {
+  /* Основни стилове */
+  width: 100%;
+  padding: 12px 52px 12px 16px;
+  border: 2px solid rgba(168, 109, 46, 0.3);
+  border-radius: 12px;
+  background-color: #fff8ee;
+  color: #a86d2e;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Кастомна стрелка */
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a86d2e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 20px;
+  
+  /* Фокус стил */
+  outline: none;
+}
+
+/* Ховер ефект */
+#google_translate_element select:hover {
+  border-color: rgba(168, 109, 46, 0.6);
+  box-shadow: 0 2px 8px rgba(168, 109, 46, 0.1);
+}
+
+/* Фокус ефект */
+#google_translate_element select:focus {
+  border-color: #a86d2e;
+  box-shadow: 0 0 0 3px rgba(168, 109, 46, 0.2);
+}
+
+/* Анимация при фокус */
+@keyframes selectFocus {
+  0% { box-shadow: 0 0 0 0 rgba(168, 109, 46, 0.2); }
+  100% { box-shadow: 0 0 0 6px rgba(168, 109, 46, 0); }
+}
+
+#google_translate_element select:focus {
+  animation: selectFocus 0.4s ease-out;
+}
+
+/* Дарк мод поддръжка */
+@media (prefers-color-scheme: dark) {
+  #google_translate_element select {
+    background-color: #2a1a0a;
+    color: #ffd8b4;
+    border-color: rgba(168, 109, 46, 0.5);
+    background-image: 
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffd8b4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   }
-  .goog-te-gadget {
-    color: transparent!important;
-    font-size:0px;
+  
+  #google_translate_element select:hover {
+    border-color: rgba(168, 109, 46, 0.8);
   }
-  .goog-text-highlight {
-    background: none !important;
-    box-shadow: none !important;
+}
+[data-no-translate], .quantity-control, .cart-item {
+  -webkit-translate: no;
+  translate: no;
+}
+body > div.VIpgJd-ZVi9od-aZ2wEe-wOHMyf.VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc {
+  display: none !important;
+}
+/* Hover and focus states */
+#google_translate_element select:hover {
+  background-color: #4a3a30;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#google_translate_element select:focus {
+  outline: none;
+  background-color: #4a3a30;
+  box-shadow: 0 0 0 2px #e8c9a9;
+}
+
+/* Dropdown options styling */
+#google_translate_element select option {
+  background: #3a2b21;
+  color: #fff8ee;
+  padding: 10px;
+}
+
+/* Modern scrollbar for dropdown */
+#google_translate_element select::-webkit-scrollbar {
+  width: 8px;
+}
+
+#google_translate_element select::-webkit-scrollbar-track {
+  background: #2a1d15;
+}
+
+#google_translate_element select::-webkit-scrollbar-thumb {
+  background: #e8c9a9;
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #google_translate_element select {
+    padding: 12px 16px;
+    font-size: 16px;
   }
-  #google_translate_element select{
-    background:#2b1a12;
-    color:#fff4e4;
-    border: none;
-    font-weight:bold;
-    border-radius:3px;
-    padding:8px 12px
-  }
+  
+}
 
 </style>
   <!-- Google Fonts -->

@@ -263,7 +263,7 @@ const ShowCart = ({ objectData }) => {
 
                       {/* Quantity */}
                       <div className="d-flex align-items-center border rounded px-2 py-1">
-                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={()=>
+                        <button data-no-translate type="button" className="btn btn-sm btn-outline-secondary" onClick={()=>
                           handleDecrement(product?.item_id)}
                           >
                           −
@@ -271,7 +271,7 @@ const ShowCart = ({ objectData }) => {
                         <span className="mx-2 fw-semibold" style={{ minWidth: '30px', textAlign: 'center' }}>
                           {cart[index]?.productQuantity}
                         </span>
-                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={()=>
+                        <button data-no-translate type="button" className="btn btn-sm btn-outline-secondary" onClick={()=>
                           handleIncrement(product?.item_id)}
                           >
                           +
@@ -295,7 +295,7 @@ const ShowCart = ({ objectData }) => {
           </div>
         </div>
 
-        <div className="cart-summary-container">
+        <div className="cart-summary-container" translate="no">
           <div className="summary-card">
             <div className="summary-grid">
               <div className="summary-row">

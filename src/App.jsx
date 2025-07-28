@@ -12,6 +12,7 @@ import { QRError } from './components/PageComponents/Errors/QRError';
 import { TableError } from './components/PageComponents/Errors/TableError';
 import ProfilePage from './components/PageComponents/Auth/Profile';
 import { CooldownProvider } from './contexts/CoolDownCTX';
+import ReviewPageWithData from './components/Reviews/content';
 const Home = lazy(() => import('./Pages/Home'));
 const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
 const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
@@ -42,6 +43,7 @@ return (
                 <Route path={PATH_LIST.FINAL_CHECKOUT} element={<FinalCheckoutPage/>}/>
                 <Route path={ERROR_PATHS.CHECKOUT_ERROR} element={<ShowCheckoutError/>}/>
                 <Route path={PATH_LIST.AUTH_PROFILE} element={<ProfilePage/>}/>
+                <Route path={PATH_LIST.REVIEW_PAGE} element={<ReviewPageWithData/>}/>
             </Route>
             <Route path='*' element={<NotFound/>}/>
             <Route path={ERROR_PATHS.QR_ERROR} element={<QRError/>}/>

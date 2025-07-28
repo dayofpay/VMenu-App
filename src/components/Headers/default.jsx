@@ -19,8 +19,28 @@ function DefaultHeader({objectData}) {
                         </div>
                         <div className="mid-content"></div>
                         <div className="right-content">
-                            <button className="btn w-100 btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#objectInfoModal"
-                                class="mb-2 me-2 btn btn-icon btn-primary"><i className="fa-solid fa-circle-info"></i></button>
+                            
+                                <button 
+                                    className="btn btn-icon btn-primary rounded-pill p-3 shadow-sm" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#objectInfoModal"
+                                    style={{
+                                        transition: 'all 0.3s ease',
+                                        border: 'none',
+                                        background: 'linear-gradient(135deg, #3a7bd5, #00d2ff)'
+                                    }}
+                                    onMouseOver={(e) => {
+                                        e.currentTarget.style.transform = 'scale(1.1)';
+                                        e.currentTarget.style.boxShadow = '0 5px 15px rgba(0, 210, 255, 0.4)';
+                                    }}
+                                    onMouseOut={(e) => {
+                                        e.currentTarget.style.transform = 'scale(1)';
+                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+                                    }}
+                                    >
+                                    <i className="fa-solid fa-circle-info fa-xl" style={{ fontSize: '1.5rem' }}></i>
+                                    <span className="ms-2 d-none d-sm-inline">Информация</span>
+                                </button>
                             {/*TEMPORARY REMOVED -  {objectData?.license.perksData.tc_darkMode ? (
                             <a href="#" className="theme-btn">
                                 <svg className="dark" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24"

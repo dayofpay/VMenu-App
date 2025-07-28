@@ -1,0 +1,62 @@
+.translate-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.language-select {
+  width: 220px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.reset-btn {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #495057;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.reset-btn:hover {
+  background: #e9ecef;
+  border-color: #ced4da;
+}
+
+.reset-btn i {
+  font-size: 12px;
+}
+
+.translation-disabled {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.translation-disabled i {
+  color: #adb5bd;
+}
+
+/* React Select overrides */
+.select__menu {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #dee2e6 !important;
+}
+
+.select__option--is-selected {
+  background-color: #f1f3f5 !important;
+  color: #212529 !important;
+}
+
+.select__option--is-focused {
+  background-color: #f8f9fa !important;
+}

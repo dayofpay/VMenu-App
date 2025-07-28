@@ -18,6 +18,7 @@ import { hasAddon } from "../../../../services/objectServices";
 import PERK_LIST from "../../../../utils/perkAddons";
 import { getProductsByCategory } from "../../../../services/productServices";
 import { CooldownContext } from "../../../../contexts/CoolDownCTX";
+import ShowTranslateAPI from "../../Plugins/TranslateAPI";
 
 const HomeContent = ({ objectData }) => {
   const [callMessage, setCallMessage] = useState("");
@@ -33,12 +34,18 @@ const HomeContent = ({ objectData }) => {
   
   const [categoryData, setCategoryData] = useState([]);
   const [categoryItems, setCategoryItems] = useState([]);
-  
+  const [showCallWaiter, setShowCallWaiter] = useState(false);
+  const [showLanguageOption,setShowLanguageOption] = useState(false);
+
   useEffect(() => {
     const getData = async() => {
+      objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.ACTION_BUTTONS?.CALL_WAITER ? setShowCallWaiter(true) : setShowCallWaiter(false);
+      objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.ACTION_BUTTONS?.SELECT_LANGUAGE ? setShowLanguageOption(true) : setShowLanguageOption(false);
       setCategoryData(categoryHighlight.CATEGORY);
       const categoryItemList = await getProductsByCategory(categoryHighlight.CATEGORY);
       setCategoryItems(categoryItemList.categoryData[0]);
+
+
     }
     
     getData();
@@ -124,13 +131,59 @@ const HomeContent = ({ objectData }) => {
             </div> */}
 
             <div className="dashboard-area">
-              {hasAddon(PERK_LIST.CALLS) ? (
+              {hasAddon(PERK_LIST.CALLS) && showCallWaiter ? (
               <button type="button" className="server-call-btn" data-bs-toggle="modal" data-bs-target="#callModal">
                 <i className="fa-solid fa-bell"></i>
                 <span>Повикване на сервитьор</span>
               </button>
               ) : null}
+{showLanguageOption && (
+        <>
+            <button
+      className="language-selector-btn"
+      data-bs-toggle="modal"
+      data-bs-target="#languageModal"
+    >
+      <i className="fas fa-globe"></i> Избери език
+    </button>
 
+    <div
+      className="modal fade language-modal"
+      id="languageModal"
+      tabIndex="-1"
+      aria-labelledby="languageModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="languageModalLabel">
+              <i className="fas fa-globe"></i> Избор на език
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div className="modal-body">
+            <ShowTranslateAPI objectData={objectData} />
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              data-bs-dismiss="modal"
+            >
+              Затвори
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+        </>
+      )}
               <div className="modal fade" id="callModal" style={{ display: "none" }}>
                 <div className="modal-dialog" role="document">
                   <div className="modal-content">
@@ -363,6 +416,7 @@ const HomeContent = ({ objectData }) => {
               </div>
               <style jsx>
                 {
+
                   ` .server-call-btn {
                     display: flex;
                     align-items: center;
@@ -378,7 +432,115 @@ const HomeContent = ({ objectData }) => {
                     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
                     transition: all 0.3s ease;
                   }
+        .language-selector-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          padding: 14px 20px;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #2c82c9, #1a4f7a);
+          color: #fff8ee;rgba(46, 148, 168, 1)rgba(46, 140, 168, 1)
+          font-weight: 600;
+          border: none;
+          margin-bottom: 16px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+        }
 
+        .language-selector-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+          background: linear-gradient(135deg, #c7823a, #a86d2e);
+        }
+
+        .language-selector-btn:active {
+          transform: translateY(0);
+        }
+
+        .language-selector-btn::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
+          transition: 0.5s;
+        }
+
+        .language-selector-btn:hover::before {
+          left: 100%;
+        }
+
+        .language-selector-btn i {
+          margin-right: 10px;
+          font-size: 20px;
+          transition: transform 0.3s ease;
+        }
+
+        .language-selector-btn:hover i {
+          transform: scale(1.1);
+        }
+
+
+        .language-modal .modal-content {
+          border-radius: 16px;
+          overflow: hidden;
+          border: none;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-modal .modal-header {
+          background: linear-gradient(135deg, #a86d2e, #8a5a2b);
+          color: white;
+          border-bottom: none;
+          padding: 20px;
+        }
+
+        .language-modal .modal-title {
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+        }
+
+        .language-modal .modal-title i {
+          margin-right: 10px;
+        }
+
+        .language-modal .modal-body {
+          padding: 25px;
+        }
+
+        .language-modal .btn-close {
+          filter: invert(1);
+          opacity: 0.8;
+          transition: opacity 0.2s ease;
+        }
+
+        .language-modal .btn-close:hover {
+          opacity: 1;
+        }
+
+
+        @media (max-width: 576px) {
+          .language-selector-btn {
+            padding: 12px 16px;
+            font-size: 14px;
+          }
+          
+          .language-modal .modal-body {
+            padding: 15px;
+          }
+        }
                   .server-call-btn:hover {
                     transform: translateY(-2px);
                     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);

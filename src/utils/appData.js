@@ -6,4 +6,5 @@ const appState = {
 const getEnv = () => {
     return SERVER_ENDPOINTS?.[appState.APP_ENV]
 }
-export {appState,getEnv};
+const getAppState = () => {return appState.APP_ENV}
+export {appState,getEnv,getAppState};

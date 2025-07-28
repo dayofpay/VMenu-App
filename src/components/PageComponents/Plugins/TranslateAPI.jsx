@@ -68,6 +68,7 @@ function TranslateAPI({ objectData }) {
       {isTranslationEnabled ? (
         <>
           <div id="google_translate_element"></div>
+          
           <button
             onClick={resetTranslation}
             className="btn btn-primary"

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import ShowAppMenu from "../../AppMenus/defaultMenu";
 import withObjectData from "../../../HOC/withObjectInfo";
-import { getEnv } from "../../../utils/appData";
+import { getAppState, getEnv } from "../../../utils/appData";
 import TranslateAPI from "../Plugins/TranslateAPI";
 import { useEffect } from "react";
 import { do_action } from "../../../services/userServices";
@@ -87,6 +87,14 @@ const Profile = ({objectData}) => {
 							Моята количка
 						</Link>
 					</li>
+					{getAppState() === 'DEVELOPMENT' && (
+					<li>
+						<Link to="/cart">
+							<i class="fa-solid fa-comment"></i>	
+							Оставете отзив
+						</Link>
+					</li>
+					) }
 					{/* <li>
 						<a href="/orders">
 							<i class="fa-solid fa-clock"></i>

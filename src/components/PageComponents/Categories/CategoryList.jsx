@@ -34,13 +34,20 @@ const ShowCategoryList = ({ objectData }) => {
   }, [objectData]);
 
 
-  const getStyles = () => {
-    const colorSchemes = {
-      default: { bg: '#f5f5f5', card: '#fff', text: '#333', header: '#fff' },
-      vibrant: { bg: '#fff5f5', card: '#fff', text: '#d63031', header: '#fff' },
-      minimal: { bg: '#f1f2f6', card: '#fff', text: '#2f3542', header: '#fff' },
-      dark: { bg: '#121212', card: '#1e1e1e', text: '#fff', header: '#1e1e1e' }
-    };
+const getStyles = () => {
+  const colorSchemes = {
+    default: { bg: '#f5f5f5', card: '#fff', text: '#333', header: '#fff' },
+    vibrant: { bg: '#fff5f5', card: '#fff', text: '#d63031', header: '#fff' },
+    minimal: { 
+      bg: '#f8f9fa', 
+      card: '#ffffff', 
+      text: '#5a5a5a', 
+      header: '#ffffff',
+      lightText: '#BF8034',
+      accent: '#e8e8e8'
+    },
+    dark: { bg: '#121212', card: '#1e1e1e', text: '#e0e0e0', header: '#1e1e1e' }
+  };
 
     const currentScheme = colorSchemes[categoryMeta.design.colorScheme] || colorSchemes.default;
     const cardStyle = categoryMeta.design.cardStyle;
@@ -73,8 +80,13 @@ const ShowCategoryList = ({ objectData }) => {
       5: 'repeat(5, 1fr)'
     };
 
-
-    const textContrastStyles = {
+const textContrastStyles = categoryMeta.design.colorScheme === 'minimal' 
+  ? {
+      color: colorSchemes.minimal.lightText,
+      fontWeight: '500',
+      letterSpacing: '0.5px'
+    }
+  : {
       color: '#fff',
       textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)',
       fontWeight: '600'
@@ -162,20 +174,22 @@ const ShowCategoryList = ({ objectData }) => {
         fontSize: categoryMeta.themes.grid.iconSize === 'small' ? '2rem' : 
                  categoryMeta.themes.grid.iconSize === 'large' ? '3rem' : '2.5rem',
         marginBottom: '12px',
-        color: '#fff',
+        color: categoryMeta.design.colorScheme === 'minimal' ? '#D4AF37' : '#fff',
         visibility: objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_SETTINGS?.SHOW_PRODUCT_ICONS ? 'visible' : 'hidden'
       },
-      categoryName: {
-        margin: '0 0 4px 0',
-        fontSize: columns === 1 ? '1.5rem' : '1.1rem',
-        fontWeight: 700,
-        ...textContrastStyles
-      },
-      categoryCount: {
-        fontSize: columns === 1 ? '1.1rem' : '0.9rem',
-        ...textContrastStyles,
-        display: categoryMeta.content.showCounts ? 'block' : 'none'
-      },
+categoryName: {
+  margin: '0 0 4px 0',
+  fontSize: columns === 1 ? '1.5rem' : '1.1rem',
+  fontWeight: categoryMeta.design.colorScheme === 'minimal' ? 500 : 700,
+  ...textContrastStyles,
+  transition: 'color 0.3s ease'
+},
+categoryCount: {
+  fontSize: columns === 1 ? '1.1rem' : '0.9rem',
+  ...textContrastStyles,
+  display: categoryMeta.content.showCounts ? 'block' : 'none',
+  opacity: categoryMeta.design.colorScheme === 'minimal' ? 0.8 : 1
+},
       badgeContainer: {
         position: 'absolute',
         top: '10px',
@@ -224,7 +238,7 @@ const ShowCategoryList = ({ objectData }) => {
             to={`/category/${category.entry_id}`}
             style={{
               ...styles.categoryCard,
-              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${getEnv()}/uploads/${category.category_background_image})`
+              backgroundImage: `linear-gradient(rgba(231, 228, 228, 0.6), rgba(0, 0, 0, 0.6)), url(${getEnv()}/uploads/${category.category_background_image})`
             }}
             onMouseEnter={e => Object.assign(e.currentTarget.style, styles.hoverEffect)}
             onMouseLeave={e => {

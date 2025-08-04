@@ -43,28 +43,29 @@ useEffect(() => {
   const updateAspectRatio = () => {
     const width = window.innerWidth;
 
-    // If the number of columns is 1, use a different aspect ratio for medium and large screens.
+
     if (categoryMeta.layout.columns === 1) {
-      if (width >= 768 && width <= 1024) {
-        // For medium screens, use an aspect ratio of 5:1.
-        setAspectRatio('5/1');
-      } else {
-        // For large screens, use an aspect ratio of 3:1.
+      if (width < 768) {
+
         setAspectRatio('3/1');
+      } else {
+
+        setAspectRatio('5/1');
       }
     } else {
-      // For other numbers of columns, use an aspect ratio of 1:1.
+
       setAspectRatio('1/1');
     }
   };
 
   updateAspectRatio();
-  window.addEventListener('resize', updateAspectRatio);
+  window.addEventListener('resize', updateAspectRatio); // Listen for resize
 
   return () => {
     window.removeEventListener('resize', updateAspectRatio);
   };
 }, [categoryMeta.layout.columns]);
+
 
 const getStyles = () => {
   const colorSchemes = {
@@ -214,7 +215,7 @@ const textContrastStyles = categoryMeta.design.colorScheme === 'minimal'
         visibility: objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_SETTINGS?.SHOW_PRODUCT_ICONS ? 'visible' : 'hidden'
       },
 categoryName: {
-  margin: '0 0 4px 0',
+  margin: '0 0 50px 0',
   fontSize: columns === 1 ? '1.5rem' : '1.1rem',
   fontWeight: categoryMeta.design.colorScheme === 'minimal' ? 500 : 700,
   ...textContrastStyles,
@@ -309,7 +310,7 @@ categoryCount: {
         ))}
       </div>
       
-      <ShowAppMenu />
+      {objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_CATEGORIES && <ShowAppMenu />}
     </div>
   );
 };

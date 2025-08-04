@@ -14,6 +14,7 @@ import { PATH_LIST } from "../../../utils/pathList";
 import CartAddons from "../Plugins/CartAddons";
 import { hasAddon } from "../../../services/objectServices";
 import PERK_LIST from "../../../utils/perkAddons";
+import ShowAppMenu from "../../AppMenus/defaultMenu";
 
 /**
  * ShowCart component.
@@ -352,6 +353,7 @@ const ShowCart = ({ objectData }) => {
                 </Link>
           </div>
         </div>
+                  {objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_CART && <ShowAppMenu />}
       </div>
     </>
   );

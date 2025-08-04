@@ -5,7 +5,8 @@ import { getProductsByCategory } from "../../../../../services/productServices"
 import { ProductHasDiscount } from "../../../../../utils/DateUtils";
 import LoadingAnimation from "../../../../Animations/Loading";
 import { do_action } from "../../../../../services/userServices";
-
+import ShowAppMenu from "../../../../AppMenus/defaultMenu";
+import { formatDiscountedPrice, formatPrice } from "../../../../../utils/pricingUtils";
 const ShowCategoryData = ({ objectData }) => {
     const { id } = useParams();
     const [categoryData, setCategoryData] = useState([]);
@@ -257,19 +258,22 @@ const ShowCategoryData = ({ objectData }) => {
                                 </h5>
                                 <div style={styles.priceSection}>
                                     {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) ? (
-                                        <>
-                                            <span style={styles.currentPrice}>
-                                                BGN {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)}
-                                            </span>
-                                            <span style={styles.originalPrice}>
-                                                BGN {Number(product.item_price).toFixed(2)}
-                                            </span>
-                                        </>
+                                    <>
+                                        <h6 className="me-2 mb-0">
+                                        {formatDiscountedPrice(product.item_price, product.discount_percentage).discounted}
+                                        </h6>
+                                        <del className="off-text">
+                                        <h6 className="mb-0">
+                                            {formatDiscountedPrice(product.item_price, product.discount_percentage).original}
+                                        </h6>
+                                        </del>
+                                    </>
                                     ) : (
-                                        <span style={{...styles.currentPrice, color: '#333'}}>
-                                            BGN {Number(product.item_price).toFixed(2)}
-                                        </span>
+                                    <h6 className="me-2 mb-0">
+                                        {formatPrice(product.item_price)}
+                                    </h6>
                                     )}
+
                                 </div>
                                 
                                 {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) && (
@@ -285,6 +289,8 @@ const ShowCategoryData = ({ objectData }) => {
                     ))}
                 </div>
             </div>
+      {objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_CATEGORIES_DETAILS && <ShowAppMenu />}
+
         </div>
     );
 };

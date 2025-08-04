@@ -20,6 +20,7 @@ import { getProductsByCategory } from "../../../../services/productServices";
 import { CooldownContext } from "../../../../contexts/CoolDownCTX";
 import ShowTranslateAPI from "../../Plugins/TranslateAPI";
 import "../../../Styles/TranslateAPI.css";
+import { formatPrice, formatDiscountedPrice } from "../../../../utils/pricingUtils";
 const HomeContent = ({ objectData }) => {
   const [callMessage, setCallMessage] = useState("");
   const { cooldowns, setCooldowns, remainingTimes,setRemainingTimes } = useContext(CooldownContext);
@@ -567,16 +568,16 @@ const HomeContent = ({ objectData }) => {
               <i className={category.category_mini_image}></i>
             </div>
           )}
-<h6 
-  className="category-title"
-  style={{
-    color: categoryMeta.design.colorScheme === 'minimal' ? '#eeeee7ff' : ''
-  }}
->
-  {category.category_name}
-</h6>
+            <h6 
+              className="category-title"
+              style={{
+                color: categoryMeta.design.colorScheme === 'minimal' ? '#eeeee7ff' : ''
+              }}
+            >
+              {category.category_name}
+            </h6>
           <span className="product-count">
-            {category.itemCount}
+            {category.itemCount}&nbsp;&nbsp;
             {GeneratePrefix(category.itemCount)}
           </span>
         </div>
@@ -689,35 +690,32 @@ const HomeContent = ({ objectData }) => {
                   </span>
                 )}
               </div>
-              <div className="card-content">
-                <h6 className="product-title">
-                  <Link to={`/products/${product.item_id}`}>
-                    {product.item_name}{" "}
-                  </Link>{" "}
-                </h6>{" "}
-                <div className="price-section">
-                  {product.discount_percentage > 0 ? (
-                    <>
-                      <span className="price">
-                        BGN{" "}
-                        {(
-                          product.item_price -
-                          (product.discount_percentage *
-                            product.item_price) /
-                            100
-                        ).toFixed(2)}
-                      </span>
-                      <span className="original-price">
-                        BGN {Number(product.item_price).toFixed(2)}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="price">
-                      BGN {Number(product.item_price).toFixed(2)}
-                    </span>
-                  )}
-                </div>
-              </div>
+<div className="card-content">
+  <h6 className="product-title">
+    <Link to={`/products/${product.item_id}`}>
+      {product.item_name}
+    </Link>
+  </h6>
+  <div className="price-section">
+    {product.discount_percentage > 0 ? (
+      <>
+        <span className="price">
+          {formatPrice(
+            product.item_price - 
+            (product.discount_percentage * product.item_price) / 100
+          )}
+        </span>
+        <span className="original-price">
+          {formatPrice(product.item_price)}
+        </span>
+      </>
+    ) : (
+      <span className="price">
+        {formatPrice(product.item_price)}
+      </span>
+    )}
+  </div>
+</div>
             </div>
           </div>
         ))}

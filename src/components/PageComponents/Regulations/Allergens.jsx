@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import '../../Styles/AllergeneList.css';
 import { do_action } from '../../../services/userServices';
+import '../../Styles/AllergeneList.css';
 
 const Allergens = ({ productData, ALLERGENES_LIST }) => {
   const [showAllergens, setShowAllergens] = useState(false);
@@ -14,131 +14,162 @@ const Allergens = ({ productData, ALLERGENES_LIST }) => {
   const allergens = JSON.parse(productData.item_allergenes) || [];
 
   return (
-    <div className='row'>
+    <div className="delivery-allergens-container">
+      <div className="delivery-allergens-card">
+        <div 
+          className="delivery-allergens-header"
+          onClick={toggleAllergens}
+        >
+          <div className="delivery-allergens-title">
+            <h3>Алергени</h3>
+            <svg 
+              className={`delivery-allergens-chevron ${showAllergens ? 'open' : ''}`} 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24"
+            >
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+        </div>
+
+        <div className={`delivery-allergens-content ${showAllergens ? 'expanded' : ''}`}>
+          {allergens.length === 0 ? (
+            <div className="delivery-no-allergens">
+              Няма добавени алергени в този продукт
+            </div>
+          ) : (
+            <ul className="delivery-allergens-list">
+              {allergens.map((allergene) => {
+                const allergen = ALLERGENES_LIST?.[allergene];
+                return (
+                  <li className="delivery-allergen-item" key={allergene}>
+                    <div className="delivery-allergen-icon">
+                      {allergen?.allergen_icon ? (
+                        <span className="icon icon-image">{allergen.allergen_icon}</span>
+                      ) : (
+                        <span className="default-icon">⚠️</span>
+                      )}
+                    </div>
+                    <div className="delivery-allergen-name">
+                      {allergen?.allergen_name || `Алерген ${allergene}`}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      </div>
+
       <style jsx>{`
-        .allergen-card {
-          border-radius: 10px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-          margin-bottom: 20px;
+        .delivery-allergens-container {
+          margin: 16px 0;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        .delivery-allergens-card {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
           overflow: hidden;
-          border: none;
         }
-        .allergen-card-header {
-          background-color: #f8f9fa;
-          padding: 15px 20px;
-          border-bottom: 1px solid #eee;
+        
+        .delivery-allergens-header {
+          padding: 16px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: white;
+          transition: background 0.2s;
         }
-        .allergen-card-title {
-          font-size: 1.1rem;
-          margin: 0;
-          color: #333;
-          font-weight: 600;
+        
+        .delivery-allergens-header:hover {
+          background: #f8f8f8;
         }
-        .toggle-allergen-btn {
+        
+        .delivery-allergens-title {
           display: flex;
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          padding: 12px 20px;
-          background-color: light
-          color: white;
-          border: none;
-          border-radius: 6px;
-          font-weight: 500;
-          transition: all 0.3s ease;
         }
-        .toggle-allergen-btn:hover {
-          background-color: #3a5bbf;
-          transform: translateY(-1px);
-        }
-        .toggle-allergen-btn:active {
-          transform: translateY(0);
-        }
-        .allergen-list-item {
-          padding: 12px 20px;
-          border-bottom: 1px solid #f0f0f0;
-          display: flex;
-          align-items: center;
-          transition: background-color 0.2s;
-        }
-        .allergen-list-item:hover {
-          background-color: #f9f9f9;
-        }
-        .allergen-icon {
-          width: 30px;
-          height: 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-right: 12px;
-          font-size: 1.2rem;
-        }
-        .allergen-name {
-          font-size: 0.95rem;
+        
+        .delivery-allergens-title h3 {
+          margin: 0;
+          font-size: 18px;
+          font-weight: 600;
           color: #333;
         }
-        .no-allergens-alert {
-          margin: 15px;
-          text-align: center;
-          border-radius: 6px;
+        
+        .delivery-allergens-chevron {
+          transition: transform 0.2s;
+          fill: #666;
         }
-        .allergen-content {
+        
+        .delivery-allergens-chevron.open {
+          transform: rotate(180deg);
+        }
+        
+        .delivery-allergens-content {
           max-height: 0;
           overflow: hidden;
           transition: max-height 0.3s ease;
         }
-        .allergen-content.show {
-          max-height: 1000px; /* Достатъчно голяма стойност за да събере всички алергени */
+        
+        .delivery-allergens-content.expanded {
+          max-height: 1000px;
+        }
+        
+        .delivery-no-allergens {
+          padding: 16px;
+          text-align: center;
+          color: #666;
+          font-size: 14px;
+        }
+        
+        .delivery-allergens-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          border-top: 1px solid #f0f0f0;
+        }
+        
+        .delivery-allergen-item {
+          padding: 16px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          transition: background 0.2s;
+        }
+        
+        .delivery-allergen-item:hover {
+          background: #f8f8f8;
+        }
+        
+        .delivery-allergen-icon {
+          width: 32px;
+          height: 32px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #fff4f4;
+          border-radius: 6px;
+          color: #ff5252;
+          font-size: 18px;
+        }
+        
+        .delivery-allergen-name {
+          font-size: 15px;
+          color: #333;
+        }
+        
+        .default-icon {
+          font-size: 20px;
         }
       `}</style>
-
-      <div className="col-12">
-        <div className="allergen-card">
-          <div className="allergen-card-header">
-            <h5 className="allergen-card-title">Алергени</h5>
-          </div>
-          <div className="card-body py-2">
-            <div className="allergen-container">
-              <button
-                className="toggle-allergen-btn"
-                type='button' 
-                onClick={toggleAllergens}
-              >
-                <span>{showAllergens ? 'Скрий алергени' : 'Покажи алергени'}</span>
-                <i className={`bi bi-chevron-${showAllergens ? 'up' : 'down'}`}></i>
-              </button>
-              
-              <div className={`allergen-content ${showAllergens ? 'show' : ''}`}>
-                {allergens.length === 0 ? (
-                  <div className="alert alert-warning no-allergens-alert" role="alert">
-                    Няма добавени алергени.
-                  </div>
-                ) : (
-                  <div className="list-group-flush">
-                    {allergens.map((allergene) => {
-                      const allergen = ALLERGENES_LIST?.[allergene];
-                      return (
-                        <div className="allergen-list-item" key={allergene}>
-                          <div className="allergen-icon me-2">
-                            {allergen?.allergen_icon ? (
-                              <span className="icon icon-image">{allergen.allergen_icon}</span>
-                            ) : (
-                              <span className="default-icon">⚠️</span>
-                            )}
-                          </div>
-                          <span className="allergen-name">
-                            {allergen?.allergen_name || `Алерген ${allergene}`}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

@@ -206,7 +206,8 @@ const ShowAnnounces = ({ objectData }) => {
                 )}
             </main>
 
-            <ShowAppMenu />
+                  {objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_ANNOUNCEMENTS && <ShowAppMenu />}
+
         </div>
     );
 };

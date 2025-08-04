@@ -7,6 +7,7 @@ import LoadingAnimation from "../../../../Animations/Loading";
 import '../../../../Animations/Packages/slideInFromLeft.css';
 import '../../../../Styles/CategoryDetails.css';
 import { do_action } from "../../../../../services/userServices";
+import ShowAppMenu from "../../../../AppMenus/defaultMenu";
 
 const ShowCategoryData = ({ objectData }) => {
     const { id } = useParams();
@@ -94,6 +95,8 @@ const ShowCategoryData = ({ objectData }) => {
                         </ul>
                     </div>
                 </div>
+      {objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_CATEGORIES_DETAILS && <ShowAppMenu />}
+
             </div>
         </>
     );

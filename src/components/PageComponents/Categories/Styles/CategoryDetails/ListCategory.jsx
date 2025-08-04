@@ -7,6 +7,8 @@ import LoadingAnimation from "../../../../Animations/Loading";
 import '../../../../Animations/Packages/slideInFromLeft.css';
 import '../../../../Styles/CategoryDetails.css';
 import { do_action } from "../../../../../services/userServices";
+import ShowAppMenu from "../../../../AppMenus/defaultMenu";
+import { formatDiscountedPrice,formatPrice } from "../../../../../utils/pricingUtils";
 const ShowCategoryData = ({
     objectData
 }) => {
@@ -69,17 +71,23 @@ const ShowCategoryData = ({
                                         <Link to={`/products/${product.item_id}`}>{product?.item_name}</Link>
                                     </h5>
 									<div className="d-flex align-items-center">
-                                    {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) ? (
-                                        <>
+									{product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) ? (
+									<>
+										<h6 className="me-2 mb-0">
+										{formatDiscountedPrice(product.item_price, product.discount_percentage).discounted}
+										</h6>
+										<del className="off-text">
+										<h6 className="mb-0">
+											{formatDiscountedPrice(product.item_price, product.discount_percentage).original}
+										</h6>
+										</del>
+									</>
+									) : (
+									<h6 className="me-2 mb-0">
+										{formatPrice(product.item_price)}
+									</h6>
+									)}
 
-										<h6 className="me-2 mb-0">BGN {(product.item_price -
-												(product.discount_percentage *
-												product.item_price) / 100).toFixed(2)}</h6>
-										<del className="off-text"><h6 className="mb-0">BGN {Number(product.item_price).toFixed(2)}</h6></del>
-                                        </>
-                                    ) : (<>
-										<h6 className="me-2 mb-0">BGN {Number(product?.item_price).toFixed(2)}</h6>
-                                    </>)}
 									</div>    
 								</div>
 								<div className="item-footer">
@@ -124,6 +132,8 @@ const ShowCategoryData = ({
 				</ul>    
 			</div>
 		</div>
+      {objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_CATEGORIES_DETAILS && <ShowAppMenu />}
+
 	</div>
     </>
     )

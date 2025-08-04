@@ -8,6 +8,7 @@ import ProductDescription from "../Products/ProductDescription";
 import { getEnv } from "../../../utils/appData";
 import '../../Styles/Tables.css';
 import { do_action } from "../../../services/userServices";
+import ShowAppMenu from "../../AppMenus/defaultMenu";
 const ShowDetails = ({objectData}) => {
 
     if(!objectData){
@@ -84,6 +85,7 @@ const ShowDetails = ({objectData}) => {
 				</div>
 			</div>
 		</div>
+                  {objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_ANNOUNCEMENTS && <ShowAppMenu />}
 	</div>
         </>
     )

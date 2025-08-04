@@ -19,7 +19,7 @@ import PERK_LIST from "../../../../utils/perkAddons";
 import { getProductsByCategory } from "../../../../services/productServices";
 import { CooldownContext } from "../../../../contexts/CoolDownCTX";
 import ShowTranslateAPI from "../../Plugins/TranslateAPI";
-
+import { formatPrice,formatDiscountedPrice,convertToEuro } from "../../../../utils/pricingUtils";
 const HomeContent = ({ objectData }) => {
   const [callMessage, setCallMessage] = useState("");
   const { cooldowns, setCooldowns, remainingTimes,setRemainingTimes } = useContext(CooldownContext);
@@ -823,30 +823,38 @@ const HomeContent = ({ objectData }) => {
                     )}
                   </div>
                   <div className="card-content">
-                    <h6 className="product-title">
-                      <Link to={`/products/${product.item_id}`}> {product.item_name} </Link> </h6> <div
-                        className="price-section">
-                      {product.has_discount ? (
-                      <>
-                        <span className="price">
-                          BGN {(
-                          product.item_price -
-                          (product.discount_percentage * product.item_price) / 100
-                          ).toFixed(2)}
-                        </span>
-                        <span className="original-price">
-                          BGN {Number(product.item_price).toFixed(2)}
-                        </span>
-                      </>
-                      ) : (
-                      <span className="price">
-                        BGN {Number(product.item_price).toFixed(2)}
-                      </span>
-                      )}
-                  </div>
+  <h6 className="product-title">
+    <Link to={`/products/${product.item_id}`}>{product.item_name}</Link>
+  </h6>
+  <div className="price-section">
+    {product.has_discount ? (
+      <>
+        <span className="price">
+          BGN {(
+            product.item_price -
+            (product.discount_percentage * product.item_price) / 100
+          ).toFixed(2)}
+          (€{convertToEuro(
+            product.item_price -
+            (product.discount_percentage * product.item_price) / 100
+          )})
+        </span>
+        <span className="original-price">
+          BGN {Number(product.item_price).toFixed(2)}
+          (€{convertToEuro(product.item_price)})
+        </span>
+      </>
+    ) : (
+      <span className="price">
+        BGN {Number(product.item_price).toFixed(2)}
+        (€{convertToEuro(product.item_price)})
+      </span>
+    )}
+  </div>
+</div>
                 </div>
               </div>
-            </div>
+
             ))}
           </div>
 

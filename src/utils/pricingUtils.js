@@ -114,8 +114,8 @@ export const formatDiscountedPrice = (originalPrice, discountPercentage) => {
   // Return an object with the original and discounted prices, formatted as strings
   return {
     // The original price in both BGN and EUR, rounded to two decimal places
-    original: `BGN ${originalPrice.toFixed(2)} (€${convertToEuro(originalPrice).toFixed(2)})`,
+    original: `BGN ${originalPrice.toFixed(2)} (€${convertToEuro(originalPrice)})`,
     // The discounted price in both BGN and EUR, rounded to two decimal places
-    discounted: `BGN ${discountedPrice.toFixed(2)} (€${convertToEuro(discountedPrice).toFixed(2)})`
+    discounted: `BGN ${discountedPrice.toFixed(2)} (€${convertToEuro(discountedPrice)})`
   };
 };

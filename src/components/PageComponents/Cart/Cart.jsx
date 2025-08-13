@@ -15,6 +15,7 @@ import CartAddons from "../Plugins/CartAddons";
 import { hasAddon } from "../../../services/objectServices";
 import PERK_LIST from "../../../utils/perkAddons";
 import ShowAppMenu from "../../AppMenus/defaultMenu";
+import { convertPrice, formatPrice } from "../../../utils/pricingUtils";
 
 /**
  * ShowCart component.
@@ -349,31 +350,38 @@ const ShowCart = ({ objectData }) => {
 
                       {/* Price */}
                       <div>
-                        {product?.has_discount ? (
+                      {product?.has_discount ? (
                         <>
                           <div className="text-danger fw-bold">
-                            BGN {(product.item_price - (product.discount_percentage * product.item_price) /
-                            100).toFixed(2)}
+                            {formatPrice(
+                              product.item_price - (product.discount_percentage * product.item_price) / 100,
+                              product.item_currency,
+                              false
+                            )}
                             <span className="euro-price text-muted ms-1">
-                              (€{((product.item_price - (product.discount_percentage * product.item_price) / 100) /
-                              1.95583).toFixed(2)})
+                              (€{convertPrice(
+                                product.item_price - (product.discount_percentage * product.item_price) / 100,
+                                product.item_currency,
+                                'EUR'
+                              ).toFixed(2)})
                             </span>
                           </div>
                           <div className="text-muted small">
                             <del>
-                              BGN {product.item_price.toFixed(2)} (€{(product.item_price / 1.95583).toFixed(2)})
+                              {formatPrice(product.item_price, product.item_currency, false)}
+                              (€{convertPrice(product.item_price, product.item_currency, 'EUR').toFixed(2)})
                             </del>
                           </div>
                         </>
-                        ) : (
+                      ) : (
                         <div className="fw-bold">
-                          BGN {product.item_price.toFixed(2)}
+                          {formatPrice(product.item_price, product.item_currency, false)}
                           <span className="euro-price text-muted ms-1">
-                            (€{(product.item_price / 1.95583).toFixed(2)})
+                            (€{convertPrice(product.item_price, product.item_currency, 'EUR').toFixed(2)})
                           </span>
                         </div>
-                        )}
-                      </div>
+                      )}
+                    </div>
 
                       {/* Quantity */}
                       <div className="d-flex align-items-center border rounded px-2 py-1">
@@ -437,15 +445,21 @@ const ShowCart = ({ objectData }) => {
 
               <div className="divider"></div>
 
-              <div className="summary-row total-row">
-                <span className="summary-label">Общо:</span>
-                <span className="summary-value total">
-                  {Number(discountPrice + totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
-                  <span className="euro-conversion">
-                    ≈ {( (discountPrice + totalAddonsPrice) / 1.95583 ).toFixed(2)} €
+                <div className="summary-row total-row">
+                  <span className="summary-label">Общо:</span>
+                  <span className="summary-value total">
+                    {Number(discountPrice + totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
+                    {objectData.objectInformation.object_currency !== 'EUR' && (
+                      <span className="euro-conversion">
+                        ≈ {convertPrice(
+                          discountPrice + totalAddonsPrice,
+                          objectData.objectInformation.object_currency,
+                          'EUR'
+                        ).toFixed(2)} €
+                      </span>
+                    )}
                   </span>
-                </span>
-              </div>
+                </div>
 
               {totalDiscounts > 0 && (
               <div className="promo-badge">

@@ -297,18 +297,18 @@ return (
                           {product.has_discount ? (
                             <>
                               <span className="price">
-                                BGN{" "}
+                                {product.item_currency}{" "}
                                 {(
                                   product.item_price -
                                   (product.discount_percentage * product.item_price) / 100
                                 ).toFixed(2)}
                               </span>
                               <span className="original-price">
-                                BGN {Number(product.item_price).toFixed(2)}
+                                {product.item_currency} {Number(product.item_price).toFixed(2)}
                               </span>
                             </>
                           ) : (
-                            <span className="price">BGN {Number(product.item_price).toFixed(2)}</span>
+                            <span className="price">{product.item_currency} {Number(product.item_price).toFixed(2)}</span>
                           )}
                         </div>
                       </div>
@@ -348,18 +348,18 @@ return (
                             {product.has_discount ? (
                               <>
                                 <span className="price">
-                                  BGN{" "}
+                                  {product.item_currency}{" "}
                                   {(
                                     product.item_price -
                                     (product.discount_percentage * product.item_price) / 100
                                   ).toFixed(2)}
                                 </span>
                                 <span className="original-price">
-                                  BGN {Number(product.item_price).toFixed(2)}
+                                  {product.item_currency} {Number(product.item_price).toFixed(2)}
                                 </span>
                               </>
                             ) : (
-                              <span className="price">BGN {Number(product.item_price).toFixed(2)}</span>
+                              <span className="price">{product.item_currency} {Number(product.item_price).toFixed(2)}</span>
                             )}
                           </div>
                         </div>

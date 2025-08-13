@@ -21,6 +21,7 @@ import ProductAddons from "../Plugins/Addons";
 import { hasAddon } from "../../../services/objectServices";
 import PERK_LIST from "../../../utils/perkAddons";
 import { do_action } from "../../../services/userServices";
+import { convertPrice, formatPrice } from "../../../utils/pricingUtils";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -262,61 +263,81 @@ setCategoryNames([...new Set(product.category_names)]);
 
             {/* Price Section */}
             <div style={styles.priceSection}>
-              <div style={styles.priceContainer}>
-                {productData.hasDiscount ? (
-                <>
-                  <div style={styles.currentPrice}>
-                    <span style={styles.priceMain}>
-                      {(productData.item_price - (productData.discount_percentage * productData.item_price) /
-                      100).toFixed(2)} лв.
-                    </span>
-                    <span style={styles.priceSecondary}>
-                      (€{((productData.item_price - (productData.discount_percentage * productData.item_price) / 100) /
-                      1.95583).toFixed(2)})
-                    </span>
-                  </div>
-                  <div style={styles.originalPrice}>
-                    <span style={styles.strikethrough}>
-                      {productData.item_price.toFixed(2)} лв.
-                    </span>
-                    <span style={styles.discountPercent}>
-                      -{productData.discount_percentage}%
-                    </span>
-                  </div>
-                </>
-                ) : (
-                <div style={styles.currentPrice}>
-                  <span style={styles.priceMain}>
-                    {productData.item_price.toFixed(2)} лв.
-                  </span>
-                  <span style={styles.priceSecondary}>
-                    (€{(productData.item_price / 1.95583).toFixed(2)})
-                  </span>
-                </div>
-                )}
-              </div>
+  <div style={styles.priceContainer}>
+    {productData.hasDiscount ? (
+      <>
+        <div style={styles.currentPrice}>
+          <span style={styles.priceMain}>
+            {formatPrice(
+              productData.item_price - (productData.discount_percentage * productData.item_price) / 100,
+              productData.item_currency,
+              false
+            )}
+          </span>
+          {productData.item_currency === 'BGN' && (
+            <span style={styles.priceSecondary}>
+              (€{convertPrice(
+                productData.item_price - (productData.discount_percentage * productData.item_price) / 100,
+                'BGN',
+                'EUR'
+              ).toFixed(2)})
+            </span>
+          )}
+        </div>
+        <div style={styles.originalPrice}>
+          <span style={styles.strikethrough}>
+            {formatPrice(productData.item_price, productData.item_currency, false)}
+          </span>
+          <span style={styles.discountPercent}>
+            -{productData.discount_percentage}%
+          </span>
+        </div>
+      </>
+    ) : (
+      <div style={styles.currentPrice}>
+        <span style={styles.priceMain}>
+          {formatPrice(productData.item_price, productData.item_currency, false)}
+        </span>
+        {productData.item_currency === 'BGN' && (
+          <span style={styles.priceSecondary}>
+            (€{convertPrice(productData.item_price, 'BGN', 'EUR').toFixed(2)})
+          </span>
+        )}
+      </div>
+    )}
+  </div>
 
-              {hasAddon(PERK_LIST.CART) && (
-              <div style={styles.quantitySelector}>
-                <button type="button" style={styles.quantityButton} onClick={()=> decrementQuantity(productQuantity,
-                  setProductQuantity)}
-                  aria-label="Намали количество"
-                  >
-                  −
-                </button>
-                <div style={styles.quantityDisplay}>
-                  <input type="text" name={ProductDetailsKeys.PRODUCT_QUANTITY} value={productQuantity} readOnly
-                    style={styles.quantityInput} aria-label="Текущо количество" />
-                </div>
-                <button type="button" style={styles.quantityButton} onClick={()=> incrementQuantity(productQuantity,
-                  setProductQuantity)}
-                  aria-label="Увеличи количество"
-                  >
-                  +
-                </button>
-              </div>
-              )}
-            </div>
+  {hasAddon(PERK_LIST.CART) && (
+    <div style={styles.quantitySelector}>
+      <button 
+        type="button" 
+        style={styles.quantityButton} 
+        onClick={() => decrementQuantity(productQuantity, setProductQuantity)}
+        aria-label="Намали количество"
+      >
+        −
+      </button>
+      <div style={styles.quantityDisplay}>
+        <input 
+          type="text" 
+          name={ProductDetailsKeys.PRODUCT_QUANTITY} 
+          value={productQuantity} 
+          readOnly
+          style={styles.quantityInput} 
+          aria-label="Текущо количество" 
+        />
+      </div>
+      <button 
+        type="button" 
+        style={styles.quantityButton} 
+        onClick={() => incrementQuantity(productQuantity, setProductQuantity)}
+        aria-label="Увеличи количество"
+      >
+        +
+      </button>
+    </div>
+  )}
+</div>
 
             {/* Allergens and Addons */}
             <Allergens productData={productData} ALLERGENES_LIST={ALLERGENES_LIST} />
@@ -360,15 +381,15 @@ setCategoryNames([...new Set(product.category_names)]);
                 {new Date(product.discount_expires) >= new Date() && product.discount_percentage > 0 ? (
                   <>
                     <span style={styles.upsellCurrentPrice}>
-                      {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)} лв.
+                      {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)} {product.item_currency}.
                     </span>
                     <span style={styles.upsellOriginalPrice}>
-                      {product.item_price.toFixed(2)} лв.
+                      {product.item_price.toFixed(2)} {product.item_currency}.
                     </span>
                   </>
                 ) : (
                   <span style={styles.upsellCurrentPrice}>
-                    {product.item_price.toFixed(2)} лв.
+                    {product.item_price.toFixed(2)} {product.item_currency}.
                   </span>
                 )}
               </div>
@@ -407,15 +428,15 @@ setCategoryNames([...new Set(product.category_names)]);
                   {new Date(product.discount_expires) >= new Date() && product.discount_percentage > 0 ? (
                     <>
                       <span style={styles.upsellCurrentPrice}>
-                        {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)} лв.
+                        {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)} {product.item_currency}.
                       </span>
                       <span style={styles.upsellOriginalPrice}>
-                        {product.item_price.toFixed(2)} лв.
+                        {product.item_price.toFixed(2)} {product.item_currency}.
                       </span>
                     </>
                   ) : (
                     <span style={styles.upsellCurrentPrice}>
-                      {product.item_price.toFixed(2)} лв.
+                      {product.item_price.toFixed(2)} {product.item_currency}.
                     </span>
                   )}
                 </div>

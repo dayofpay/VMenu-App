@@ -185,23 +185,136 @@ const ShowCart = ({ objectData }) => {
         <div className="container bottom-content shop-cart-wrapper">
           <div className="item-list style-2">
             {cartPrototype.length === 0 ? (
-            <div className="row justify-content-center">
-              <div className="col-12 col-md-6">
-                <div className="card text-center">
-                  <img src="/assets/images/pages/cart/cart.png" className="card-img-top" alt="Empty Cart Image" />
-                  <div className="card-body">
-                    <h5 className="card-title">Вашата количка е празна</h5>
-                    <p className="card-text">
-                      Моля, добавете продукти в количката си, за да продължите
-                      пазаруването.
-                    </p>
-                    <Link to="/" className="btn btn-primary">
-                    Продължи пазаруването
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
+<div className="empty-cart-container" style={{
+  maxWidth: '500px',
+  margin: '0 auto',
+  padding: '2rem',
+  textAlign: 'center',
+  animation: 'fadeIn 0.5s ease-out'
+}}>
+  <div style={{
+    position: 'relative',
+    marginBottom: '2rem'
+  }}>
+    <div style={{
+      width: '150px',
+      height: '150px',
+      margin: '0 auto',
+      background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxShadow: '0 10px 25px rgba(255, 154, 158, 0.3)',
+      animation: 'bounce 2s infinite alternate'
+    }}>
+      <span style={{
+        fontSize: '4rem',
+        animation: 'pulse 1.5s infinite'
+      }}>🛒</span>
+    </div>
+  </div>
+
+  <h2 style={{
+    fontSize: '1.8rem',
+    fontWeight: '700',
+    marginBottom: '1rem',
+    color: '#2d3436'
+  }}>Количката ви е празна! <span style={{animation: 'wobble 1s infinite'}}>😕</span></h2>
+
+  <p style={{
+    fontSize: '1.1rem',
+    color: '#636e72',
+    marginBottom: '2rem',
+    lineHeight: '1.6'
+  }}>
+    Няма продукти в количката ви все още. <br/>
+    Но не се притеснявате, имаме много вкусни предложения! <span>😋</span>
+  </p>
+
+  <div style={{
+    display: 'flex',
+    gap: '1rem',
+    justifyContent: 'center',
+    flexWrap: 'wrap'
+  }}>
+    <Link 
+      to="/" 
+      className="delivery-btn primary"
+      style={{
+        background: '#ff7675',
+        color: 'white',
+        padding: '0.8rem 2rem',
+        borderRadius: '50px',
+        textDecoration: 'none',
+        fontWeight: '600',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        transition: 'all 0.3s ease',
+        boxShadow: '0 4px 15px rgba(255, 118, 117, 0.3)'
+      }}
+    >
+      <span>🏠</span> Начална страница
+    </Link>
+    
+    <Link 
+      to={PATH_LIST.CATEGORY_LIST} 
+      className="delivery-btn secondary"
+      style={{
+        background: 'white',
+        color: '#ff7675',
+        padding: '0.8rem 2rem',
+        borderRadius: '50px',
+        textDecoration: 'none',
+        fontWeight: '600',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        transition: 'all 0.3s ease',
+        border: '2px solid #ff7675',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+      }}
+    >
+      <span>🍔</span> Виж менюто
+    </Link>
+  </div>
+
+
+  <style jsx>{`
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-15px); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    @keyframes wobble {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .delivery-btn:hover {
+      transform: translateY(-3px);
+    }
+    .delivery-btn.primary:hover {
+      background: #e84393 !important;
+      box-shadow: 0 7px 20px rgba(255, 118, 117, 0.4) !important;
+    }
+    .delivery-btn.secondary:hover {
+      background: #f8f8f8 !important;
+      boxShadow: 0 7px 20px rgba(0,0,0,0.1) !important;
+    }
+  `}</style>
+</div>
             ) : (
             <ul>
               {cartPrototype.map((product, index) => (
@@ -302,14 +415,14 @@ const ShowCart = ({ objectData }) => {
               <div className="summary-row">
                 <span className="summary-label">Продукти:</span>
                 <span className="summary-value">
-                  {Number(totalPrice).toFixed(2)} лв.
+                  {Number(totalPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
                 </span>
               </div>
 
               <div className="summary-row">
                 <span className="summary-label">Добавки:</span>
                 <span className="summary-value addons">
-                  +{Number(totalAddonsPrice).toFixed(2)} лв.
+                  +{Number(totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
                 </span>
               </div>
 
@@ -317,7 +430,7 @@ const ShowCart = ({ objectData }) => {
               <div className="summary-row">
                 <span className="summary-label">Отстъпки:</span>
                 <span className="summary-value discount">
-                  -{Number(totalPrice - discountPrice).toFixed(2)} лв.
+                  -{Number(totalPrice - discountPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
                 </span>
               </div>
               )}
@@ -327,7 +440,7 @@ const ShowCart = ({ objectData }) => {
               <div className="summary-row total-row">
                 <span className="summary-label">Общо:</span>
                 <span className="summary-value total">
-                  {Number(discountPrice + totalAddonsPrice).toFixed(2)} лв.
+                  {Number(discountPrice + totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
                   <span className="euro-conversion">
                     ≈ {( (discountPrice + totalAddonsPrice) / 1.95583 ).toFixed(2)} €
                   </span>

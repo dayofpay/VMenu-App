@@ -19,7 +19,7 @@ import PERK_LIST from "../../../../utils/perkAddons";
 import { getProductsByCategory } from "../../../../services/productServices";
 import { CooldownContext } from "../../../../contexts/CoolDownCTX";
 import ShowTranslateAPI from "../../Plugins/TranslateAPI";
-import { formatPrice,formatDiscountedPrice,convertToEuro } from "../../../../utils/pricingUtils";
+import { formatPrice,convertPrice } from "../../../../utils/pricingUtils";
 const HomeContent = ({ objectData }) => {
   const [callMessage, setCallMessage] = useState("");
   const { cooldowns, setCooldowns, remainingTimes,setRemainingTimes } = useContext(CooldownContext);
@@ -827,30 +827,44 @@ const HomeContent = ({ objectData }) => {
     <Link to={`/products/${product.item_id}`}>{product.item_name}</Link>
   </h6>
   <div className="price-section">
-    {product.has_discount ? (
-      <>
-        <span className="price">
-          BGN {(
-            product.item_price -
-            (product.discount_percentage * product.item_price) / 100
-          ).toFixed(2)}
-          (€{convertToEuro(
-            product.item_price -
-            (product.discount_percentage * product.item_price) / 100
-          )})
-        </span>
-        <span className="original-price">
-          BGN {Number(product.item_price).toFixed(2)}
-          (€{convertToEuro(product.item_price)})
-        </span>
-      </>
-    ) : (
+  {product.has_discount ? (
+    <>
       <span className="price">
-        BGN {Number(product.item_price).toFixed(2)}
-        (€{convertToEuro(product.item_price)})
+        {formatPrice(
+          product.item_price - (product.discount_percentage * product.item_price) / 100,
+          product.item_currency,
+          false
+        )}
+        {product.item_currency === 'BGN' && (
+          <span className="secondary-currency">
+            (€{convertPrice(
+              product.item_price - (product.discount_percentage * product.item_price) / 100,
+              'BGN',
+              'EUR'
+            ).toFixed(2)})
+          </span>
+        )}
       </span>
-    )}
-  </div>
+      <span className="original-price">
+        {formatPrice(product.item_price, product.item_currency, false)}
+        {product.item_currency === 'BGN' && (
+          <span className="secondary-currency">
+            (€{convertPrice(product.item_price, 'BGN', 'EUR').toFixed(2)})
+          </span>
+        )}
+      </span>
+    </>
+  ) : (
+    <span className="price">
+      {formatPrice(product.item_price, product.item_currency, false)}
+      {product.item_currency === 'BGN' && (
+        <span className="secondary-currency">
+          (€{convertPrice(product.item_price, 'BGN', 'EUR').toFixed(2)})
+        </span>
+      )}
+    </span>
+  )}
+</div>
 </div>
                 </div>
               </div>

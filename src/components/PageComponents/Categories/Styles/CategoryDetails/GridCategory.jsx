@@ -72,11 +72,11 @@ const ShowCategoryData = ({ objectData }) => {
                                                 <div className="price-section">
                                                     {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) ? (
                                                         <>
-                                                            <h6 className="discounted-price">BGN {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)}</h6>
-                                                            <del className="original-price">BGN {Number(product.item_price).toFixed(2)}</del>
+                                                            <h6 className="discounted-price">{product.item_currency} {(product.item_price - (product.discount_percentage * product.item_price) / 100).toFixed(2)}</h6>
+                                                            <del className="original-price">{product.item_currency} {Number(product.item_price).toFixed(2)}</del>
                                                         </>
                                                     ) : (
-                                                        <h6 className="original-price">BGN {Number(product.item_price).toFixed(2)}</h6>
+                                                        <h6 className="original-price">{product.item_currency} {Number(product.item_price).toFixed(2)}</h6>
                                                     )}
                                                 </div>
                                             </div>

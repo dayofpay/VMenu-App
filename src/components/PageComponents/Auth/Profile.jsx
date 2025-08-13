@@ -5,6 +5,7 @@ import { getAppState, getEnv } from "../../../utils/appData";
 import TranslateAPI from "../Plugins/TranslateAPI";
 import { useEffect } from "react";
 import { do_action } from "../../../services/userServices";
+import { PATH_LIST } from "../../../utils/pathList";
 
 
 const Profile = ({objectData}) => {
@@ -89,7 +90,7 @@ const Profile = ({objectData}) => {
 					</li>
 					{getAppState() === 'DEVELOPMENT' && (
 					<li>
-						<Link to="/cart">
+						<Link to={PATH_LIST.REVIEW_PAGE}>
 							<i class="fa-solid fa-comment"></i>	
 							Оставете отзив
 						</Link>

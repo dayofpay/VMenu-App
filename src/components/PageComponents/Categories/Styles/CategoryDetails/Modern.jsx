@@ -260,17 +260,17 @@ const ShowCategoryData = ({ objectData }) => {
                                     {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) ? (
                                     <>
                                         <h6 className="me-2 mb-0">
-                                        {formatDiscountedPrice(product.item_price, product.discount_percentage).discounted}
+                                        {formatDiscountedPrice(product.item_price, product.discount_percentage,product.item_currency).discounted}
                                         </h6>
                                         <del className="off-text">
                                         <h6 className="mb-0">
-                                            {formatDiscountedPrice(product.item_price, product.discount_percentage).original}
+                                            {formatDiscountedPrice(product.item_price, product.discount_percentage, product.item_currency).original}
                                         </h6>
                                         </del>
                                     </>
                                     ) : (
                                     <h6 className="me-2 mb-0">
-                                        {formatPrice(product.item_price)}
+                                        {formatPrice(product.item_price, product.item_currency)}
                                     </h6>
                                     )}
 

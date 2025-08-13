@@ -218,7 +218,7 @@ const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
                     </div>
                     
                     <div className="delivery-addon-controls">
-                      <div className="delivery-addon-price">+{addon.addon_price.toFixed(2)} лв.</div>
+                      <div className="delivery-addon-price">+{addon.addon_price.toFixed(2)} {productData.item_currency}</div>
                       
                       {isSelected ? (
                         <div className="delivery-addon-quantity">

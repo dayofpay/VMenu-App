@@ -21,6 +21,7 @@ import { CooldownContext } from "../../../../contexts/CoolDownCTX";
 import ShowTranslateAPI from "../../Plugins/TranslateAPI";
 import "../../../Styles/TranslateAPI.css";
 import { formatPrice, formatDiscountedPrice } from "../../../../utils/pricingUtils";
+import { ProductHasDiscount } from "../../../../utils/DateUtils";
 const HomeContent = ({ objectData }) => {
   const [callMessage, setCallMessage] = useState("");
   const { cooldowns, setCooldowns, remainingTimes,setRemainingTimes } = useContext(CooldownContext);
@@ -684,7 +685,7 @@ const HomeContent = ({ objectData }) => {
                     className="card-image"
                   />
                 </Link>
-                {product.discount_percentage > 0 && (
+                {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) && (
                   <span className="discount-badge">
                     -{product.discount_percentage}%
                   </span>
@@ -697,21 +698,18 @@ const HomeContent = ({ objectData }) => {
     </Link>
   </h6>
   <div className="price-section">
-    {product.discount_percentage > 0 ? (
+    {product.discount_percentage > 0 && ProductHasDiscount(product.discount_expires) ? (
       <>
         <span className="price">
           {formatPrice(
             product.item_price - 
             (product.discount_percentage * product.item_price) / 100
-          )}
-        </span>
-        <span className="original-price">
-          {formatPrice(product.item_price)}
+          ,product.item_currency)}
         </span>
       </>
     ) : (
       <span className="price">
-        {formatPrice(product.item_price)}
+        {formatPrice(product.item_price,product.item_currency)}
       </span>
     )}
   </div>

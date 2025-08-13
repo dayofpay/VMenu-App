@@ -88,7 +88,7 @@ const CartAddons = ({ product, handleRemoveAddon, selectedAddons }) => {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.25 }}
         >
-          Обща цена: {totalPrice.toFixed(2)} лв.
+          Обща цена: {totalPrice.toFixed(2)} {product.item_currency}.
         </motion.div>
       </footer>
     </section>

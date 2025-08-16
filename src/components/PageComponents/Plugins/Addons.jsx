@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { do_action } from "../../../services/userServices";
 import "../../Styles/AddonsList.css";
-
+import { getMenuLanguage } from "../../../services/appServices";
 const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
   const [showAddons, setShowAddons] = useState(false);
   const [selectedAddons, setSelectedAddons] = useState([]);
@@ -10,7 +10,7 @@ const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const itemRefs = useRef({});
-
+  const menuLanguage = getMenuLanguage();
   useEffect(() => {
     const savedAddons = JSON.parse(localStorage.getItem("selectedAddons")) || [];
     setSelectedAddons(savedAddons);
@@ -28,7 +28,7 @@ const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
 
   const toggleAddons = () => {
     setShowAddons(!showAddons);
-    const button_name = showAddons ? "Покажи добавки" : "Скрий добавки";
+    const button_name = showAddons ? menuLanguage.Buttons.DROPDOWN_BUTTONS.ADDONS.States.Show : menuLanguage.Buttons.DROPDOWN_BUTTONS.ADDONS.States.Hide;
     do_action("click_button", { button_name: button_name });
   };
 
@@ -158,7 +158,7 @@ const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
           onClick={toggleAddons}
         >
           <div className="delivery-addons-title">
-            <h3>Добавки</h3>
+            <h3>{menuLanguage.Addons}</h3>
             <div className="delivery-addons-status">
               {selectedAddonsCount > 0 && (
                 <span className={`delivery-addons-count ${totalSelected >= MAX_ADDONS ? 'warning' : ''}`}>
@@ -180,7 +180,7 @@ const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
         <div className={`delivery-addons-content ${showAddons ? 'expanded' : ''}`}>
           {addons.length === 0 ? (
             <div className="delivery-no-addons">
-              Няма налични добавки за този продукт
+              {menuLanguage.Buttons.DROPDOWN_BUTTONS.ADDONS.Options.NO_AVAILABLE}
             </div>
           ) : (
             <ul className="delivery-addons-list">
@@ -255,7 +255,7 @@ const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
                           onClick={() => handleAddonToggle(addon)}
                           disabled={!productInCart || totalSelected >= MAX_ADDONS}
                         >
-                          Добави
+                          {menuLanguage.Buttons.DROPDOWN_BUTTONS.ADDONS.States.Add}
                         </button>
                       )}
                     </div>

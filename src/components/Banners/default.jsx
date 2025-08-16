@@ -2,18 +2,20 @@ import { Link } from "react-router-dom";
 import LoadingAnimation from "../Animations/Loading";
 import { PATH_LIST } from "../../utils/pathList";
 import TranslateMenu from "../PageComponents/Plugins/TranslateAPI";
+import { getMenuLanguage } from "../../services/appServices";
 
 function ShowBanner({objectData}) {
 	const timeType = new Date().getHours();
+	const menuLanguage = getMenuLanguage();
 	const getTime = (time) => {
 		if(time >= 0 && time < 12){
-			return 'Добро Утро,';
+			return menuLanguage.System_Dynamic_Text.GOOD_MORNING;
 		}
 		else if(time >= 12 && time < 18){
-			return 'Добър Ден,';
+			return menuLanguage.System_Dynamic_Text.GOOD_DAY;
 		}
 		else{
-			return 'Добър Вечер,';
+			return menuLanguage.System_Dynamic_Text.GOOD_EVENING;
 		}
 	}
 	const time = getTime(timeType);
@@ -28,7 +30,7 @@ function ShowBanner({objectData}) {
 			<div className="container inner-wrapper">
 				<div className="dz-info">
 					<span className="text-dark d-block">{time}</span>
-					<h2 className="name mb-0 title"> Гост {/*Гост на {objectData.objectInformation.object_name}*/} 👋</h2>
+					<h2 className="name mb-0 title"> {menuLanguage.Guest} {/*Гост на {objectData.objectInformation.object_name}*/} 👋</h2>
 				</div>
 				<Link to={PATH_LIST.ANNOUNCE_LIST} className="notify-cart">
 					<span className="font-18 font-w600 text-dark">{objectData.objectAnnounces.length}</span>

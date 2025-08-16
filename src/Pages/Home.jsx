@@ -8,15 +8,21 @@ import HomeV2 from "../components/PageComponents/Home/content"
 import withObjectData from "../HOC/withObjectInfo"
 import LoadingAnimation from "../components/Animations/Loading"
 import PWAFooter from "../components/Utils/PWAInitialize"
-
+import { getMenuLanguage } from "../services/appServices"
+import { interpolateString } from "../utils/stringUtiils"
 
 function ShowHome({objectData}){
     if(!objectData.objectInformation){
         return <LoadingAnimation/>
     }
+    const menuLanguage = getMenuLanguage();
     return (
         <>
-        <title>Мобилно приложение на {objectData.objectInformation.object_name}</title>
+        <title>
+        {interpolateString(menuLanguage.Title, {
+            object: objectData.objectInformation.object_name
+        })}
+        </title>
         <ScriptLoader page={APP_PAGES.HOME_PAGE} objectData={objectData}/>
         <Header objectData={objectData}/> 
         <DefaultSidebar objectData={objectData}/>

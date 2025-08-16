@@ -9,12 +9,15 @@ import '../../../../Styles/CategoryDetails.css';
 import { do_action } from "../../../../../services/userServices";
 import ShowAppMenu from "../../../../AppMenus/defaultMenu";
 import { formatDiscountedPrice,formatPrice } from "../../../../../utils/pricingUtils";
+import { getMenuLanguage } from "../../../../../services/appServices";
+import { interpolateString } from "../../../../../utils/stringUtiils";
 const ShowCategoryData = ({
     objectData
 }) => {
     const {id} = useParams();
     const [categoryData,setCategoryData] = useState([]);
 	const [categoryName,setCategoryName] = useState('');
+	const menuLanguage = getMenuLanguage();
     useEffect(() => {
         const getData = async() => {
             const productData = await getProductsByCategory(id);
@@ -104,7 +107,11 @@ const ShowCategoryData = ({
 											</clipPath>
 											</defs>
 										</svg>
-										<h6 className="font-12 text-accent mb-0 font-w400">В момента на лимитирана -{product.discount_percentage}% отстъпка !</h6>
+											<h6 className="font-12 text-accent mb-0 font-w400">
+											{interpolateString(menuLanguage.Products.Limited_Discount, {
+												discount: product.discount_percentage
+											})}
+											</h6>
 									</div>
                                         </>
                                     ) : (									<div className="d-flex align-items-center" style={{visibility:'hidden'}}>

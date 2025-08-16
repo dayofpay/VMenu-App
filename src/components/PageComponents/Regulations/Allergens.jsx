@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { do_action } from '../../../services/userServices';
 import '../../Styles/AllergeneList.css';
+import { getLocale, getMenuLanguage } from '../../../services/appServices';
 
 const Allergens = ({ productData, ALLERGENES_LIST }) => {
   const [showAllergens, setShowAllergens] = useState(false);
-
+  const menuLanguage = getMenuLanguage();
   const toggleAllergens = () => {
     setShowAllergens(!showAllergens);
     const button_name = showAllergens ? "Скрий алергени" : "Покажи алергени";
@@ -21,7 +22,7 @@ const Allergens = ({ productData, ALLERGENES_LIST }) => {
           onClick={toggleAllergens}
         >
           <div className="delivery-allergens-title">
-            <h3>Алергени</h3>
+            <h3>{menuLanguage.Buttons.DROPDOWN_BUTTONS.ALLERGENES.Text}</h3>
             <svg 
               className={`delivery-allergens-chevron ${showAllergens ? 'open' : ''}`} 
               width="24" 
@@ -36,12 +37,13 @@ const Allergens = ({ productData, ALLERGENES_LIST }) => {
         <div className={`delivery-allergens-content ${showAllergens ? 'expanded' : ''}`}>
           {allergens.length === 0 ? (
             <div className="delivery-no-allergens">
-              Няма добавени алергени в този продукт
+              {menuLanguage.Buttons.DROPDOWN_BUTTONS.ALLERGENES.Options.NO_AVAILABLE}
             </div>
           ) : (
             <ul className="delivery-allergens-list">
               {allergens.map((allergene) => {
                 const allergen = ALLERGENES_LIST?.[allergene];
+                
                 return (
                   <li className="delivery-allergen-item" key={allergene}>
                     <div className="delivery-allergen-icon">
@@ -52,7 +54,7 @@ const Allergens = ({ productData, ALLERGENES_LIST }) => {
                       )}
                     </div>
                     <div className="delivery-allergen-name">
-                      {allergen?.allergen_name || `Алерген ${allergene}`}
+                      {allergen.allergen_name[getLocale()] || `Алерген ${allergene}`}
                     </div>
                   </li>
                 );

@@ -20,6 +20,7 @@ import { getProductsByCategory } from "../../../../services/productServices";
 import { CooldownContext } from "../../../../contexts/CoolDownCTX";
 import ShowTranslateAPI from "../../Plugins/TranslateAPI";
 import { formatPrice,convertPrice } from "../../../../utils/pricingUtils";
+import {getMenuLanguage} from "../../../../services/appServices";
 const HomeContent = ({ objectData }) => {
   const [callMessage, setCallMessage] = useState("");
   const { cooldowns, setCooldowns, remainingTimes,setRemainingTimes } = useContext(CooldownContext);
@@ -36,7 +37,7 @@ const HomeContent = ({ objectData }) => {
   const [categoryItems, setCategoryItems] = useState([]);
   const [showCallWaiter, setShowCallWaiter] = useState(false);
   const [showLanguageOption,setShowLanguageOption] = useState(false);
-
+  const menuLanguage = getMenuLanguage();
   useEffect(() => {
     const getData = async() => {
       objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.ACTION_BUTTONS?.CALL_WAITER ? setShowCallWaiter(true) : setShowCallWaiter(false);
@@ -134,7 +135,7 @@ const HomeContent = ({ objectData }) => {
               {hasAddon(PERK_LIST.CALLS) && showCallWaiter ? (
               <button type="button" className="server-call-btn" data-bs-toggle="modal" data-bs-target="#callModal">
                 <i className="fa-solid fa-bell"></i>
-                <span>Повикване на сервитьор</span>
+          <span>{menuLanguage.Buttons.CALL_WAITER.Text}</span>
               </button>
               ) : null}
 {showLanguageOption && (
@@ -144,7 +145,7 @@ const HomeContent = ({ objectData }) => {
       data-bs-toggle="modal"
       data-bs-target="#languageModal"
     >
-      <i className="fas fa-globe"></i> Избери език
+      <i className="fas fa-globe"></i> {menuLanguage.Buttons.CHANGE_LANGUAGE.Text}
     </button>
 
     <div
@@ -158,7 +159,7 @@ const HomeContent = ({ objectData }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="languageModalLabel">
-              <i className="fas fa-globe"></i> Избор на език
+              <i className="fas fa-globe"></i> {menuLanguage.Buttons.CHANGE_LANGUAGE.Text}
             </h5>
             <button
               type="button"
@@ -176,7 +177,7 @@ const HomeContent = ({ objectData }) => {
               className="btn btn-outline-secondary"
               data-bs-dismiss="modal"
             >
-              Затвори
+             {menuLanguage.Header.Information.Close_Button}
             </button>
           </div>
         </div>
@@ -188,7 +189,7 @@ const HomeContent = ({ objectData }) => {
                 <div className="modal-dialog" role="document">
                   <div className="modal-content">
                     <div className="modal-header">
-                      <h5 className="modal-title">Повикване</h5>
+                      <h5 className="modal-title">{menuLanguage.Buttons.CALL_WAITER.Text}</h5>
                       <button className="btn-close" data-bs-dismiss="modal">
                         <i className="fa-solid fa-xmark"></i>
                       </button>
@@ -206,209 +207,240 @@ const HomeContent = ({ objectData }) => {
                         </div>
                         ) : (
                         <div className="row">
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn ${remainingTimes[CallKeys.CHANGE_ASH_TRAY]
-                              ? 'on-cooldown' : '' }`} onClick={()=> handleCall(CallKeys.CHANGE_ASH_TRAY)}
-                              disabled={remainingTimes[CallKeys.CHANGE_ASH_TRAY] > 0}
-                              >
-                              Смяна на пепелник
-                              {remainingTimes[CallKeys.CHANGE_ASH_TRAY] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.CHANGE_ASH_TRAY] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.CHANGE_ASH_TRAY)}
+                        disabled={remainingTimes[CallKeys.CHANGE_ASH_TRAY] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.changeAshTray}
+                        {remainingTimes[CallKeys.CHANGE_ASH_TRAY] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.CHANGE_ASH_TRAY] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.CHANGE_ASH_TRAY]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.CHANGE_ASH_TRAY]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn ${remainingTimes[CallKeys.REQUEST_BILL]
-                              ? 'on-cooldown' : '' }`} onClick={()=> handleCall(CallKeys.REQUEST_BILL)}
-                              disabled={remainingTimes[CallKeys.REQUEST_BILL] > 0}
-                              >
-                              Поискване на сметка
-                              {remainingTimes[CallKeys.REQUEST_BILL] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.REQUEST_BILL] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.REQUEST_BILL)}
+                        disabled={remainingTimes[CallKeys.REQUEST_BILL] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.requestBill}
+                        {remainingTimes[CallKeys.REQUEST_BILL] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.REQUEST_BILL] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.REQUEST_BILL]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.REQUEST_BILL]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn ${remainingTimes[CallKeys.CHANGE_CUTLERY]
-                              ? 'on-cooldown' : '' }`} onClick={()=> handleCall(CallKeys.CHANGE_CUTLERY)}
-                              disabled={remainingTimes[CallKeys.CHANGE_CUTLERY] > 0}
-                              >
-                              Смяна на прибори
-                              {remainingTimes[CallKeys.CHANGE_CUTLERY] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.CHANGE_CUTLERY] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.CHANGE_CUTLERY)}
+                        disabled={remainingTimes[CallKeys.CHANGE_CUTLERY] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.changeCutlery}
+                        {remainingTimes[CallKeys.CHANGE_CUTLERY] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.CHANGE_CUTLERY] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.CHANGE_CUTLERY]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.CHANGE_CUTLERY]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn ${remainingTimes[CallKeys.REFILL_WATER]
-                              ? 'on-cooldown' : '' }`} onClick={()=> handleCall(CallKeys.REFILL_WATER)}
-                              disabled={remainingTimes[CallKeys.REFILL_WATER] > 0}
-                              >
-                              Попълване на вода
-                              {remainingTimes[CallKeys.REFILL_WATER] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.REFILL_WATER] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.REFILL_WATER)}
+                        disabled={remainingTimes[CallKeys.REFILL_WATER] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.refillWater}
+                        {remainingTimes[CallKeys.REFILL_WATER] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.REFILL_WATER] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.REFILL_WATER]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.REFILL_WATER]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn ${remainingTimes[CallKeys.CLEAN_TABLE]
-                              ? 'on-cooldown' : '' }`} onClick={()=> handleCall(CallKeys.CLEAN_TABLE)}
-                              disabled={remainingTimes[CallKeys.CLEAN_TABLE] > 0}
-                              >
-                              Изчистване на масата
-                              {remainingTimes[CallKeys.CLEAN_TABLE] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.CLEAN_TABLE] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.CLEAN_TABLE)}
+                        disabled={remainingTimes[CallKeys.CLEAN_TABLE] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.cleanTable}
+                        {remainingTimes[CallKeys.CLEAN_TABLE] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.CLEAN_TABLE] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.CLEAN_TABLE]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.CLEAN_TABLE]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn ${remainingTimes[CallKeys.REFILL_NAPKINS]
-                              ? 'on-cooldown' : '' }`} onClick={()=> handleCall(CallKeys.REFILL_NAPKINS)}
-                              disabled={remainingTimes[CallKeys.REFILL_NAPKINS] > 0}
-                              >
-                              Попълване на салфетки
-                              {remainingTimes[CallKeys.REFILL_NAPKINS] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.REFILL_NAPKINS] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.REFILL_NAPKINS)}
+                        disabled={remainingTimes[CallKeys.REFILL_NAPKINS] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.refillNapkins}
+                        {remainingTimes[CallKeys.REFILL_NAPKINS] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.REFILL_NAPKINS] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.REFILL_NAPKINS]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.REFILL_NAPKINS]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn
-                              ${remainingTimes[CallKeys.ADDITIONAL_CHAIR] ? 'on-cooldown' : '' }`} onClick={()=>
-                              handleCall(CallKeys.ADDITIONAL_CHAIR)}
-                              disabled={remainingTimes[CallKeys.ADDITIONAL_CHAIR] > 0}
-                              >
-                              Допълнителен стол
-                              {remainingTimes[CallKeys.ADDITIONAL_CHAIR] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.ADDITIONAL_CHAIR] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.ADDITIONAL_CHAIR)}
+                        disabled={remainingTimes[CallKeys.ADDITIONAL_CHAIR] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.additionalChair}
+                        {remainingTimes[CallKeys.ADDITIONAL_CHAIR] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.ADDITIONAL_CHAIR] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.ADDITIONAL_CHAIR]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.ADDITIONAL_CHAIR]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn ${remainingTimes[CallKeys.CLEAN_SPILL]
-                              ? 'on-cooldown' : '' }`} onClick={()=> handleCall(CallKeys.CLEAN_SPILL)}
-                              disabled={remainingTimes[CallKeys.CLEAN_SPILL] > 0}
-                              >
-                              Почистване на разливка
-                              {remainingTimes[CallKeys.CLEAN_SPILL] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.CLEAN_SPILL] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.CLEAN_SPILL)}
+                        disabled={remainingTimes[CallKeys.CLEAN_SPILL] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.cleanSpill}
+                        {remainingTimes[CallKeys.CLEAN_SPILL] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.CLEAN_SPILL] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.CLEAN_SPILL]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.CLEAN_SPILL]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn
-                              ${remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS] ? 'on-cooldown' : '' }`} onClick={()=>
-                              handleCall(CallKeys.ADDITIONAL_CONDIMENTS)}
-                              disabled={remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS] > 0}
-                              >
-                              Допълнителни подправки
-                              {remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.ADDITIONAL_CONDIMENTS)}
+                        disabled={remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.additionalCondiments}
+                        {remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn
-                              ${remainingTimes[CallKeys.REQUEST_WAITER_HELP] ? 'on-cooldown' : '' }`} onClick={()=>
-                              handleCall(CallKeys.REQUEST_WAITER_HELP)}
-                              disabled={remainingTimes[CallKeys.REQUEST_WAITER_HELP] > 0}
-                              >
-                              Помощ от сервитьор
-                              {remainingTimes[CallKeys.REQUEST_WAITER_HELP] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.REQUEST_WAITER_HELP] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.REQUEST_WAITER_HELP)}
+                        disabled={remainingTimes[CallKeys.REQUEST_WAITER_HELP] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.requestWaiterHelp}
+                        {remainingTimes[CallKeys.REQUEST_WAITER_HELP] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.REQUEST_WAITER_HELP] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.REQUEST_WAITER_HELP]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.REQUEST_WAITER_HELP]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn ${remainingTimes[CallKeys.CALL_MANAGER]
-                              ? 'on-cooldown' : '' }`} onClick={()=> handleCall(CallKeys.CALL_MANAGER)}
-                              disabled={remainingTimes[CallKeys.CALL_MANAGER] > 0}
-                              >
-                              Повикване на управител
-                              {remainingTimes[CallKeys.CALL_MANAGER] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.CALL_MANAGER] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.CALL_MANAGER)}
+                        disabled={remainingTimes[CallKeys.CALL_MANAGER] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.callManager}
+                        {remainingTimes[CallKeys.CALL_MANAGER] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.CALL_MANAGER] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.CALL_MANAGER]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.CALL_MANAGER]}с</span>
                           </div>
-                          <div className="col-6 mb-3">
-                            <button type="button" className={`call-option-btn
-                              ${remainingTimes[CallKeys.REPORT_ORDER_ISSUE] ? 'on-cooldown' : '' }`} onClick={()=>
-                              handleCall(CallKeys.REPORT_ORDER_ISSUE)}
-                              disabled={remainingTimes[CallKeys.REPORT_ORDER_ISSUE] > 0}
-                              >
-                              Сигнал за проблем с поръчка
-                              {remainingTimes[CallKeys.REPORT_ORDER_ISSUE] > 0 && (
-                              <div className="cooldown-timer">
-                                <div className="cooldown-progress" style={{ 
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="col-6 mb-3">
+                      <button
+                        type="button"
+                        className={`call-option-btn ${remainingTimes[CallKeys.REPORT_ORDER_ISSUE] ? 'on-cooldown' : ''}`}
+                        onClick={() => handleCall(CallKeys.REPORT_ORDER_ISSUE)}
+                        disabled={remainingTimes[CallKeys.REPORT_ORDER_ISSUE] > 0}
+                      >
+                        {menuLanguage.Buttons.CALL_WAITER.options.reportOrderIssue}
+                        {remainingTimes[CallKeys.REPORT_ORDER_ISSUE] > 0 && (
+                          <div className="cooldown-timer">
+                            <div className="cooldown-progress" style={{ 
                               width: `${(remainingTimes[CallKeys.REPORT_ORDER_ISSUE] / COOLDOWN_TIME) * 100}%` 
                             }}></div>
-                                <span>{remainingTimes[CallKeys.REPORT_ORDER_ISSUE]}с</span>
-                              </div>
-                              )}
-                            </button>
+                            <span>{remainingTimes[CallKeys.REPORT_ORDER_ISSUE]}с</span>
                           </div>
-                        </div>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                         )}
                       </div>
                     </form>
                     <div className="modal-footer">
                       <button type="button" className="btn-cancel" data-bs-dismiss="modal">
-                        Отказ
+                        {menuLanguage.Header.Information.Close_Button}
                       </button>
                     </div>
                   </div>
@@ -682,7 +714,7 @@ const HomeContent = ({ objectData }) => {
 
               <div className="title-bar mt-0">
                 <Link to={PATH_LIST.CATEGORY_LIST}>
-                <span className="title mb-0 font-18">Категории</span>
+                <span className="title mb-0 font-18">{menuLanguage.Categories.Text}</span>
                 </Link>
                 <Link className="btn-link" to={PATH_LIST.CATEGORY_LIST}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -882,7 +914,7 @@ const HomeContent = ({ objectData }) => {
           position: 'relative',
           overflow: 'hidden'
         }}>
-            Разгледай всички предложения
+            {menuLanguage.Categories.View_All}
             <i className="fas fa-arrow-right ms-2"></i>
             </Link>
           </div>

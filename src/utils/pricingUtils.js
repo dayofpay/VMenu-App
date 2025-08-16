@@ -1,11 +1,13 @@
 let exchangeRates = {
-  BGN: 1,       // 1 BGN = 1 BGN
-  EUR: 1.95583, // 1 EUR = 1.95583 BGN
-  USD: 1.80,    // 1 USD = 1.80 BGN
-  GBP: 2.25,    // 1 GBP = 2.25 BGN
-  RON: 0.40,    // 1 RON = 0.40 BGN
-  TRY: 0.041     // 1 TRY = 0.10 BGN
+  BGN: 1,        // 1 BGN = 1 BGN
+  EUR: 1.95583,  // 1 EUR = 1.95583 BGN
+  USD: 1.77,     // 1 USD ≈ 1.77 BGN
+  GBP: 2.28,     // 1 GBP ≈ 2.28 BGN
+  RON: 0.39,     // 1 RON ≈ 0.39 BGN
+  TRY: 0.04094   // 1 TRY = 0.04094 BGN
+
 };
+
 
 /**
  * Updates the exchange rates with the given rates.

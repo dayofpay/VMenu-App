@@ -22,12 +22,14 @@ import ShowTranslateAPI from "../../Plugins/TranslateAPI";
 import "../../../Styles/TranslateAPI.css";
 import { formatPrice, formatDiscountedPrice } from "../../../../utils/pricingUtils";
 import { ProductHasDiscount } from "../../../../utils/DateUtils";
+import {getMenuLanguage} from "../../../../services/appServices";
 const HomeContent = ({ objectData }) => {
   const [callMessage, setCallMessage] = useState("");
   const { cooldowns, setCooldowns, remainingTimes,setRemainingTimes } = useContext(CooldownContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showCallWaiter, setShowCallWaiter] = useState(false);
   const [showLanguageOption,setShowLanguageOption] = useState(false);
+  const menuLanguage = getMenuLanguage();
   // Cooldown time in seconds
   const COOLDOWN_TIME = 60;
   
@@ -154,7 +156,7 @@ const HomeContent = ({ objectData }) => {
           data-bs-target="#callModal"
         >
           <i className="fa-solid fa-bell"></i>
-          <span>Повикване на сервитьор</span>
+          <span>{menuLanguage.Buttons.CALL_WAITER.Text}</span>
         </button>
       ) : null}
       {showLanguageOption && (
@@ -164,7 +166,7 @@ const HomeContent = ({ objectData }) => {
       data-bs-toggle="modal"
       data-bs-target="#languageModal"
     >
-      <i className="fas fa-globe"></i> <span style={{ fontSize: '16px' }}>Избери език</span>
+      <i className="fas fa-globe"></i> <span style={{ fontSize: '16px' }}>{menuLanguage.Buttons.CHANGE_LANGUAGE.Text}</span>
 
     </button>
 
@@ -179,7 +181,7 @@ const HomeContent = ({ objectData }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="languageModalLabel">
-              <i className="fas fa-globe"></i> Избор на език
+              <i className="fas fa-globe"></i> {menuLanguage.Buttons.CHANGE_LANGUAGE.Text}
             </h5>
             <button
               type="button"
@@ -197,7 +199,7 @@ const HomeContent = ({ objectData }) => {
               className="btn btn-outline-secondary"
               data-bs-dismiss="modal"
             >
-              Затвори
+              {menuLanguage.Header.Information.Close_Button}
             </button>
           </div>
         </div>
@@ -213,7 +215,7 @@ const HomeContent = ({ objectData }) => {
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Повикване</h5>
+              <h5 className="modal-title">{menuLanguage.Buttons.CALL_WAITER.Text}</h5>
               <button className="btn-close" data-bs-dismiss="modal">
                 <i className="fa-solid fa-xmark"></i>
               </button>
@@ -238,7 +240,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.CHANGE_ASH_TRAY)}
                         disabled={remainingTimes[CallKeys.CHANGE_ASH_TRAY] > 0}
                       >
-                        Смяна на пепелник
+                        {menuLanguage.Buttons.CALL_WAITER.options.changeAshTray}
                         {remainingTimes[CallKeys.CHANGE_ASH_TRAY] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -249,6 +251,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -256,7 +259,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.REQUEST_BILL)}
                         disabled={remainingTimes[CallKeys.REQUEST_BILL] > 0}
                       >
-                        Поискване на сметка
+                        {menuLanguage.Buttons.CALL_WAITER.options.requestBill}
                         {remainingTimes[CallKeys.REQUEST_BILL] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -267,6 +270,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -274,7 +278,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.CHANGE_CUTLERY)}
                         disabled={remainingTimes[CallKeys.CHANGE_CUTLERY] > 0}
                       >
-                        Смяна на прибори
+                        {menuLanguage.Buttons.CALL_WAITER.options.changeCutlery}
                         {remainingTimes[CallKeys.CHANGE_CUTLERY] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -285,6 +289,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -292,7 +297,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.REFILL_WATER)}
                         disabled={remainingTimes[CallKeys.REFILL_WATER] > 0}
                       >
-                        Попълване на вода
+                        {menuLanguage.Buttons.CALL_WAITER.options.refillWater}
                         {remainingTimes[CallKeys.REFILL_WATER] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -303,6 +308,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -310,7 +316,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.CLEAN_TABLE)}
                         disabled={remainingTimes[CallKeys.CLEAN_TABLE] > 0}
                       >
-                        Изчистване на масата
+                        {menuLanguage.Buttons.CALL_WAITER.options.cleanTable}
                         {remainingTimes[CallKeys.CLEAN_TABLE] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -321,6 +327,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -328,7 +335,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.REFILL_NAPKINS)}
                         disabled={remainingTimes[CallKeys.REFILL_NAPKINS] > 0}
                       >
-                        Попълване на салфетки
+                        {menuLanguage.Buttons.CALL_WAITER.options.refillNapkins}
                         {remainingTimes[CallKeys.REFILL_NAPKINS] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -339,6 +346,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -346,7 +354,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.ADDITIONAL_CHAIR)}
                         disabled={remainingTimes[CallKeys.ADDITIONAL_CHAIR] > 0}
                       >
-                        Допълнителен стол
+                        {menuLanguage.Buttons.CALL_WAITER.options.additionalChair}
                         {remainingTimes[CallKeys.ADDITIONAL_CHAIR] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -357,6 +365,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -364,7 +373,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.CLEAN_SPILL)}
                         disabled={remainingTimes[CallKeys.CLEAN_SPILL] > 0}
                       >
-                        Почистване на разливка
+                        {menuLanguage.Buttons.CALL_WAITER.options.cleanSpill}
                         {remainingTimes[CallKeys.CLEAN_SPILL] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -375,6 +384,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -382,7 +392,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.ADDITIONAL_CONDIMENTS)}
                         disabled={remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS] > 0}
                       >
-                        Допълнителни подправки
+                        {menuLanguage.Buttons.CALL_WAITER.options.additionalCondiments}
                         {remainingTimes[CallKeys.ADDITIONAL_CONDIMENTS] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -393,6 +403,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -400,7 +411,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.REQUEST_WAITER_HELP)}
                         disabled={remainingTimes[CallKeys.REQUEST_WAITER_HELP] > 0}
                       >
-                        Помощ от сервитьор
+                        {menuLanguage.Buttons.CALL_WAITER.options.requestWaiterHelp}
                         {remainingTimes[CallKeys.REQUEST_WAITER_HELP] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -411,6 +422,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -418,7 +430,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.CALL_MANAGER)}
                         disabled={remainingTimes[CallKeys.CALL_MANAGER] > 0}
                       >
-                        Повикване на управител
+                        {menuLanguage.Buttons.CALL_WAITER.options.callManager}
                         {remainingTimes[CallKeys.CALL_MANAGER] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -429,6 +441,7 @@ const HomeContent = ({ objectData }) => {
                         )}
                       </button>
                     </div>
+
                     <div className="col-6 mb-3">
                       <button
                         type="button"
@@ -436,7 +449,7 @@ const HomeContent = ({ objectData }) => {
                         onClick={() => handleCall(CallKeys.REPORT_ORDER_ISSUE)}
                         disabled={remainingTimes[CallKeys.REPORT_ORDER_ISSUE] > 0}
                       >
-                        Сигнал за проблем с поръчка
+                        {menuLanguage.Buttons.CALL_WAITER.options.reportOrderIssue}
                         {remainingTimes[CallKeys.REPORT_ORDER_ISSUE] > 0 && (
                           <div className="cooldown-timer">
                             <div className="cooldown-progress" style={{ 
@@ -457,7 +470,7 @@ const HomeContent = ({ objectData }) => {
                 className="btn-cancel"
                 data-bs-dismiss="modal"
               >
-                Отказ
+              {menuLanguage.Header.Information.Close_Button}
               </button>
             </div>
           </div>
@@ -527,7 +540,7 @@ const HomeContent = ({ objectData }) => {
       
       <div className="title-bar mt-0">
         <Link to={PATH_LIST.CATEGORY_LIST}>
-          <span className="title mb-0 font-18">Категории</span>
+          <span className="title mb-0 font-18">{menuLanguage.Categories.Text}</span>
         </Link>
         <Link className="btn-link" to={PATH_LIST.CATEGORY_LIST}>
           <svg

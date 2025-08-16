@@ -7,11 +7,12 @@ import LoadingAnimation from "../../../../Animations/Loading";
 import { do_action } from "../../../../../services/userServices";
 import ShowAppMenu from "../../../../AppMenus/defaultMenu";
 import { formatDiscountedPrice, formatPrice } from "../../../../../utils/pricingUtils";
+import { getMenuLanguage } from "../../../../../services/appServices";
 const ShowCategoryData = ({ objectData }) => {
     const { id } = useParams();
     const [categoryData, setCategoryData] = useState([]);
     const [categoryName, setCategoryName] = useState('');
-    
+    const menuLanguage = getMenuLanguage();
     useEffect(() => {
         const getData = async () => {
             const productData = await getProductsByCategory(id);
@@ -242,13 +243,17 @@ const ShowCategoryData = ({ objectData }) => {
                                 />
                             </Link>
                             
-                            {JSON.parse(product.settings).VISUAL_SETTINGS.SHOW_BADGES.PROMO && (
-    <div style={{...styles.promotedTag, ...styles.promotedTagWithIcon}}>Промотирано</div>
-                            )}
-                            
-                            {product.product_views >= 200 && (
-                                <div style={styles.popularTag}>Популярно</div>
-                            )}
+                           {JSON.parse(product.settings).VISUAL_SETTINGS.SHOW_BADGES.PROMO && (
+    <div style={{...styles.promotedTag, ...styles.promotedTagWithIcon}}>
+        {menuLanguage.Badges.Promoted} 
+    </div>
+)}
+    
+{product.product_views >= 200 && (
+    <div style={styles.popularTag}>
+        {menuLanguage.Badges.Popular}
+    </div>
+)}
                             
                             <div style={styles.productContent}>
                                 <h5 style={styles.productName}>

@@ -22,7 +22,8 @@ import { hasAddon } from "../../../services/objectServices";
 import PERK_LIST from "../../../utils/perkAddons";
 import { do_action } from "../../../services/userServices";
 import { convertPrice, formatPrice } from "../../../utils/pricingUtils";
-
+import { getMenuLanguage } from "../../../services/appServices";
+import { interpolateString } from "../../../utils/stringUtiils";
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function ProductDetails() {
   const [relatedProducts, setRelatedProducts] = useState([]);
 
   const objectData = storage.getItem("objectData");
-  
+  const menuLanguage = getMenuLanguage();
   useEffect(() => {
     
     document.title = "Детайли за продукт";
@@ -152,7 +153,7 @@ setCategoryNames([...new Set(product.category_names)]);
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor" />
           </svg>
           </Link>
-          <h1 style={styles.headerTitle}>Детайли за продукт</h1>
+          <h1 style={styles.headerTitle}>{getMenuLanguage().Product_Details}</h1>
           <div style={styles.headerSpacer}></div>
         </div>
       </header>
@@ -246,14 +247,14 @@ setCategoryNames([...new Set(product.category_names)]);
                                 visibility: productData?.settings?.VISUAL_SETTINGS?.SHOW_PRODUCT_VIEW_COUNT ? 'visible' : 'hidden'
                               }}
                             >
-                              {productData?.product_views || 0} преглеждания
+                              {productData?.product_views || 0} {menuLanguage.Products.Product_Views}
                             </span>
                 </div>
 
                 {productData.hasDiscount && (
                 <div style={{...styles.statItem, ...styles.discountBadge}}>
                   <i className="fas fa-tag" style={styles.statIcon}></i>
-                  <span>Намаление {productData.discount_percentage}%</span>
+                  <span>-{productData.discount_percentage}%</span>
                 </div>
                 )}
               </div>
@@ -401,9 +402,11 @@ setCategoryNames([...new Set(product.category_names)]);
   ) : (
     Array.isArray(relatedProducts?.categoryData?.[0]) && relatedProducts.categoryData[0].length > 0 && (
       <div style={styles.upsellSection}>
-        <h3 style={styles.upsellTitle}>
-          🔥 Други ястия от "{relatedProducts.categoryData[1]?.categoryName}", които нашите гости харесват...
-        </h3>
+<h3 style={styles.upsellTitle}>
+  {interpolateString(menuLanguage.Marketing_Modules.UpSell.FallBack_Text, {
+    category: relatedProducts.categoryData[1]?.categoryName
+  })}
+</h3>
         <div style={styles.upsellGrid}>
           {relatedProducts.categoryData[0].slice(0, 4).map((product) => (
             <Link to={`/products/${product.item_id}`} key={product.item_id} style={styles.upsellCard}>
@@ -462,7 +465,10 @@ setCategoryNames([...new Set(product.category_names)]);
                 ...(productExists ? styles.cartButtonRemove : {})
               }}>
             <i className={`fas ${productExists ? 'fa-trash-alt' : 'fa-shopping-cart' }`} style={styles.cartIcon}></i>
-            {!productExists ? "ДОБАВИ В КОЛИЧКАТА" : "ПРЕМАХНИ ОТ КОЛИЧКАТА"}
+{!productExists 
+  ? menuLanguage.Buttons.CART_MANAGEMENT.Add_To_Cart 
+  : menuLanguage.Buttons.CART_MANAGEMENT.Remove_From_Cart
+}
           </button>
         </div>
         )}

@@ -1,6 +1,4 @@
-// SetOptions.jsx
-
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import usePersistedState from '../../hooks/usePersistedState';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createVisitor } from '../../services/userServices';

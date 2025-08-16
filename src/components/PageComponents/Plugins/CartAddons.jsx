@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import "../../Styles/CartAddons.css";
 import { motion, AnimatePresence } from "framer-motion";
+import { getMenuLanguage } from '../../../services/appServices';
+import {interpolateString} from '../../../utils/stringUtiils';
 /**
  * Calculate the total price of the add-ons.
  * @param {Array} addonsList - List of addon objects.
@@ -28,6 +30,7 @@ const getAddonsForProduct = (productId, storedAddons) => {
 };
 
 const CartAddons = ({ product, handleRemoveAddon, selectedAddons }) => {
+  const menuLanguage = getMenuLanguage();
   // Memoize the add-ons for the current product. 
   // This recalculates only when `product` or `selectedAddons` changes.
   const addons = useMemo(() => {
@@ -44,7 +47,7 @@ const CartAddons = ({ product, handleRemoveAddon, selectedAddons }) => {
   return (
     <section className="addons-section" aria-labelledby="addons-heading">
       <header className="addons-header">
-        <h2 id="addons-heading">Добавки</h2>
+        <h2 id="addons-heading">{menuLanguage.Addons}</h2>
       </header>
       <AnimatePresence>
         <motion.div
@@ -88,7 +91,10 @@ const CartAddons = ({ product, handleRemoveAddon, selectedAddons }) => {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.25 }}
         >
-          Обща цена: {totalPrice.toFixed(2)} {product.item_currency}.
+            {interpolateString(menuLanguage.Total_Addons_Price, {
+              totalPrice: totalPrice.toFixed(2),
+              currency: product.item_currency
+            })}
         </motion.div>
       </footer>
     </section>

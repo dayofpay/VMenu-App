@@ -9,6 +9,7 @@ import { getEnv } from "../../../utils/appData";
 import '../../Styles/Tables.css';
 import { do_action } from "../../../services/userServices";
 import ShowAppMenu from "../../AppMenus/defaultMenu";
+import { getMenuLanguage } from "../../../services/appServices";
 const ShowDetails = ({objectData}) => {
 
     if(!objectData){
@@ -65,14 +66,14 @@ const ShowDetails = ({objectData}) => {
 								<img src="/assets/images/avatar/6.jpg" alt="/"/>
 							</div>
 							<div className="detail-text">
-								<h6 className="mb-0">Качено от {announceData.announced_by?.['first_name']}</h6>
+								<h6 className="mb-0">{getMenuLanguage().News.Article.Upload_By} {announceData.announced_by?.['first_name']}</h6>
 								<ul className="timeline">
 									<li className="d-flex align-items-center">
 										<span className="text-soft">{TimeBetween(announceData.createdAt,new Date())}</span>
 										<div className="saprete-circle ms-2"></div>
 									</li>
 									<li>
-										<span className="text-soft">Последно редактирана на {announceData.updatedAt}</span>
+										<span className="text-soft">{getMenuLanguage().News.Article.Last_Edit} {announceData.updatedAt}</span>
 									</li>
 								</ul>
 							</div>

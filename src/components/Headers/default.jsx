@@ -3,11 +3,15 @@ import OBJECT_TYPES from "../../utils/objectTypes";
 import LoadingAnimation from "../Animations/Loading";
 import { useState,useEffect } from "react";
 import '../Styles/CKContent.css';
+import { getMenuLanguage } from "../../services/appServices";
 
 function DefaultHeader({objectData}) {
     if(!objectData.objectInformation) {
         return <LoadingAnimation/>
     }
+    const menuLanguage = getMenuLanguage();
+
+    
   const [categoryMeta, setCategoryMeta] = useState({
     layout: { type: 'grid', columns: 3, spacing: 'medium', order: 'manual' },
     design: { colorScheme: 'default', cardStyle: 'rounded', animation: { hover: true, type: 'lift' } },
@@ -90,7 +94,7 @@ useEffect(() => {
   }}
 >
   <i className="fa-solid fa-circle-info fa-xl" style={{ fontSize: '1.5rem' }}></i>
-  <span className="ms-2 d-none d-sm-inline">Информация</span>
+
 </button>
                             {/*TEMPORARY REMOVED -  {objectData?.license.perksData.tc_darkMode ? (
                             <a href="#" className="theme-btn">
@@ -109,120 +113,128 @@ useEffect(() => {
                             ) : (null)} */}
                         </div>
                         <div className="modal fade" id="objectInfoModal" style={{ display: 'none' }}>
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title">Информация за {OBJECT_TYPES?.[objectData?.objectInformation?.object_type]} {objectData?.objectInformation?.object_name}</h5>
-                                        <button className="btn-close" data-bs-dismiss="modal">
-                                            <i className="fa-solid fa-xmark"></i>
-                                        </button>
+    <div className="modal-dialog" role="document">
+        <div className="modal-content">
+            <div className="modal-header">
+                <h5 className="modal-title">
+                    {menuLanguage.Header.Information.Text} {objectData?.objectInformation?.object_name}
+                </h5>
+                <button className="btn-close" data-bs-dismiss="modal">
+                    <i className="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div className="modal-body">
+                <div className="row mb-3">
+                    <div className="col-12">
+                        <div className="card">
+                            <div className="card-header">
+                                <h5 className="card-title">
+                                    <i className="fa-solid fa-wifi"></i> {menuLanguage.Header.Information.Modules.Wifi.Header}
+                                </h5>
+                            </div>
+                            <div className="card-body">
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <h6>{menuLanguage.Header.Information.Modules.Wifi.Fields.SSID}:</h6>
+                                        <p className="fw-bold">
+                                            {objectData?.MODULES?.OBJECT_INFO?.FEATURES?.WIFI_SSID || menuLanguage.Header.Information.Modules.Wifi.Fields.No_Information}
+                                        </p>
                                     </div>
-                                    <div className="modal-body">
-                                        <div className="row mb-3">
-                                            <div className="col-12">
-                                                <div className="card">
-                                                    <div className="card-header">
-                                                        <h5 className="card-title">
-                                                            <i className="fa-solid fa-wifi"></i> WiFi Информация
-                                                        </h5>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <div className="row">
-                                                            <div className="col-md-6 mb-3">
-                                                                <h6>SSID:</h6>
-                                                                <p className="fw-bold">{objectData?.MODULES?.OBJECT_INFO?.FEATURES?.WIFI_SSID || 'Няма информация'}</p>
-                                                            </div>
-                                                            <div className="col-md-6 mb-3">
-                                                                <h6>Парола:</h6>
-                                                                <p className="fw-bold">{objectData?.MODULES?.OBJECT_INFO?.FEATURES?.WIFI_PASSCODE || 'Няма информация'}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="row mb-3">
-                                            <div className="col-12">
-                                                <div className="card">
-                                                    <div className="card-header d-block">
-                                                        <h5 className="card-title">Контактна Информация</h5>
-                                                        <p className="sub-title mb-0">Свържете се с управителя:</p>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <div className="row g-2">
-                                                            <div className="col-12 mb-2">
-                                                                <a href={`tel:${objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.MANAGER_PHONE_NUMBER || ''}`} className="btn btn-phone btn-icon-text w-100">
-                                                                    <i className="fa fa-phone"></i> {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.MANAGER_PHONE_NUMBER || 'Не е наличен'}
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="row mb-3">
-                                            <div className="col-12">
-                                                <div className="card">
-                                                    <div className="card-header d-block">
-                                                        <h5 className="card-title">Социални Връзки</h5>
-                                                        <p className="sub-title mb-0">Свържете се с нас в социалните мрежи:</p>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <div className="row g-2">
-                                                            {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_FACEBOOK && (
-                                                                <div className="col-6">
-                                                                    <a href={objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_FACEBOOK} target="_blank" rel="noopener noreferrer" className="btn btn-facebook btn-icon-text w-100">
-                                                                        <i className="fab fa-facebook-f"></i> Facebook
-                                                                    </a>
-                                                                </div>
-                                                            )}
-                                                            {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_INSTAGRAM && (
-                                                                <div className="col-6">
-                                                                    <a href={objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_INSTAGRAM} target="_blank" rel="noopener noreferrer" className="btn btn-instagram btn-icon-text w-100">
-                                                                        <i className="fab fa-instagram"></i> Instagram
-                                                                    </a>
-                                                                </div>
-                                                            )}
-                                                            {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_TIKTOK && (
-                                                                <div className="col-6">
-                                                                    <a href={objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_TIKTOK} target="_blank" rel="noopener noreferrer" className="btn btn-tiktok btn-icon-text w-100">
-                                                                        <i className="fab fa-tiktok"></i> TikTok
-                                                                    </a>
-                                                                </div>
-                                                            )}
-                                                            {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_TWITTER && (
-                                                                <div className="col-6">
-                                                                    <a href={objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_TWITTER} target="_blank" rel="noopener noreferrer" className="btn btn-twitter btn-icon-text w-100">
-                                                                        <i className="fab fa-twitter"></i> Twitter
-                                                                    </a>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="divider border-warning inner-divider mt-3">
-                                            <i className="fa-solid fa-heart"></i>
-                                        </div>
-
-                                        <div className="row">
-                                            <div className="col-12">
-                                                <h6><i className="fa-solid fa-info-circle"></i> Допълнителна Информация:</h6>
-                                                <div className="ck-content" dangerouslySetInnerHTML={{ __html: objectData?.MODULES?.OBJECT_INFO?.DESIGN_MODULE?.DATA || 'Няма допълнителна информация' }} />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-sm btn-danger light" data-bs-dismiss="modal">Затвори</button>
+                                    <div className="col-md-6 mb-3">
+                                        <h6>{menuLanguage.Header.Information.Modules.Wifi.Fields.Password}:</h6>
+                                        <p className="fw-bold">
+                                            {objectData?.MODULES?.OBJECT_INFO?.FEATURES?.WIFI_PASSCODE || menuLanguage.Header.Information.Modules.Wifi.Fields.No_Information}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div className="row mb-3">
+                    <div className="col-12">
+                        <div className="card">
+                            <div className="card-header d-block">
+                                <h5 className="card-title">{menuLanguage.Header.Information.Modules.Contact_Information.Header}</h5>
+                                <p className="sub-title mb-0">{menuLanguage.Header.Information.Modules.Contact_Information.Subtext}</p>
+                            </div>
+                            <div className="card-body">
+                                <div className="row g-2">
+                                    <div className="col-12 mb-2">
+                                        <a href={`tel:${objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.MANAGER_PHONE_NUMBER || ''}`} className="btn btn-phone btn-icon-text w-100">
+                                            <i className="fa fa-phone"></i> {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.MANAGER_PHONE_NUMBER || menuLanguage.Header.Information.Modules.Contact_Information.Not_Available}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row mb-3">
+                    <div className="col-12">
+                        <div className="card">
+                            <div className="card-header d-block">
+                                <h5 className="card-title">{menuLanguage.Header.Information.Modules.Social_Media.Header}</h5>
+                                <p className="sub-title mb-0">{menuLanguage.Header.Information.Modules.Social_Media.Subtext}</p>
+                            </div>
+                            <div className="card-body">
+                                <div className="row g-2">
+                                    {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_FACEBOOK && (
+                                        <div className="col-6">
+                                            <a href={objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_FACEBOOK} target="_blank" rel="noopener noreferrer" className="btn btn-facebook btn-icon-text w-100">
+                                                <i className="fab fa-facebook-f"></i> Facebook
+                                            </a>
+                                        </div>
+                                    )}
+                                    {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_INSTAGRAM && (
+                                        <div className="col-6">
+                                            <a href={objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_INSTAGRAM} target="_blank" rel="noopener noreferrer" className="btn btn-instagram btn-icon-text w-100">
+                                                <i className="fab fa-instagram"></i> Instagram
+                                            </a>
+                                        </div>
+                                    )}
+                                    {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_TIKTOK && (
+                                        <div className="col-6">
+                                            <a href={objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_TIKTOK} target="_blank" rel="noopener noreferrer" className="btn btn-tiktok btn-icon-text w-100">
+                                                <i className="fab fa-tiktok"></i> TikTok
+                                            </a>
+                                        </div>
+                                    )}
+                                    {objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_TWITTER && (
+                                        <div className="col-6">
+                                            <a href={objectData?.MODULES?.OBJECT_INFO?.CONTACTS?.SOCIAL_TWITTER} target="_blank" rel="noopener noreferrer" className="btn btn-twitter btn-icon-text w-100">
+                                                <i className="fab fa-twitter"></i> Twitter
+                                            </a>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="divider border-warning inner-divider mt-3">
+                    <i className="fa-solid fa-heart"></i>
+                </div>
+
+                <div className="row">
+                    <div className="col-12">
+                        <h6><i className="fa-solid fa-info-circle"></i> {menuLanguage.Header.Information.Modules.Additional_Information.Text}</h6>
+                        <div className="ck-content" dangerouslySetInnerHTML={{ __html: objectData?.MODULES?.OBJECT_INFO?.DESIGN_MODULE?.DATA || menuLanguage.Header.Information.Modules.Additional_Information.No_Information }} />
+                    </div>
+                </div>
+            </div>
+
+            <div className="modal-footer">
+                <button type="button" className="btn btn-sm btn-danger light" data-bs-dismiss="modal">
+                    {menuLanguage.Header.Information.Close_Button}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -236,7 +248,7 @@ useEffect(() => {
                 fontFamily: 'sans-serif',
                 backgroundColor: 'rgba(0,0,0,0.02)'
             }}>
-                Поддържано и разработвано от V-MENU
+                {menuLanguage.Header.VMENU_PROMO_TEXT}
 {objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.HEADER_SETTINGS?.SHOW_LOGO && (
                     <div style={{
                         marginTop: '10px',

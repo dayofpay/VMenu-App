@@ -5,7 +5,7 @@ import { TimeBetween } from '../../../utils/DateUtils';
 import ShowAppMenu from '../../AppMenus/defaultMenu';
 import { useEffect } from 'react';
 import { do_action } from '../../../services/userServices';
-
+import { getMenuLanguage } from '../../../services/appServices';
 const ShowAnnounces = ({ objectData }) => {
     useEffect(() => {
         if (objectData?.objectAnnounces) {
@@ -17,7 +17,7 @@ const ShowAnnounces = ({ objectData }) => {
         return <LoadingAnimation />;
     }
 
-    // Стилове за JSX
+
     const styles = {
         container: {
             maxWidth: '800px',
@@ -152,7 +152,7 @@ const ShowAnnounces = ({ objectData }) => {
                                 <path d="m456.283 272.773h-425.133c-16.771 0-30.367-13.596-30.367-30.367s13.596-30.367 30.367-30.367h425.133c16.771 0 30.367 13.596 30.367 30.367s-13.596 30.367-30.367 30.367z" />
                             </svg>
                         </Link>
-                        <h1 style={styles.title}>Новини</h1>
+                        <h1 style={styles.title}>{getMenuLanguage().News.Header.Text}</h1>
                     </div>
                 </div>
             </header>
@@ -161,7 +161,7 @@ const ShowAnnounces = ({ objectData }) => {
                 <div style={styles.searchBox}>
                     <input 
                         type="search" 
-                        placeholder="Търсене в новини..." 
+                        placeholder={getMenuLanguage().News.Search.Placeholder} 
                         style={styles.searchInput}
                     />
                     <div style={styles.searchIcon}>
@@ -192,7 +192,7 @@ const ShowAnnounces = ({ objectData }) => {
                                         <div style={styles.newsMeta}>
                                             <span>{TimeBetween(announce?.['createdAt'], new Date())}</span>
                                             <span style={styles.metaSeparator}></span>
-                                            <span>Качено от {announce?.announced_by.first_name}</span>
+                                            <span>{getMenuLanguage().News.Article.Upload_By}  {announce?.announced_by.first_name}</span>
                                         </div>
                                     </div>
                                 </Link>
@@ -201,7 +201,7 @@ const ShowAnnounces = ({ objectData }) => {
                     </ul>
                 ) : (
                     <div style={styles.emptyState}>
-                        <p>Няма налични новини в момента</p>
+                        <p>{getMenuLanguage().News.No_News}</p>
                     </div>
                 )}
             </main>

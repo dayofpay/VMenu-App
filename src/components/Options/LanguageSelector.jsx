@@ -1,23 +1,18 @@
-import React from 'react';
-
+import { getMenuLanguage } from '../../services/appServices';
 const languages = [
   { code: 'en', name: 'English' },
   { code: 'bg', name: 'Български' },
-  { code: 'hi', name: 'हिन्दी' },
-  { code: 'bn', name: 'বাংলা' },
-  { code: 'ar', name: 'العربية' },
-  { code: 'ja', name: '日本語' },
-  { code: 'iw', name: 'עברית' },
 ];
 
 const LanguageSelectorModal = ({ isOpen, onClose, onSelectLanguage }) => {
+    const menuLanguage = getMenuLanguage();
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>Изберете език</h3>
+          <h3>{menuLanguage.Buttons.CHANGE_LANGUAGE.Text}</h3>
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
         <div className="language-grid">

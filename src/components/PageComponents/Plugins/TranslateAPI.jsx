@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import withObjectData from "../../../HOC/withObjectInfo";
 import { do_action } from "../../../services/userServices";
-
+import { getMenuLanguage } from "../../../services/appServices";
 const LANGUAGES = [
 { code: "bg", name: "Български", flag: "https://flagcdn.com/24x18/bg.png" },
 { code: "ab", name: "Абхазки", flag: "" },
@@ -250,80 +250,145 @@ const LANGUAGES = [
 ];
 
 function TranslateAPI({ objectData }) {
+  const DEFAULT_LANGUAGE = objectData.objectInformation.menu_language || 'bg';
   const [isTranslationEnabled, setIsTranslationEnabled] = useState(true);
-  const [currentLanguage, setCurrentLanguage] = useState("bg");
+  const [currentLanguage, setCurrentLanguage] = useState(DEFAULT_LANGUAGE);
   const [availableLanguages, setAvailableLanguages] = useState([]);
+  const getPageLanguage = () => {
+    const supportedLanguages = ['bg', 'en', 'de', 'fr', 'ru', 'tr', 'ro'];
 
+    if (supportedLanguages.includes(objectData.objectInformation.menu_language)) {
+      return objectData.objectInformation.menu_language;
+    } else {
+      return 'bg';
+    }
+  }
 useEffect(() => {
   if (!objectData) return;
-
   const langSettings = objectData?.MODULES?.OBJECT_INFO?.ENABLED_LANGUAGES;
-
   if (!langSettings) {
     setIsTranslationEnabled(false);
     return;
-  }  
-  let filteredLanguages = [];
-
-  if (langSettings.useAllAvailableLanguages) {
-    filteredLanguages = LANGUAGES;
-  } else if (Array.isArray(langSettings.options)) {
-    filteredLanguages = LANGUAGES.filter(lang => langSettings.options.includes(lang.code));
   }
+
+  const filteredLanguages = langSettings.useAllAvailableLanguages
+    ? LANGUAGES
+    : LANGUAGES.filter(lang => langSettings.options.includes(lang.code));
   setAvailableLanguages(filteredLanguages);
 
+  const DEFAULT_LANGUAGE = objectData.objectInformation.menu_language || 'bg';
+  setCurrentLanguage(DEFAULT_LANGUAGE);
 
-  const loadGoogleTranslate = () => {
-    window.googleTranslateElementInit = () => {
-      new window.google.translate.TranslateElement(
-        {
-          pageLanguage: "bg",
-          includedLanguages: LANGUAGES.map(lang => lang.code).join(','),
-          layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-        },
-        "google_translate_element"
-      );
+  /**
+   * Initializes the Google Translate element on the page.
+   * Sets up the translation options and default language selection.
+   */
+  window.googleTranslateElementInit = () => {
+    // Create a new Google Translate element with specified settings
+    new window.google.translate.TranslateElement(
+      {
+        pageLanguage: getPageLanguage(), // Default page language
+        includedLanguages: LANGUAGES.map(lang => lang.code).join(','), // Languages to include in the translation dropdown
+        layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL, // Layout style
+      },
+      "google_translate_element" // Element ID to attach the translate widget
+    );
 
+    // Hide the language selection dropdown after a short delay
+    setTimeout(() => {
       const select = document.querySelector('.goog-te-combo');
-      if (select) select.style.display = 'none';
-    };
+      if (select) {
+        select.style.display = 'none'; // Hide the dropdown
 
-    const script = document.createElement("script");
-    script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-    script.async = true;
-    document.head.appendChild(script);
+        // If the default language is not default, set it and trigger change event
+        if (DEFAULT_LANGUAGE !== getPageLanguage()) {
+          select.value = DEFAULT_LANGUAGE; // Set the selected language
+          select.dispatchEvent(new Event('change')); // Dispatch change event to update translation
+        }
+      }
+    }, 500); // Delay to ensure the dropdown is available after initialization
   };
 
-  loadGoogleTranslate();
+  const script = document.createElement("script");
+  script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+  script.async = true;
+  document.head.appendChild(script);
 
   return () => {
-    const translateElement = document.getElementById("google_translate_element");
-    if (translateElement) translateElement.innerHTML = "";
+    const el = document.getElementById("google_translate_element");
+    if (el) el.innerHTML = "";
   };
 }, [objectData]);
 
 
-  const changeLanguage = (langCode) => {
-    setCurrentLanguage(langCode);
-    const select = document.querySelector('.goog-te-combo');
-    if (select) {
-      select.value = langCode;
-      select.dispatchEvent(new Event('change'));
+
+  /**
+   * Sets the Google Translate cookie.
+   * @param {String} lang - The language code to set the cookie to.
+   * @description
+   * If the language is "bg" (Bulgarian), the cookie is deleted.
+   * Otherwise, the cookie is set to the provided language and expires in 30 days.
+   */
+  const setGoogleTranslateCookie = (lang) => {
+    if (lang === getPageLanguage()) {
+      // Delete the cookie if the language is "bg" (Bulgarian)
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    } else {
+      // Set the cookie to the provided language and expires in 30 days
+      document.cookie = `googtrans=/bg/${lang}; expires=${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
     }
   };
 
+/**
+ * Changes the language of the translation.
+ * @param {String} langCode - The code of the language to change to.
+ */
+const changeLanguage = (langCode) => {
+  // Update the current language state
+  setCurrentLanguage(langCode);
+
+  // Perform an action indicating the language change
+  do_action("change_language", { message: "Езика бе сменен на " + langCode });
+
+  // Select the Google Translate dropdown element
+  const select = document.querySelector('.goog-te-combo');
+  if (select) {
+    // Set the selected language in the dropdown
+    select.value = langCode;
+
+    // Trigger change event to update translation
+    select.dispatchEvent(new Event('change'));
+  }
+};
+
+  /**
+   * Resets the translation settings to the default language (Bulgarian).
+   * This function performs the following actions:
+   * - Calls an action to reset the translation.
+   * - Sets the Google Translate cookie to the default language.
+   * - Updates the current language in the state.
+   * - Reloads the page to apply the changes.
+   */
   const resetTranslation = () => {
+    // Perform an action to reset the translation
     do_action("reset_translation", { message: "Translation reset" });
-    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    // Set the Google Translate cookie to the default language ('bg')
+    setGoogleTranslateCookie(getPageLanguage());
+
+    // Update the current language in the state to 'bg'
+    setCurrentLanguage(getPageLanguage());
+
+    // Reload the page to apply the language changes
     window.location.reload();
   };
-
+  const menuLanguage = getMenuLanguage();
   return (
+    
     <HelmetProvider>
       <Helmet>{/* V-MENU.API.TRANSLATION */}</Helmet>
       {isTranslationEnabled ? (
         <>
-
           <div style={{ 
             display: "flex", 
             flexWrap: "wrap", 
@@ -361,9 +426,7 @@ useEffect(() => {
             ))}
           </div>
 
-          {/* Google Translate */}
           <div id="google_translate_element" style={{ display: "none" }}></div>
-
 
           <button
             onClick={resetTranslation}
@@ -377,7 +440,7 @@ useEffect(() => {
               fontSize: "14px",
             }}
           >
-            Нулиране на превода
+            {menuLanguage.API_LIST.Google_Services.Reset_Options.Text}
           </button>
         </>
       ) : (

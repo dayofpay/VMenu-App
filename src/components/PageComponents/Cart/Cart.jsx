@@ -6,7 +6,7 @@ import {
   incrementCartQuantity,
   removeCartItem,
 } from "../../../handlers/CartQuantityHR";
-import { ProductDetailsKeys } from "../../../keys/formKeys";
+import { getMenuLanguage } from "../../../services/appServices";
 import LoadingAnimation from "../../Animations/Loading";
 import usePersistedState from "../../../hooks/usePersistedState";
 import { Link } from "react-router-dom";
@@ -16,8 +16,7 @@ import { hasAddon } from "../../../services/objectServices";
 import PERK_LIST from "../../../utils/perkAddons";
 import ShowAppMenu from "../../AppMenus/defaultMenu";
 import { convertPrice, formatPrice } from "../../../utils/pricingUtils";
-
-/**
+import localeData from "../../../locales/locales";/**
  * ShowCart component.
  * @param {object} objectData - The object with the list of products, categories, etc.
  * @returns {JSX.Element} The JSX element representing the cart page.
@@ -30,6 +29,19 @@ const ShowCart = ({ objectData }) => {
   const [totalDiscounts, setTotalDiscounts] = useState(0);
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [totalAddonsPrice, setTotalAddonsPrice] = useState(0);
+  const language = objectData.objectInformation.menu_language || 'bg';
+  const lang = ['bg','en','de','fr','ru','tr','ro'].includes(language) ? language : 'bg';
+  const menuLangauge = getMenuLanguage();
+  const L = localeData.CART_LOCALES[lang];
+  const checkoutTexts = {
+    bg: 'Продължи към плащане',
+    en: 'Proceed to Checkout',
+    de: 'Zur Kasse',
+    fr: 'Passer à la caisse',
+    ru: 'Перейти к оплате',
+    tr: 'Ödeme Yap',
+    ro: 'Continuă la plată'
+  };
   useEffect(() => {
     const getProductData = async () => {
       const filteredProducts = await Promise.all(
@@ -175,7 +187,7 @@ const ShowCart = ({ objectData }) => {
                     d="m456.283 272.773h-425.133c-16.771 0-30.367-13.596-30.367-30.367s13.596-30.367 30.367-30.367h425.133c16.771 0 30.367 13.596 30.367 30.367s-13.596 30.367-30.367 30.367z" />
                 </svg>
                 </Link>
-                <h5 className="title mb-0 text-nowrap">Количка</h5>
+                <h5 className="title mb-0 text-nowrap">{menuLangauge.Cart.Cart_Text}</h5>
               </div>
             </div>
           </div>
@@ -217,21 +229,23 @@ const ShowCart = ({ objectData }) => {
   </div>
 
   <h2 style={{
-    fontSize: '1.8rem',
-    fontWeight: '700',
-    marginBottom: '1rem',
-    color: '#2d3436'
-  }}>Количката ви е празна! <span style={{animation: 'wobble 1s infinite'}}>😕</span></h2>
+  fontSize: '1.8rem',
+  fontWeight: '700',
+  marginBottom: '1rem',
+  color: '#2d3436'
+}}>
+  {menuLangauge.Cart.Empty.Text} <span style={{animation: 'wobble 1s infinite'}}>😕</span>
+</h2>
 
-  <p style={{
-    fontSize: '1.1rem',
-    color: '#636e72',
-    marginBottom: '2rem',
-    lineHeight: '1.6'
-  }}>
-    Няма продукти в количката ви все още. <br/>
-    Но не се притеснявате, имаме много вкусни предложения! <span>😋</span>
-  </p>
+<p style={{
+  fontSize: '1.1rem',
+  color: '#636e72',
+  marginBottom: '2rem',
+  lineHeight: '1.6'
+}}>
+  {menuLangauge.Cart.Empty.Subtext} <br/>
+  {menuLangauge.Cart.Empty.Additional_Text} <span>😋</span>
+</p>
 
   <div style={{
     display: 'flex',
@@ -256,7 +270,7 @@ const ShowCart = ({ objectData }) => {
         boxShadow: '0 4px 15px rgba(255, 118, 117, 0.3)'
       }}
     >
-      <span>🏠</span> Начална страница
+      <span>🏠</span> {menuLangauge.Cart.Empty.Buttons.Home_Page.Text}
     </Link>
     
     <Link 
@@ -277,7 +291,7 @@ const ShowCart = ({ objectData }) => {
         boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
       }}
     >
-      <span>🍔</span> Виж менюто
+      <span>🍔</span> {menuLangauge.Cart.Empty.Buttons.Menu_Page.Text}
     </Link>
   </div>
 
@@ -418,68 +432,71 @@ const ShowCart = ({ objectData }) => {
         </div>
 
         <div className="cart-summary-container" translate="no">
-          <div className="summary-card">
-            <div className="summary-grid">
-              <div className="summary-row">
-                <span className="summary-label">Продукти:</span>
-                <span className="summary-value">
-                  {Number(totalPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
-                </span>
-              </div>
-
-              <div className="summary-row">
-                <span className="summary-label">Добавки:</span>
-                <span className="summary-value addons">
-                  +{Number(totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
-                </span>
-              </div>
-
-              {totalDiscounts > 0 && (
-              <div className="summary-row">
-                <span className="summary-label">Отстъпки:</span>
-                <span className="summary-value discount">
-                  -{Number(totalPrice - discountPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
-                </span>
-              </div>
-              )}
-
-              <div className="divider"></div>
-
-                <div className="summary-row total-row">
-                  <span className="summary-label">Общо:</span>
-                  <span className="summary-value total">
-                    {Number(discountPrice + totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
-                    {objectData.objectInformation.object_currency !== 'EUR' && (
-                      <span className="euro-conversion">
-                        ≈ {convertPrice(
-                          discountPrice + totalAddonsPrice,
-                          objectData.objectInformation.object_currency,
-                          'EUR'
-                        ).toFixed(2)} €
-                      </span>
-                    )}
-                  </span>
-                </div>
-
-              {totalDiscounts > 0 && (
-              <div className="promo-badge">
-                <span className="badge-icon">🎁</span>
-                <span className="badge-text">
-                  Използвани {totalDiscounts} {totalDiscounts === 1 ? 'отстъпка' : 'отстъпки'}
-                </span>
-              </div>
-              )}
-            </div>
-
-            <Link to={totalPrice> 0 ? PATH_LIST.APP_CHECKOUT : "#"}
-            className={`checkout-btn ${totalPrice > 0 ? '' : 'disabled'}`}
-            aria-disabled={totalPrice <= 0} tabIndex={totalPrice <=0 ? -1 : 0} onClick={(e)=> {
-              if (totalPrice <= 0) { e.preventDefault(); } }}>
-                <span>Продължи към плащане</span>
-                <span className="btn-arrow">→</span>
-                </Link>
+      <div className="summary-card">
+        <div className="summary-grid">
+          <div className="summary-row">
+            <span className="summary-label">{L.PRODUCTS}:</span>
+            <span className="summary-value">
+              {Number(totalPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
+            </span>
           </div>
+
+          <div className="summary-row">
+            <span className="summary-label">{L.ADDONS}:</span>
+            <span className="summary-value addons">
+              +{Number(totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
+            </span>
+          </div>
+
+          {totalDiscounts > 0 && (
+            <div className="summary-row">
+              <span className="summary-label">{L.DISCOUNTS.MORE}:</span>
+              <span className="summary-value discount">
+                -{Number(totalPrice - discountPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
+              </span>
+            </div>
+          )}
+
+          <div className="divider"></div>
+
+          <div className="summary-row total-row">
+            <span className="summary-label">{L.TOTAL}:</span>
+            <span className="summary-value total">
+              {Number(discountPrice + totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
+              {objectData.objectInformation.object_currency !== 'EUR' && (
+                <span className="euro-conversion">
+                  ≈ {convertPrice(
+                    discountPrice + totalAddonsPrice,
+                    objectData.objectInformation.object_currency,
+                    'EUR'
+                  ).toFixed(2)} €
+                </span>
+              )}
+            </span>
+          </div>
+
+          {totalDiscounts > 0 && (
+            <div className="promo-badge">
+              <span className="badge-icon">🎁</span>
+              <span className="badge-text">
+                {L.DISCOUNTS_USED} {totalDiscounts} {totalDiscounts === 1 ? L.DISCOUNTS.ONE : L.DISCOUNTS.MORE}
+              </span>
+            </div>
+          )}
         </div>
+
+        <Link
+          to={totalPrice > 0 ? PATH_LIST.APP_CHECKOUT : "#"}
+          className={`checkout-btn ${totalPrice > 0 ? '' : 'disabled'}`}
+          aria-disabled={totalPrice <= 0}
+          tabIndex={totalPrice <= 0 ? -1 : 0}
+          onClick={(e) => { if (totalPrice <= 0) e.preventDefault(); }}
+        >
+          <span>{checkoutTexts[lang]}</span>
+          <span className="btn-arrow">→</span>
+        </Link>
+      </div>
+    </div>
                   {objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_CART && <ShowAppMenu />}
       </div>
     </>

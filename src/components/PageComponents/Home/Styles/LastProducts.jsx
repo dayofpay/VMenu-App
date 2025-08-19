@@ -836,7 +836,7 @@ const HomeContent = ({ objectData }) => {
 `}</style>
 
             <div className="title-bar d-flex justify-content-between align-items-center mb-3">
-              <span className="title mb-0 font-18">Последни продукти</span>
+              <span className="title mb-0 font-18">{menuLanguage.Products.Last_Products}</span>
             </div>
 
             <div className="row g-3 mb-4 latest-products">

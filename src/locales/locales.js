@@ -112,7 +112,8 @@ const localeData = {
                 GOOD_EVENING: 'Добър Вечер,',
                 Products: {
                     Singular: 'Продукт',
-                    Plural: 'Продукти'
+                    Plural: 'Продукти',
+                    DefiniteSingular: 'Продукта',
                 }
             },
             Buttons: {
@@ -171,7 +172,8 @@ const localeData = {
             },
             Products: {
                 Product_Views: 'Преглеждания',
-                Limited_Discount: 'В момента на лимитирана -{discount}% отстъпка!'
+                Limited_Discount: 'В момента на лимитирана -{discount}% отстъпка!',
+                Last_Products: 'Последни продукти'
             },
             Addons: 'Добавки',
             Total_Addons_Price: 'Обща цена: {totalPrice} {currency}',
@@ -385,7 +387,8 @@ const localeData = {
             },
             Products: {
                 Product_Views: 'Views',
-                Limited_Discount: 'Currently on limited -{discount}% discount!'
+                Limited_Discount: 'Currently on limited -{discount}% discount!',
+                Last_Products: 'Last products'
             },
             Addons: 'Addons',
             Total_Addons_Price: 'Total price: {totalPrice} {currency}',
@@ -598,7 +601,8 @@ const localeData = {
             },
             Products: {
                 Product_Views: 'Görüntülenme',
-                Limited_Discount: 'Şu anda sınırlı -{discount}% indirim!'
+                Limited_Discount: 'Şu anda sınırlı -{discount}% indirim!',
+                Last_Products: 'Son Urunler',
             },
             Addons: 'Ekstralar',
             Total_Addons_Price: 'Toplam fiyat: {totalPrice} {currency}',
@@ -811,7 +815,9 @@ const localeData = {
             },
             Products: {
                 Product_Views: 'Aufrufe',
-                Limited_Discount: 'Aktuell limitierter -{discount}% Rabatt!'
+                Limited_Discount: 'Aktuell limitierter -{discount}% Rabatt!',
+                Last_Products: 'Letzte Produkte'
+
             },
             Addons: 'Extras',
             Total_Addons_Price: 'Gesamtpreis: {totalPrice} {currency}',
@@ -1024,7 +1030,9 @@ const localeData = {
             },
             Products: {
                 Product_Views: 'Vues',
-                Limited_Discount: 'Actuellement en promotion limitée : -{discount}% !'
+                Limited_Discount: 'Actuellement en promotion limitée : -{discount}% !',
+                Last_Products: 'Derniers produits'
+
             },
             Addons: 'Suppléments',
             Total_Addons_Price: 'Prix total : {totalPrice} {currency}',
@@ -1237,7 +1245,9 @@ const localeData = {
             },
             Products: {
                 Product_Views: 'Просмотры',
-                Limited_Discount: 'Ограниченная скидка -{discount}%!'
+                Limited_Discount: 'Ограниченная скидка -{discount}%!',
+                Last_Products: 'Последние продукты',
+
             },
             Addons: 'Дополнения',
             Total_Addons_Price: 'Общая стоимость: {totalPrice} {currency}',
@@ -1450,7 +1460,9 @@ const localeData = {
             },
             Products: {
                 Product_Views: 'Vizualizări',
-                Limited_Discount: 'Reducere limitată de -{discount}%!'
+                Limited_Discount: 'Reducere limitată de -{discount}%!',
+                Last_Products: 'Ultimele produse'
+
             },
             Addons: 'Suplimente',
             Total_Addons_Price: 'Preț total: {totalPrice} {currency}',

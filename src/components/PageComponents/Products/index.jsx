@@ -38,9 +38,7 @@ export default function ProductDetails() {
   const objectData = storage.getItem("objectData");
   const menuLanguage = getMenuLanguage();
   useEffect(() => {
-    
-    document.title = "Детайли за продукт";
-    
+        
     const fetchData = async () => {
       try {
         const [product, addons] = await Promise.all([

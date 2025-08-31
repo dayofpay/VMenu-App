@@ -36,28 +36,15 @@ import { useState } from "react";
 export default function useForm(submitHandler, initialValues, validatorSettings) {
   const [values, setValues] = useState(initialValues || {});
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  /**
-   * This function is used to validate the form when it is submitted. It checks
-   * each field in the form against the validation rules defined in the
-   * validatorSettings object. If any of the fields fail validation, the
-   * validate function returns false and the errors object is updated to
-   * contain the validation errors. If all of the fields pass validation, the
-   * validate function returns true and the errors object is cleared.
-   * @returns {boolean} True if the form is valid, false if it is not.
-   */
   const validate = () => {
     if (!validatorSettings) {
-      return true; // if there is no special validation settings, return true
+      return true;
     }
 
     let validationErrors = {};
 
-    /**
-     * Loop through each field in the form and check it against the validation
-     * rules defined in the validatorSettings object. If any of the fields fail
-     * validation, update the validationErrors object with the error messages.
-     */
     Object.keys(validatorSettings || {}).forEach((fieldName) => {
       const errorMessage = validatorSettings[fieldName] && validatorSettings[fieldName](values[fieldName]);
       if (errorMessage) {
@@ -67,46 +54,22 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
       }
     });
 
-    /**
-     * Update the errors object with the validation errors. If there are no errors,
-     * clear the errors object.
-     */
     setErrors(validationErrors);
     return Object.values(validationErrors).every((error) => !error);
   };
 
-  /**
-   * This function is used to update the state of the form when a form input is
-   * changed. It takes in an event object as a parameter, which is the event
-   * object passed to the onChange event handler by React.
-   * @param {object} event The event object passed to the onChange event handler.
-   * @returns {void} Does not return a value.
-   */
   const onChange = (event) => {
     const fieldName = event.target?.name;
     const fieldValue = event.target?.value;
 
-    /**
-     * If the event object has a name and value property, update the state of
-     * the form with the new value.
-     */
     if (fieldName && fieldValue !== undefined) {
-      /**
-       * Create a new state object with the updated value.
-       */
       const newState = {
         ...values,
         [fieldName]: fieldValue,
       };
 
-      /**
-       * Update the state with the new state object.
-       */
       setValues(newState);
 
-      /**
-       * Clear the error message for the field that was just updated.
-       */
       setErrors((prevErrors) => ({
         ...prevErrors,
         [fieldName]: undefined,
@@ -114,33 +77,20 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
     }
   };
 
-  /**
-   * This function is used to handle form submission. It takes in an event object
-   * as a parameter, which is the event object passed to the onSubmit event
-   * handler by React.
-   * @param {object} event The event object passed to the onSubmit event handler.
-   */
+  // Променена onSubmit функция за да приема опционален event
   const onSubmit = async (event) => {
-    event?.preventDefault();
+    // Ако е подаден event, предотвратяваме default поведението
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+    }
 
-    /**
-     * Call the validate function to validate the form. If the form is invalid,
-     * do not call the submitHandler function.
-     */
     try {
+      setLoading(true);
       const isValid = validate();
+      
       if (isValid) {
-        /**
-         * Call the submitHandler function with the state of the form as an
-         * argument.
-         */
         const result = await submitHandler?.(values);
-
-        /**
-         * If the submitHandler function returns an object with a success
-         * property that is false, update the errors object with the error
-         * message.
-         */
+        
         if (result && !result.success) {
           setErrors((prevErrors) => ({
             ...prevErrors,
@@ -156,6 +106,37 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
     } catch (error) {
       console.error("An unexpected error occurred:", error);
       setErrors({ form: error?.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Нова функция за директно извикване без event
+  const submitForm = async () => {
+    try {
+      setLoading(true);
+      const isValid = validate();
+      
+      if (isValid) {
+        const result = await submitHandler?.(values);
+        
+        if (result && !result.success) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            form: result.error,
+          }));
+          console.error("Submit Handler Status - ❌:", result);
+        } else {
+          console.log("Submit Handler Status - ✅!");
+        }
+      } else {
+        console.log('Validation failed');
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+      setErrors({ form: error?.message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -163,8 +144,9 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
     values,
     onChange,
     onSubmit,
+    submitForm, // Нова функция
     errors,
     setValues,
+    loading // Добавяме loading state
   };
 }
-

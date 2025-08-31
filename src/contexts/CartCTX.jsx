@@ -1,17 +1,13 @@
-import { createContext} from "react";
+import { createContext } from "react";
 import { useNavigate } from "react-router-dom";
-
-
-import usePersistedState from "../hooks/usePersistedState";
 import { ERROR_PATHS, PATH_LIST } from "../utils/pathList";
 import * as storage from '../utils/memory';
 import { createCheckout } from "../services/userServices";
-import React from "react";
+
 export const CartContext = createContext();
 
 export const CartProvider = ({
     children,
-
 }) => {
     const navigate = useNavigate();
 
@@ -21,17 +17,17 @@ export const CartProvider = ({
      * @param {object} data - The data of the product to be added to the cart.
      * @param {function} setProductExists - A function that sets the productExists state to true or false.
      */
-    const cartUpdateHandler = (data,setProductExists) => {
+    const cartUpdateHandler = (data, setProductExists) => {
         // First we check if the cart already exists in local storage
         const createCart = () => {
             // If it doesn't, we create a new cart and add the product to it
-            storage.setItem('cart',[data])
+            storage.setItem('cart', [data])
         }
         const updateCart = (cartObj) => {
             // If the cart already exists, we check if the product is already in it
             const productExists = cartObj.some((product) => product?.productId === data.productId);
             // If the product is not in the cart, we add it
-            productExists ? null : storage.setItem('cart',[...cartObj,data]);
+            productExists ? null : storage.setItem('cart', [...cartObj, data]);
         }
         // Finally, we set the productExists state to true so that we can use it in the component
         setProductExists(true);
@@ -47,19 +43,15 @@ export const CartProvider = ({
      * @param {object} data - The data of the product to be deleted from the cart.
      * @param {function} setProductExists - A function that sets the productExists state to true or false.
      */
-    const cartDeleteHandler = (data,setProductExists) => {
+    const cartDeleteHandler = (data, setProductExists) => {
         let cart = storage.getItem('cart');
         
         // Find the index of the item to delete
         const indexToDelete = cart.findIndex(item => item.productId === data.productId);
     
         if (indexToDelete !== -1) {
-
             cart.splice(indexToDelete, 1);
-            
-
             storage.setItem('cart', cart);
-
             setProductExists(false);
         }
     }
@@ -69,16 +61,21 @@ export const CartProvider = ({
      * and sends it to the server. If the server responds with a success message, we clear the cart and navigate to the final checkout page.
      * @param {object} data - The data of the products to be purchased.
      */
-    const checkoutHandler = async(data) => {
-        const result = await createCheckout(data);
+    const checkoutHandler = async (data) => {
+        // Get applied discount from localStorage
+        const appliedDiscount = storage.getItem('appliedDiscount');
+        
+        const result = await createCheckout({
+            ...data,
+            discountData: appliedDiscount // Add discount data to the request
+        });
 
-        if(!result.hasError){
+        if (!result.hasError) {
             storage.removeItem('cart');
             storage.removeItem('selectedAddons');
-            navigate(PATH_LIST.FINAL_CHECKOUT)
-        }
-
-        else{
+            storage.removeItem('appliedDiscount'); // Remove discount after successful order
+            navigate(PATH_LIST.FINAL_CHECKOUT);
+        } else {
             navigate(ERROR_PATHS.CHECKOUT_ERROR);
         }
     }
@@ -87,13 +84,14 @@ export const CartProvider = ({
         cartUpdateHandler,
         cartDeleteHandler,
         checkoutHandler,
-        // Insert submit handlers here
     } 
-     return (
+
+    return (
         <CartContext.Provider value={logValues}>
             {children}
         </CartContext.Provider>
     )
 }
+
 CartContext.displayName = 'CartContext';
 export default CartContext;

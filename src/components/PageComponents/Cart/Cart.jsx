@@ -16,6 +16,7 @@ import { hasAddon } from "../../../services/objectServices";
 import PERK_LIST from "../../../utils/perkAddons";
 import ShowAppMenu from "../../AppMenus/defaultMenu";
 import { convertPrice, formatPrice } from "../../../utils/pricingUtils";
+import DiscountBox from "./DiscountBox";
 import localeData from "../../../locales/locales";/**
  * ShowCart component.
  * @param {object} objectData - The object with the list of products, categories, etc.
@@ -32,6 +33,7 @@ const ShowCart = ({ objectData }) => {
   const language = objectData.objectInformation.menu_language || 'bg';
   const lang = ['bg','en','de','fr','ru','tr','ro'].includes(language) ? language : 'bg';
   const menuLangauge = getMenuLanguage();
+  const [appliedDiscount, setAppliedDiscount] = useState(null);
   const L = localeData.CART_LOCALES[lang];
   const checkoutTexts = {
     bg: 'Продължи към плащане',
@@ -43,7 +45,14 @@ const ShowCart = ({ objectData }) => {
     ro: 'Continuă la plată'
   };
   useEffect(() => {
+    /**
+     * A function that gets the data of the products in the cart.
+     * It maps over the cart items and finds the corresponding product in the objectData.allProducts array.
+     * Then it sets the cartPrototype state with the filtered products.
+     * It also gets the addons data from localStorage and sets the selectedAddons state.
+     */
     const getProductData = async () => {
+      // Map over the cart items and find the corresponding product in the objectData.allProducts array
       const filteredProducts = await Promise.all(
         cart.map(async (product) => {
           return objectData.allProducts.find(
@@ -51,21 +60,22 @@ const ShowCart = ({ objectData }) => {
           );
         })
       );
+      // Set the cartPrototype state with the filtered products
       setCartPrototype(filteredProducts);
 
-      // Вземаме добавките от localStorage
+      // Get the addons data from localStorage
       const addonsData =
         JSON.parse(localStorage.getItem("selectedAddons")) || [];
+      // Set the selectedAddons state
       setSelectedAddons(addonsData);
     };
 
     getProductData();
   }, [cart, objectData]);
 
-  useEffect(() => {
+    useEffect(() => {
     const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    let totalDiscountsCount = 0;
-
+    
     let totalPrice = cartItems.reduce((acc, cartItem) => {
       const product = cartPrototype.find(
         (product) => product.item_id === cartItem.productId
@@ -77,32 +87,45 @@ const ShowCart = ({ objectData }) => {
       return acc;
     }, 0);
 
-    let discountPrice = cartItems.reduce((acc, cartItem) => {
-      const product = cartPrototype.find(
-        (product) => product.item_id === cartItem.productId
-      );
 
-      if (
-        product &&
-        product.item_price &&
-        product.has_discount &&
-        cartItem.productQuantity
-      ) {
-        const discountedPrice =
-          (product.item_price * (100 - product.discount_percentage)) / 100;
-        totalDiscountsCount++; // Increment the count of items with discounts
-        return acc + discountedPrice * cartItem.productQuantity;
-      }
-      return acc + (product?.item_price * cartItem.productQuantity || 0);
-    }, 0);
+    let finalPrice = totalPrice;
+    if (appliedDiscount) {
+      finalPrice = totalPrice - appliedDiscount.amount;
+    } else {
+
+      finalPrice = cartItems.reduce((acc, cartItem) => {
+        const product = cartPrototype.find(
+          (product) => product.item_id === cartItem.productId
+        );
+
+        if (
+          product &&
+          product.item_price &&
+          product.has_discount &&
+          cartItem.productQuantity
+        ) {
+          const discountedPrice =
+            (product.item_price * (100 - product.discount_percentage)) / 100;
+          return acc + discountedPrice * cartItem.productQuantity;
+        }
+        return acc + (product?.item_price * cartItem.productQuantity || 0);
+      }, 0);
+    }
 
     setTotalPrice(totalPrice);
-    setDiscountPrice(discountPrice);
-    setTotalDiscounts(totalDiscountsCount); // Set the total number of items with discounts
-  }, [cartPrototype]);
+    setDiscountPrice(finalPrice);
+  }, [cartPrototype, appliedDiscount]);
 
+  /**
+   * Handle the decrement of a product in the cart.
+   * If the product quantity is 1, do not decrement it further.
+   * @param {number} productId - The id of the product to decrement.
+   */
   const handleDecrement = (productId) => {
+    // Decrement the quantity of the product in the cart
     decrementCartQuantity(productId);
+
+    // Update the cart state with the new quantity
     setCart((prevCart) =>
       prevCart.map((item) =>
         item.productId === productId && item.productQuantity > 1
@@ -112,8 +135,15 @@ const ShowCart = ({ objectData }) => {
     );
   };
 
+  /**
+   * Handle the increment of a product in the cart.
+   * @param {number} productId - The id of the product to increment.
+   */
   const handleIncrement = (productId) => {
+    // Increment the quantity of the product in the cart
     incrementCartQuantity(productId);
+
+    // Update the cart state with the new quantity
     setCart((prevCart) =>
       prevCart.map((item) =>
         item.productId === productId
@@ -123,42 +153,68 @@ const ShowCart = ({ objectData }) => {
     );
   };
 
+  /**
+   * Handles the removal of a product from the cart.
+   * @param {number} productId - The id of the product to remove.
+   */
   const handleRemove = (productId) => {
+    // Remove the product from the cart
     removeCartItem(productId);
+    // Update the cart state with the new quantity
     setCart((prevCart) =>
       prevCart.filter((item) => item.productId !== productId)
     );
-    console.log(JSON.parse(localStorage.getItem('selectedAddons')));
-    
-    // JSON.parse(localStorage.getItem('selectedAddons')).map((addon) => {
-    //   if(addon.item_id === productId){
-    //     handleRemoveAddon(addon.item_id);
-      
-    // }
-    // })
 
-    for(let addon in JSON.parse(localStorage.getItem('selectedAddons'))){
-      if(JSON.parse(localStorage.getItem('selectedAddons'))[addon].item_id === productId){
+    // Remove all addons associated with the removed product from localStorage
+    // and update the selectedAddons state
+    const savedAddons = JSON.parse(localStorage.getItem('selectedAddons')) || [];
+    for (let addonIndex in savedAddons) {
+      const addon = savedAddons[addonIndex];
+      if (addon.item_id === productId) {
         // get copy of the addons without the addon we want to remove
-        const updatedAddons = JSON.parse(localStorage.getItem('selectedAddons')).filter((addon) => addon.item_id !== productId);
+        const updatedAddons = savedAddons.filter(
+          (addon) => addon.item_id !== productId
+        );
         localStorage.setItem("selectedAddons", JSON.stringify(updatedAddons));
         setSelectedAddons(updatedAddons);
       }
     }
   };
 
+  /**
+   * Handles the removal of a product addon from the cart.
+   * @param {number} addonId - The id of the addon to remove.
+   */
   const handleRemoveAddon = (addonId) => {
-
+    // Get a copy of the addons without the addon we want to remove
     const updatedAddons = selectedAddons.filter(
       (item) => item.addons.addon_id !== addonId
     );
 
-
+    // Save the updated addons to localStorage
     localStorage.setItem("selectedAddons", JSON.stringify(updatedAddons));
 
-
+    // Update the selectedAddons state
     setSelectedAddons(updatedAddons);
   };
+useEffect(() => {
+
+  const savedDiscount = localStorage.getItem('appliedDiscount');
+  if (savedDiscount) {
+    setAppliedDiscount(JSON.parse(savedDiscount));
+  }
+}, []);
+
+useEffect(() => {
+
+  if (appliedDiscount) {
+    localStorage.setItem('appliedDiscount', JSON.stringify(appliedDiscount));
+  } else {
+    localStorage.removeItem('appliedDiscount');
+  }
+}, [appliedDiscount]);
+
+
 
   useEffect(() => {
     const totalAddonsPrice = selectedAddons.reduce((total, addon) => {
@@ -337,7 +393,7 @@ const ShowCart = ({ objectData }) => {
                 <div className="d-flex flex-wrap gap-3">
 
                   <div className="item-media">
-                    <img src={`https://v-menu.eu/uploads/${JSON.parse(product?.item_images)[0]}`}
+                    <img src={`https://v-menu.eu/uploads/${product?.item_images ? JSON.parse(product.item_images)[0] : 'default-image.jpg'}`}
                       alt={product?.item_name} style={{ width: '80px', height: '80px', objectFit: 'cover' }}
                       className="rounded-2" />
                   </div>
@@ -350,7 +406,7 @@ const ShowCart = ({ objectData }) => {
                           {product?.item_name}
                           </Link>
                         </h5>
-                        <div className="text-muted small">{product?.category_names[0]}</div>
+                        <div className="text-muted small">{product?.category_names?.[0]}</div>
                       </div>
 
                       <button className="btn btn-sm btn-link text-danger p-0" onClick={()=>
@@ -432,59 +488,88 @@ const ShowCart = ({ objectData }) => {
         </div>
 
         <div className="cart-summary-container" translate="no">
-      <div className="summary-card">
-        <div className="summary-grid">
-          <div className="summary-row">
-            <span className="summary-label">{L.PRODUCTS}:</span>
-            <span className="summary-value">
-              {Number(totalPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
-            </span>
-          </div>
 
-          <div className="summary-row">
-            <span className="summary-label">{L.ADDONS}:</span>
-            <span className="summary-value addons">
-              +{Number(totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
-            </span>
-          </div>
 
-          {totalDiscounts > 0 && (
-            <div className="summary-row">
-              <span className="summary-label">{L.DISCOUNTS.MORE}:</span>
-              <span className="summary-value discount">
-                -{Number(totalPrice - discountPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
-              </span>
-            </div>
-          )}
+   <div className="summary-card">
 
-          <div className="divider"></div>
-
-          <div className="summary-row total-row">
-            <span className="summary-label">{L.TOTAL}:</span>
-            <span className="summary-value total">
-              {Number(discountPrice + totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
-              {objectData.objectInformation.object_currency !== 'EUR' && (
-                <span className="euro-conversion">
-                  ≈ {convertPrice(
-                    discountPrice + totalAddonsPrice,
-                    objectData.objectInformation.object_currency,
-                    'EUR'
-                  ).toFixed(2)} €
+            <div className="summary-grid">
+              <div className="summary-row">
+                <span className="summary-label">{L.PRODUCTS}:</span>
+                <span className="summary-value">
+                  {Number(totalPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
                 </span>
+              </div>
+
+              <div className="summary-row">
+                <span className="summary-label">{L.ADDONS}:</span>
+                <span className="summary-value addons">
+                  +{Number(totalAddonsPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
+                </span>
+              </div>
+
+
+              {appliedDiscount && (
+                <div className="summary-row">
+                  <span className="summary-label">{L.DISCOUNTS.MORE}:</span>
+                  <span className="summary-value discount">
+                    -{appliedDiscount.amount.toFixed(2)} {objectData.objectInformation.object_currency}.
+                  </span>
+                </div>
               )}
-            </span>
-          </div>
 
-          {totalDiscounts > 0 && (
-            <div className="promo-badge">
-              <span className="badge-icon">🎁</span>
-              <span className="badge-text">
-                {L.DISCOUNTS_USED} {totalDiscounts} {totalDiscounts === 1 ? L.DISCOUNTS.ONE : L.DISCOUNTS.MORE}
-              </span>
+
+              {!appliedDiscount && discountPrice < totalPrice && (
+                <div className="summary-row">
+                  <span className="summary-label">{L.DISCOUNTS.MORE}:</span>
+                  <span className="summary-value discount">
+                    -{(totalPrice - discountPrice).toFixed(2)} {objectData.objectInformation.object_currency}.
+                  </span>
+                </div>
+              )}
+
+              <div className="divider"></div>
+
+              <div className="summary-row total-row">
+                
+                <span className="summary-label">{L.TOTAL}:</span>
+                <span className="summary-value total">
+                  {Number((appliedDiscount ? totalPrice - appliedDiscount.amount+ totalAddonsPrice : discountPrice + totalAddonsPrice)).toFixed(2)}{" "}
+                  {objectData.objectInformation.object_currency}.
+                  {objectData.objectInformation.object_currency !== "EUR" && (
+                    <span className="euro-conversion">
+                      ≈{" "}
+                      {convertPrice(
+                        (appliedDiscount ? totalPrice - appliedDiscount.amount : discountPrice) + totalAddonsPrice,
+                        objectData.objectInformation.object_currency,
+                        "EUR"
+                      ).toFixed(2)}{" "}
+                      €
+                    </span>
+                  )}
+                </span>
+              </div>
+
+
+              {(appliedDiscount || discountPrice < totalPrice) && (
+                <div className="promo-badge">
+                  <span className="badge-icon">🎁</span>
+                  <span className="badge-text">
+                    {appliedDiscount 
+                      ? `Промо код: ${appliedDiscount.code}` 
+                      : `${L.DISCOUNTS_USED} ${totalDiscounts} ${totalDiscounts === 1 ? L.DISCOUNTS.ONE : L.DISCOUNTS.MORE}`}
+                  </span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-
+            <DiscountBox
+                cart={cart}
+                cartPrototype={cartPrototype}
+                objectData={objectData}
+                setCartPrototype={setCartPrototype}
+                setDiscountPrice={setDiscountPrice}
+                setAppliedDiscount={setAppliedDiscount}
+                appliedDiscount={appliedDiscount}
+          />
         <Link
           to={totalPrice > 0 ? PATH_LIST.APP_CHECKOUT : "#"}
           className={`checkout-btn ${totalPrice > 0 ? '' : 'disabled'}`}
@@ -495,10 +580,15 @@ const ShowCart = ({ objectData }) => {
           <span>{checkoutTexts[lang]}</span>
           <span className="btn-arrow">→</span>
         </Link>
+          </div>
+        </div>
+
       </div>
-    </div>
-                  {objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_CART && <ShowAppMenu />}
-      </div>
+
+{objectData.MODULES.OBJECT_INFO.COMPONENT_MANAGEMENT.FOOTER.PAGE_CART && (
+  <ShowAppMenu />
+)}
+
     </>
   );
 };

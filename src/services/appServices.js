@@ -36,18 +36,25 @@ export function getMenuLanguage() {
     const objectData = JSON.parse(localStorage.getItem('objectData'));
 
     // Access the 'menu_language' property of the 'objectInformation' object
-    const menuLanguage = objectData['objectInformation']['menu_language'] || 'bg';
+    const menuLanguage = objectData?.['objectInformation']?.['menu_language'] || 'bg';
 
     // Return the menu language
     return localeData.APP_LOCALES?.[menuLanguage];
 }
 
+/**
+ * This function retrieves the menu language from the local storage object data.
+ * It first parses the stored object data as JSON and then accesses the 'menu_language' property of the 'objectInformation' object.
+ * 
+ * @return {string} The menu language, which is a string representing the selected language for the menu.
+ */
 export function getLocale(){
-        // Retrieve the object data from local storage
+    // Retrieve the object data from local storage
     const objectData = JSON.parse(localStorage.getItem('objectData'));
 
     // Access the 'menu_language' property of the 'objectInformation' object
     const menuLanguage = objectData['objectInformation']['menu_language'] || 'bg';
 
-    return menuLanguage
+    // Return the menu language
+    return menuLanguage;
 }

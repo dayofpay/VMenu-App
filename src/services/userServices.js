@@ -83,31 +83,39 @@ export async function createVisitor() {
 }
 
 
-export async function createCheckout(data){
+export async function createCheckout(data) {
     const endpoint = `${getEnv()}/api/orders/create`;
 
     const table_ID = JSON.parse(localStorage.getItem('tableId'));
     const object_id = JSON.parse(localStorage.getItem('restaurantId'));
+    
+    // Get object data from localStorage or context
+    const objectData = JSON.parse(localStorage.getItem('objectData')) || {};
 
-    try{
-        const response = await request.post(endpoint,{
-            objectData : {
+    try {
+        const response = await request.post(endpoint, {
+            objectData: {
                 table_ID,
-                object_id
+                object_id,
+                ...objectData.objectInformation // Include full object information if available
             },
-            customerData : data,
-            cartData : storage.getItem('cart'),
+            customerData: data,
+            cartData: storage.getItem('cart'),
             item_addons: storage.getItem('selectedAddons'),
-        })
-        return response
-    }
-    catch(error){
-        console.error('Error while trying to create order',error);
-
-        return error;
+            discountData: data.discountData || null // Include discount data
+        });
+        
+        return response;
+    } catch (error) {
+        console.error('Error while trying to create order', error);
+        
+        // Return a consistent error format
+        return {
+            hasError: true,
+            message: error.response?.data?.message || 'Грешка при създаване на поръчката'
+        };
     }
 }
-
 
 export async function createCall(data){
     const endpoint = `${getEnv()}/api/calls/create`;

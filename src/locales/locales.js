@@ -277,7 +277,29 @@ const localeData = {
                         },
                         Back_Button: 'Връщане обратно',
                     }
-                }
+                },
+                Success_Element: {
+                    steps: [{
+                            title: "Добавяне в количка",
+                            icon: "🛒"
+                        },
+                        {
+                            title: "Поръчката е създадена",
+                            icon: "📋"
+                        },
+                        {
+                            title: "Обработка на поръчката",
+                            icon: "⚙️"
+                        },
+                        {
+                            title: "Поръчката е доставена",
+                            icon: "🚚"
+                        }
+                    ]
+                },
+                Expected_Time: 'Очаквано време:',
+                Minutes: 'минути',
+                Have_Questions: 'Имате въпроси? Обадете ни се на: ',
             },
             Validations: {
                 Required_Field: 'Това поле е задължително!',
@@ -289,7 +311,8 @@ const localeData = {
                         Text: 'Нулиране на превода',
                     }
                 }
-            }
+            },
+
 
         },
         en: {
@@ -491,7 +514,30 @@ const localeData = {
                             Subtext: 'Your order has been successfully created. Please wait while our team processes and prepares it for you.'
                         },
                         Back_Button: 'Go Back',
-                    }
+                    },
+                    Success_Element: {
+                        steps: [{
+                                title: "Added to cart",
+                                icon: "🛒"
+                            },
+                            {
+                                title: "Order created",
+                                icon: "📋"
+                            },
+                            {
+                                title: "Order processing",
+                                icon: "⚙️"
+                            },
+                            {
+                                title: "Order delivered",
+                                icon: "🚚"
+                            }
+                        ]
+                    },
+                    Expected_Time: 'Expected time:',
+                    Minutes: 'minutes',
+                    Have_Questions: 'Have questions? Call us at: ',
+
                 }
             },
             Validations: {
@@ -706,7 +752,30 @@ const localeData = {
                         },
                         Back_Button: 'Geri Dön',
                     }
-                }
+                },
+                Success_Element: {
+                    steps: [{
+                            title: "Sepete eklendi",
+                            icon: "🛒"
+                        },
+                        {
+                            title: "Sipariş oluşturuldu",
+                            icon: "📋"
+                        },
+                        {
+                            title: "Sipariş işleniyor",
+                            icon: "⚙️"
+                        },
+                        {
+                            title: "Sipariş teslim edildi",
+                            icon: "🚚"
+                        }
+                    ]
+                },
+                Expected_Time: 'Tahmini süre:',
+                Minutes: 'dakika',
+                Have_Questions: 'Sorularınız mı var? Bizi arayın: ',
+
             },
             Validations: {
                 Required_Field: 'Bu alan zorunludur!',
@@ -921,7 +990,30 @@ const localeData = {
                         },
                         Back_Button: 'Zurück',
                     }
-                }
+                },
+                Success_Element: {
+                    steps: [{
+                            title: "In den Warenkorb gelegt",
+                            icon: "🛒"
+                        },
+                        {
+                            title: "Bestellung erstellt",
+                            icon: "📋"
+                        },
+                        {
+                            title: "Bestellung wird bearbeitet",
+                            icon: "⚙️"
+                        },
+                        {
+                            title: "Bestellung geliefert",
+                            icon: "🚚"
+                        }
+                    ]
+                },
+                Expected_Time: 'Erwartete Zeit:',
+                Minutes: 'Minuten',
+                Have_Questions: 'Fragen? Rufen Sie uns an: ',
+
             },
             Validations: {
                 Required_Field: 'Dieses Feld ist erforderlich!',
@@ -1136,7 +1228,30 @@ const localeData = {
                         },
                         Back_Button: 'Retour',
                     }
-                }
+                },
+                Success_Element: {
+                    steps: [{
+                            title: "Ajouté au panier",
+                            icon: "🛒"
+                        },
+                        {
+                            title: "Commande créée",
+                            icon: "📋"
+                        },
+                        {
+                            title: "Commande en traitement",
+                            icon: "⚙️"
+                        },
+                        {
+                            title: "Commande livrée",
+                            icon: "🚚"
+                        }
+                    ]
+                },
+                Expected_Time: 'Temps estimé :',
+                Minutes: 'minutes',
+                Have_Questions: 'Des questions ? Appelez-nous au : ',
+
             },
             Validations: {
                 Required_Field: 'Ce champ est obligatoire !',
@@ -1351,7 +1466,30 @@ const localeData = {
                         },
                         Back_Button: 'Вернуться назад',
                     }
-                }
+                },
+                Success_Element: {
+                    steps: [{
+                            title: "Добавлено в корзину",
+                            icon: "🛒"
+                        },
+                        {
+                            title: "Заказ создан",
+                            icon: "📋"
+                        },
+                        {
+                            title: "Обработка заказа",
+                            icon: "⚙️"
+                        },
+                        {
+                            title: "Заказ доставлен",
+                            icon: "🚚"
+                        }
+                    ]
+                },
+                Expected_Time: 'Ожидаемое время:',
+                Minutes: 'минуты',
+                Have_Questions: 'Есть вопросы? Звоните нам по номеру: ',
+
             },
             Validations: {
                 Required_Field: 'Это поле обязательно!',
@@ -1566,7 +1704,30 @@ const localeData = {
                         },
                         Back_Button: 'Înapoi',
                     }
-                }
+                },
+                Success_Element: {
+                    steps: [{
+                            title: "Adăugat în coș",
+                            icon: "🛒"
+                        },
+                        {
+                            title: "Comanda creată",
+                            icon: "📋"
+                        },
+                        {
+                            title: "Procesarea comenzii",
+                            icon: "⚙️"
+                        },
+                        {
+                            title: "Comanda livrată",
+                            icon: "🚚"
+                        }
+                    ]
+                },
+                Expected_Time: 'Timp estimat:',
+                Minutes: 'minute',
+                Have_Questions: 'Aveți întrebări? Sunați-ne la: ',
+
             },
             Validations: {
                 Required_Field: 'Acest câmp este obligatoriu!',

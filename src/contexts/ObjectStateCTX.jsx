@@ -3,8 +3,7 @@ import {
     Navigate, Outlet,
 
   } from 'react-router-dom';
-import * as storage from '../utils/memory';
-import { ERROR_PATHS, PATH_LIST } from '../utils/pathList';
+import { ERROR_PATHS } from '../utils/pathList';
 
 
 /**

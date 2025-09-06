@@ -514,7 +514,7 @@ const confirmationStepWithDiscount = (
               </svg>
             </div>
             <div>
-              <div style={styles.summaryLabel}>Приложена отстъпка</div>
+              <div style={styles.summaryLabel}>{menuLanguage.Discount_Box.Applied_Discount}</div>
               <div style={styles.summaryValue}>
                 {appliedDiscount.code} (-{appliedDiscount?.amount?.toFixed(2)} {objectData.objectInformation.object_currency})
               </div>
@@ -806,7 +806,7 @@ const confirmationStepWithDiscount = (
                     </svg>
                   </div>
                   <div>
-                    <div style={styles.summaryLabel}>Приложена отстъпка</div>
+                    <div style={styles.summaryLabel}>{menuLanguage.Discount_Box.Applied_Discount}</div>
                     <div style={styles.summaryValue}>
                       {appliedDiscount.code} (-{appliedDiscount?.amount?.toFixed(2)} {objectData.objectInformation.object_currency})
                     </div>

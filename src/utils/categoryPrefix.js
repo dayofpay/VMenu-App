@@ -1,7 +1,11 @@
 import { getMenuLanguage } from "../services/appServices";
 
-const menuLanguage = getMenuLanguage();
+const GeneratePrefix = (itemCount, menuLang) => {
+  const menuLanguage = getMenuLanguage(menuLang) || getMenuLanguage();
 
-const GeneratePrefix = itemCount => [menuLanguage.System_Dynamic_Text.Products.Singular, menuLanguage.System_Dynamic_Text.Products.Singular, menuLanguage.System_Dynamic_Text.Products.Plural][Math.min(itemCount, 2)];
+  return itemCount === 1
+    ? menuLanguage.System_Dynamic_Text.Products.Singular
+    : menuLanguage.System_Dynamic_Text.Products.Plural;
+};
 
-export default GeneratePrefix
+export default GeneratePrefix;

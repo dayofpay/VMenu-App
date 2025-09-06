@@ -1,9 +1,8 @@
 // HOC
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { getObjectData } from "../services/objectServices";
 import usePersistedState from "../hooks/usePersistedState";
 import * as storage from '../utils/memory';
-import { createVisitor } from "../services/userServices";
 
 /**
  * This higher-order component takes a React component as an argument and

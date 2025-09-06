@@ -312,6 +312,7 @@ setCategoryNames([...new Set(product.category_names)]);
         type="button" 
         style={styles.quantityButton} 
         onClick={() => decrementQuantity(productQuantity, setProductQuantity)}
+        disabled={!productExists}
         aria-label="Намали количество"
       >
         −
@@ -330,6 +331,7 @@ setCategoryNames([...new Set(product.category_names)]);
         type="button" 
         style={styles.quantityButton} 
         onClick={() => incrementQuantity(productQuantity, setProductQuantity)}
+        disabled={!productExists}
         aria-label="Увеличи количество"
       >
         +
@@ -354,7 +356,7 @@ setCategoryNames([...new Set(product.category_names)]);
   productData?.settings?.upsellDetailed?.length > 0 ? (
     <div style={styles.upsellSection}>
       <h3 style={styles.upsellTitle}>
-        {(productData.settings.CONVERSION_BOOST_MODULES.UPSELL.TEXT).length > 0 ? productData.settings.CONVERSION_BOOST_MODULES.UPSELL.TEXT : "Нашите гости също предпочитат..."}
+        {(productData.settings.CONVERSION_BOOST_MODULES.UPSELL.TEXT).length > 0 ? productData.settings.CONVERSION_BOOST_MODULES.UPSELL.TEXT : interpolateString(menuLanguage.Marketing_Modules.UpSell.FallBack_Text, { category: productData.category_names[0] })}
       </h3>
       <div style={styles.upsellGrid}>
         {productData.settings.upsellDetailed.slice(0, 4).map((product) => (

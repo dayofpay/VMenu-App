@@ -5,6 +5,7 @@ import { formatPrice, convertPrice } from "../../../utils/pricingUtils";
 import "./DiscountBox.scss";
 import { do_action } from "../../../services/userServices";
 import { triggerVibration } from "../../../utils/vibrationApi";
+import { getMenuLanguage } from "../../../services/appServices";
 /**
  * The DiscountBox component.
  * @param {object} props - The props passed to the component.
@@ -34,7 +35,7 @@ export default function DiscountBox({
   const [variant, setVariant] = useState("info");
   const [validationResult, setValidationResult] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
-
+  const menuLanguage = getMenuLanguage();
 
   useEffect(() => {
     if (cart.length === 0 && appliedDiscount) {
@@ -93,11 +94,16 @@ export default function DiscountBox({
       
       if (!validateData.success) {
         setVariant("error");
-        setMessage(validateData.error || "❌ Невалиден или изтекъл код");
+
+        const errorKey = validateData.error_code || "Invalid_Code";
+        const localizedMessage = 
+          menuLanguage.Discount_Box.Response_List.Error_List[errorKey] ||
+          menuLanguage.Discount_Box.Response_List.Invalid_Code;
+
+        setMessage(localizedMessage);
         setLoading(false);
         return;
       }
-
       setValidationResult(validateData.discount);
 
       // 2️⃣ Прилагане на отстъпката
@@ -116,15 +122,20 @@ export default function DiscountBox({
 
       if (!applyData.success) {
         setVariant("error");
-        setMessage(applyData.error || "❌ Грешка при прилагане на отстъпката");
+
+        const errorKey = applyData.error_code || "Apply_Error";
+        const localizedMessage = 
+          menuLanguage.Discount_Box.Response_List.Error_List[errorKey] ||
+          menuLanguage.Discount_Box.Response_List.Apply_Error;
+
+        setMessage(localizedMessage);
         setLoading(false);
         return;
       }
 
-
       if (applyData.discountAmount === null || applyData.discountAmount === undefined) {
         setVariant("warning");
-        setMessage("⚠️ Отстъпката не може да бъде приложена към избраните продукти");
+        setMessage(menuLanguage.Discount_Box.Response_List.No_Discount_Applied);
         setLoading(false);
         return;
       }
@@ -162,13 +173,17 @@ export default function DiscountBox({
       });
 
       setVariant("success");
-      setMessage(`✅ ${validateData.discount.description || "Отстъпката е приложена успешно!"} (-${formatPrice(discountAmount, objectData.objectInformation.object_currency, false)})`);
+      setMessage(
+        `✅ ${validateData.discount.description || menuLanguage.Discount_Box.Response_List.Success} 
+        (-${formatPrice(discountAmount, objectData.objectInformation.object_currency, false)})`
+      );
       setIsExpanded(false);
 
     } catch (err) {
       console.error("Discount error:", err);
       setVariant("error");
-      setMessage("⚠️ Възникна грешка, опитайте отново");
+      setMessage(menuLanguage.Discount_Box.Response_List.General_Error);
+
     } finally {
       setLoading(false);
     }
@@ -207,7 +222,7 @@ export default function DiscountBox({
               <i className="fas fa-tag"></i>
             </div>
             <div className="discount-info">
-              <div className="discount-title">Приложена отстъпка</div>
+              <div className="discount-title">{menuLanguage.Discount_Box.Applied_Discount}</div>
               <div className="discount-code">{appliedDiscount.code}</div>
               <div className="discount-description">{appliedDiscount.description}</div>
             </div>
@@ -233,7 +248,7 @@ export default function DiscountBox({
               <div className="discount-icon">
                 <i className="fas fa-tag"></i>
               </div>
-              <div className="discount-text">Имате промо код?</div>
+              <div className="discount-text">{menuLanguage.Discount_Box.Text}</div>
               <div className="discount-chevron">
                 <i className="fas fa-chevron-right"></i>
               </div>
@@ -245,7 +260,7 @@ export default function DiscountBox({
                   <i className="fas fa-tag"></i>
                   <input
                     type="text"
-                    placeholder="Въведете промо код"
+                    placeholder={menuLanguage.Discount_Box.Placeholder}
                     value={discountCode}
                     onChange={(e) => setDiscountCode(e.target.value)}
                     className="discount-input"
@@ -260,7 +275,7 @@ export default function DiscountBox({
                   {loading ? (
                     <Spinner as="span" animation="border" size="sm" />
                   ) : (
-                    "Приложи"
+                    `${menuLanguage.Discount_Box.Apply_Button}`
                   )}
                 </button>
               </div>

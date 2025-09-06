@@ -312,6 +312,31 @@ const localeData = {
                     }
                 }
             },
+            Discount_Box: {
+                Text: 'Имате промо код?',
+                Placeholder: 'Въведете промо код',
+                Apply_Button: 'Приложи',
+                Applied_Discount: 'Приложена отстъпка:',
+                Promo_Code: 'Промо код: ',
+                Applied_Discount: 'Приложена отстъпка:',
+                Response_List: {
+                    Invalid_Code: '❌ Невалиден или изтекъл код',
+                    No_Discount_Applied: '⚠️ Отстъпката не може да бъде приложена към избраните продукти',
+                    Apply_Error: '❌ Грешка при прилагане на отстъпката',
+                    General_Error: '⚠️ Възникна грешка, опитайте отново',
+                    Success: '✅ Отстъпката е приложена успешно!',
+                    Error_List: {
+                        MISSING_REQUIRED_PARAMS: 'Код, артикули и обект са задължителни',
+                        INVALID_DISCOUNT_CODE: 'Невалиден код за отстъпка',
+                        APPLY_DISCOUNT_ERROR: 'Отстъпката не можа да се приложи',
+                        SERVER_ERROR: 'Вътрешна грешка на сървъра',
+                        DISCOUNT_EXPIRED: 'Кодът е изтекъл',
+                        DISCOUNT_NOT_APPLICABLE: 'Кодът не е приложим за избраните продукти',
+                        DISCOUNT_ALREADY_USED: 'Кодът вече е използван',
+                        MIN_PURCHASE_REQUIRED: 'Минималната сума за използване на този код не е достигната'
+                    }
+                }
+            }
 
 
         },
@@ -515,30 +540,31 @@ const localeData = {
                         },
                         Back_Button: 'Go Back',
                     },
-                    Success_Element: {
-                        steps: [{
-                                title: "Added to cart",
-                                icon: "🛒"
-                            },
-                            {
-                                title: "Order created",
-                                icon: "📋"
-                            },
-                            {
-                                title: "Order processing",
-                                icon: "⚙️"
-                            },
-                            {
-                                title: "Order delivered",
-                                icon: "🚚"
-                            }
-                        ]
-                    },
-                    Expected_Time: 'Expected time:',
-                    Minutes: 'minutes',
-                    Have_Questions: 'Have questions? Call us at: ',
 
-                }
+
+                },
+                Success_Element: {
+                    steps: [{
+                            title: "Added to cart",
+                            icon: "🛒"
+                        },
+                        {
+                            title: "Order created",
+                            icon: "📋"
+                        },
+                        {
+                            title: "Order processing",
+                            icon: "⚙️"
+                        },
+                        {
+                            title: "Order delivered",
+                            icon: "🚚"
+                        }
+                    ]
+                },
+                Expected_Time: 'Expected time:',
+                Minutes: 'minutes',
+                Have_Questions: 'Have questions? Call us at: ',
             },
             Validations: {
                 Required_Field: 'This field is required!',
@@ -550,7 +576,32 @@ const localeData = {
                         Text: 'Reset translation',
                     }
                 }
+            },
+            Discount_Box: {
+                Text: 'Do you have a promo code?',
+                Placeholder: 'Enter promo code',
+                Apply_Button: 'Apply',
+                Promo_Code: 'Promo code:',
+                Applied_Discount: 'Applied discount:',
+                Response_List: {
+                    Invalid_Code: '❌ Invalid or expired code',
+                    No_Discount_Applied: '⚠️ The discount cannot be applied to the selected products',
+                    Apply_Error: '❌ Error applying the discount',
+                    General_Error: '⚠️ An error occurred, please try again',
+                    Success: '✅ The discount was successfully applied!',
+                    Error_List: {
+                        MISSING_REQUIRED_PARAMS: 'Code, items, and object are required',
+                        INVALID_DISCOUNT_CODE: 'Invalid discount code',
+                        APPLY_DISCOUNT_ERROR: 'The discount could not be applied',
+                        SERVER_ERROR: 'Internal server error',
+                        DISCOUNT_EXPIRED: 'The code has expired',
+                        DISCOUNT_NOT_APPLICABLE: 'The code is not applicable for the selected products',
+                        DISCOUNT_ALREADY_USED: 'The code has already been used',
+                        MIN_PURCHASE_REQUIRED: 'The minimum purchase amount for this code has not been reached'
+                    }
+                }
             }
+
         },
         tr: {
             Title: '{object} Dijital Menü',
@@ -787,7 +838,32 @@ const localeData = {
                         Text: 'Çeviriyi sıfırla',
                     }
                 }
+            },
+            Discount_Box: {
+                Text: 'Promosyon kodunuz var mı?',
+                Placeholder: 'Promosyon kodunu girin',
+                Apply_Button: 'Uygula',
+                Promo_Code: 'Promosyon kodu:',
+                Applied_Discount: 'Uygulanan indirim:',
+                Response_List: {
+                    Invalid_Code: '❌ Geçersiz veya süresi dolmuş kod',
+                    No_Discount_Applied: '⚠️ İndirim seçili ürünlere uygulanamaz',
+                    Apply_Error: '❌ İndirim uygulanırken hata oluştu',
+                    General_Error: '⚠️ Bir hata oluştu, lütfen tekrar deneyin',
+                    Success: '✅ İndirim başarıyla uygulandı!',
+                    Error_List: {
+                        MISSING_REQUIRED_PARAMS: 'Kod, ürünler ve nesne zorunludur',
+                        INVALID_DISCOUNT_CODE: 'Geçersiz indirim kodu',
+                        APPLY_DISCOUNT_ERROR: 'İndirim uygulanamadı',
+                        SERVER_ERROR: 'Sunucu hatası',
+                        DISCOUNT_EXPIRED: 'Kodun süresi doldu',
+                        DISCOUNT_NOT_APPLICABLE: 'Kod seçili ürünler için geçerli değil',
+                        DISCOUNT_ALREADY_USED: 'Kod zaten kullanıldı',
+                        MIN_PURCHASE_REQUIRED: 'Bu kod için gereken minimum alışveriş tutarına ulaşılmadı'
+                    }
+                }
             }
+
         },
         de: {
             Title: 'Digitale Speisekarte von {object}',
@@ -1025,7 +1101,32 @@ const localeData = {
                         Text: 'Übersetzung zurücksetzen',
                     }
                 }
+            },
+            Discount_Box: {
+                Text: 'Haben Sie einen Promo-Code?',
+                Placeholder: 'Promo-Code eingeben',
+                Apply_Button: 'Anwenden',
+                Promo_Code: 'Promo-Code:',
+                Applied_Discount: 'Angewendeter Rabatt:',
+                Response_List: {
+                    Invalid_Code: '❌ Ungültiger oder abgelaufener Code',
+                    No_Discount_Applied: '⚠️ Der Rabatt kann nicht auf die ausgewählten Produkte angewendet werden',
+                    Apply_Error: '❌ Fehler beim Anwenden des Rabatts',
+                    General_Error: '⚠️ Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut',
+                    Success: '✅ Der Rabatt wurde erfolgreich angewendet!',
+                    Error_List: {
+                        MISSING_REQUIRED_PARAMS: 'Code, Artikel und Objekt sind erforderlich',
+                        INVALID_DISCOUNT_CODE: 'Ungültiger Rabattcode',
+                        APPLY_DISCOUNT_ERROR: 'Der Rabatt konnte nicht angewendet werden',
+                        SERVER_ERROR: 'Interner Serverfehler',
+                        DISCOUNT_EXPIRED: 'Der Code ist abgelaufen',
+                        DISCOUNT_NOT_APPLICABLE: 'Der Code ist für die ausgewählten Produkte nicht anwendbar',
+                        DISCOUNT_ALREADY_USED: 'Der Code wurde bereits verwendet',
+                        MIN_PURCHASE_REQUIRED: 'Der Mindestbestellwert für diesen Code wurde nicht erreicht'
+                    }
+                }
             }
+
         },
         fr: {
             Title: 'Menu digital de {object}',
@@ -1263,7 +1364,32 @@ const localeData = {
                         Text: 'Réinitialiser la traduction',
                     }
                 }
+            },
+            Discount_Box: {
+                Text: 'Vous avez un code promo ?',
+                Placeholder: 'Entrez le code promo',
+                Apply_Button: 'Appliquer',
+                Promo_Code: 'Code promo :',
+                Applied_Discount: 'Remise appliquée :',
+                Response_List: {
+                    Invalid_Code: '❌ Code invalide ou expiré',
+                    No_Discount_Applied: '⚠️ La remise ne peut pas être appliquée aux produits sélectionnés',
+                    Apply_Error: '❌ Erreur lors de l’application de la remise',
+                    General_Error: '⚠️ Une erreur est survenue, veuillez réessayer',
+                    Success: '✅ La remise a été appliquée avec succès !',
+                    Error_List: {
+                        MISSING_REQUIRED_PARAMS: 'Code, articles et objet requis',
+                        INVALID_DISCOUNT_CODE: 'Code promo invalide',
+                        APPLY_DISCOUNT_ERROR: 'La remise n’a pas pu être appliquée',
+                        SERVER_ERROR: 'Erreur interne du serveur',
+                        DISCOUNT_EXPIRED: 'Le code a expiré',
+                        DISCOUNT_NOT_APPLICABLE: 'Le code ne s’applique pas aux produits sélectionnés',
+                        DISCOUNT_ALREADY_USED: 'Le code a déjà été utilisé',
+                        MIN_PURCHASE_REQUIRED: 'Le montant minimum d’achat pour ce code n’a pas été atteint'
+                    }
+                }
             }
+
         },
         ru: {
             Title: 'Цифровое меню {object}',
@@ -1501,7 +1627,32 @@ const localeData = {
                         Text: 'Сбросить перевод',
                     }
                 }
+            },
+            Discount_Box: {
+                Text: 'У вас есть промокод?',
+                Placeholder: 'Введите промокод',
+                Apply_Button: 'Применить',
+                Promo_Code: 'Промокод:',
+                Applied_Discount: 'Примененная скидка:',
+                Response_List: {
+                    Invalid_Code: '❌ Недействительный или истекший код',
+                    No_Discount_Applied: '⚠️ Скидка не может быть применена к выбранным товарам',
+                    Apply_Error: '❌ Ошибка при применении скидки',
+                    General_Error: '⚠️ Произошла ошибка, попробуйте еще раз',
+                    Success: '✅ Скидка успешно применена!',
+                    Error_List: {
+                        MISSING_REQUIRED_PARAMS: 'Код, товары и объект обязательны',
+                        INVALID_DISCOUNT_CODE: 'Недействительный код скидки',
+                        APPLY_DISCOUNT_ERROR: 'Скидка не может быть применена',
+                        SERVER_ERROR: 'Внутренняя ошибка сервера',
+                        DISCOUNT_EXPIRED: 'Срок действия кода истек',
+                        DISCOUNT_NOT_APPLICABLE: 'Код не применим к выбранным товарам',
+                        DISCOUNT_ALREADY_USED: 'Код уже был использован',
+                        MIN_PURCHASE_REQUIRED: 'Минимальная сумма покупки для этого кода не достигнута'
+                    }
+                }
             }
+
         },
         ro: {
             Title: 'Meniu digital {object}',
@@ -1739,7 +1890,32 @@ const localeData = {
                         Text: 'Resetează traducerea',
                     }
                 }
+            },
+            Discount_Box: {
+                Text: 'Aveți un cod promoțional?',
+                Placeholder: 'Introduceți codul promoțional',
+                Apply_Button: 'Aplică',
+                Promo_Code: 'Cod promoțional:',
+                Applied_Discount: 'Reducere aplicată:',
+                Response_List: {
+                    Invalid_Code: '❌ Cod invalid sau expirat',
+                    No_Discount_Applied: '⚠️ Reducerea nu poate fi aplicată produselor selectate',
+                    Apply_Error: '❌ Eroare la aplicarea reducerii',
+                    General_Error: '⚠️ A apărut o eroare, încercați din nou',
+                    Success: '✅ Reducerea a fost aplicată cu succes!',
+                    Error_List: {
+                        MISSING_REQUIRED_PARAMS: 'Codul, produsele și obiectul sunt obligatorii',
+                        INVALID_DISCOUNT_CODE: 'Cod promoțional invalid',
+                        APPLY_DISCOUNT_ERROR: 'Reducerea nu a putut fi aplicată',
+                        SERVER_ERROR: 'Eroare internă a serverului',
+                        DISCOUNT_EXPIRED: 'Codul a expirat',
+                        DISCOUNT_NOT_APPLICABLE: 'Codul nu se aplică produselor selectate',
+                        DISCOUNT_ALREADY_USED: 'Codul a fost deja utilizat',
+                        MIN_PURCHASE_REQUIRED: 'Suma minimă de cumpărare pentru acest cod nu a fost atinsă'
+                    }
+                }
             }
+
         }
     }
 }

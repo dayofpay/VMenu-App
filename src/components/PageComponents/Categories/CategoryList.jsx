@@ -11,6 +11,7 @@ import { getEnv } from "../../../utils/appData";
 import ShowAppMenu from "../../AppMenus/defaultMenu";
 import { useEffect, useState } from "react";
 import { do_action } from "../../../services/userServices";
+import { getMenuLanguage } from "../../../services/appServices";
 // VMENU_APP_PAGES_CATEGORIES 6.0.0 @VDEVSBG //
 const ShowCategoryList = ({ objectData }) => {
   const [colorSchemeName,setColorSchemeName] = useState('');
@@ -265,7 +266,7 @@ categoryCount: {
               <path d="m456.283 272.773h-425.133c-16.771 0-30.367-13.596-30.367-30.367s13.596-30.367 30.367-30.367h425.133c16.771 0 30.367 13.596 30.367 30.367s-13.596 30.367-30.367 30.367z" />
             </svg>
           </Link>
-          <h5 style={styles.title}>Категории</h5>
+          <h5 style={styles.title}>{getMenuLanguage().Categories.Text}</h5>
         </div>
       </header>
       
@@ -291,7 +292,7 @@ categoryCount: {
               ></i>
               <h3 style={styles.categoryName}>{category.category_name}</h3>
               <span style={styles.categoryCount}>
-                {category.itemCount} {GeneratePrefix(category.itemCount)}
+                {category.itemCount} {GeneratePrefix(category.itemCount, objectData?.objectInformation?.menu_language)}
               </span>
               
               {categoryMeta.themes.modern.showDiscountTags && category.discount && (

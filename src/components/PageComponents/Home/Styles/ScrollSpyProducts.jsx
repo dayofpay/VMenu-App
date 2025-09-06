@@ -251,7 +251,7 @@ return (
 										<h6 className="font-14 text-white mb-2 text-center">{category.category_name}
 										</h6>
 										<span className="text-white">{category.itemCount}
-											{GeneratePrefix(category.itemCount)}</span>
+											{GeneratePrefix(category.itemCount,objectData?.objectInformation?.menu_language)}</span>
 									</div>
 									</Link>
 								</div>

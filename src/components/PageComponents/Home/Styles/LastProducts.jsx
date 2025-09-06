@@ -746,7 +746,7 @@ const HomeContent = ({ objectData }) => {
                   <div className="text-content">
                     <h6 className="category-name">{category.category_name}</h6>
                     <span className="items-count">
-                      {category.itemCount} {GeneratePrefix(category.itemCount)}
+                      {category.itemCount} {GeneratePrefix(category.itemCount,objectData?.objectInformation?.menu_language)}
                     </span>
                   </div>
                 </div>

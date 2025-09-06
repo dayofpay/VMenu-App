@@ -555,7 +555,7 @@ useEffect(() => {
                   <span className="badge-icon">🎁</span>
                   <span className="badge-text">
                     {appliedDiscount 
-                      ? `Промо код: ${appliedDiscount.code}` 
+                      ? `${menuLangauge.Discount_Box.Promo_Code} ${appliedDiscount.code}` 
                       : `${L.DISCOUNTS_USED} ${totalDiscounts} ${totalDiscounts === 1 ? L.DISCOUNTS.ONE : L.DISCOUNTS.MORE}`}
                   </span>
                 </div>

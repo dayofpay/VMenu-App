@@ -31,12 +31,12 @@ export async function getLandingPageSettings() {
  * 
  * @return {string} The menu language, which is a string representing the selected language for the menu.
  */
-export function getMenuLanguage() {
+export function getMenuLanguage(fallBackLanguage = 'bg') {
     // Retrieve the object data from local storage
     const objectData = JSON.parse(localStorage.getItem('objectData'));
 
     // Access the 'menu_language' property of the 'objectInformation' object
-    const menuLanguage = objectData?.['objectInformation']?.['menu_language'] || 'bg';
+    const menuLanguage = objectData?.['objectInformation']?.['menu_language'] || fallBackLanguage;
 
     // Return the menu language
     return localeData.APP_LOCALES?.[menuLanguage];

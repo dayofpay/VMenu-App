@@ -592,7 +592,7 @@ const HomeContent = ({ objectData }) => {
             </h6>
           <span className="product-count">
             {category.itemCount}&nbsp;&nbsp;
-            {GeneratePrefix(category.itemCount)}
+            {GeneratePrefix(category.itemCount,objectData?.objectInformation?.menu_language)}
           </span>
         </div>
       </div>

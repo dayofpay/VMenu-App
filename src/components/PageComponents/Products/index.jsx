@@ -311,7 +311,7 @@ setCategoryNames([...new Set(product.category_names)]);
       <button 
         type="button" 
         style={styles.quantityButton} 
-        onClick={() => decrementQuantity(productQuantity, setProductQuantity)}
+        onClick={() => decrementQuantity(productData.item_id,productQuantity, setProductQuantity)}
         disabled={!productExists}
         aria-label="Намали количество"
       >
@@ -330,7 +330,7 @@ setCategoryNames([...new Set(product.category_names)]);
       <button 
         type="button" 
         style={styles.quantityButton} 
-        onClick={() => incrementQuantity(productQuantity, setProductQuantity)}
+        onClick={() => incrementQuantity(productData.item_id,productQuantity, setProductQuantity)}
         disabled={!productExists}
         aria-label="Увеличи количество"
       >

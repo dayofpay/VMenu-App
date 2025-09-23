@@ -18,6 +18,7 @@ const ERROR_PATHS = {
     'CHECKOUT_ERROR' : '/checkout/error',
     'QR_ERROR' : '/qr/error',
     'OBJECT_ERROR' : '/object/error',
+    'UNPAID_INVOICE' : '/object/plan_expired',
     '*' : '/404',
 }
 

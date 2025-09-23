@@ -13,6 +13,7 @@ import { TableError } from './components/PageComponents/Errors/TableError';
 import ProfilePage from './components/PageComponents/Auth/Profile';
 import { CooldownProvider } from './contexts/CoolDownCTX';
 import ReviewPageWithData from './components/Reviews/content';
+import { PaymentError } from './components/PageComponents/Errors/PaymentError';
 const Home = lazy(() => import('./Pages/Home'));
 const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
 const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
@@ -48,6 +49,7 @@ return (
             <Route path='*' element={<NotFound/>}/>
             <Route path={ERROR_PATHS.QR_ERROR} element={<QRError/>}/>
             <Route path={ERROR_PATHS.OBJECT_ERROR} element={<TableError/>}/>
+            <Route path={ERROR_PATHS.UNPAID_INVOICE} element={<PaymentError/>}/>
         </Routes>
 
      </Suspense>

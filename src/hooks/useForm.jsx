@@ -58,18 +58,35 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
     return Object.values(validationErrors).every((error) => !error);
   };
 
+  /**
+   * The onChange function is called whenever a form input changes. It
+   * takes in an event object as a parameter, and uses the event object
+   * to get the name and value of the form input that changed.
+   * 
+   * If the form input has a name and the value is not undefined, it
+   * updates the state of the form by creating a new state object and
+   * calling setValues with the new state object.
+   * 
+   * It also updates the errors object by calling setErrors with an object
+   * that has the same properties as the previous errors object, but with
+   * the value of the field that changed set to undefined. This is done
+   * to clear out any validation errors for the field when it changes.
+   */
   const onChange = (event) => {
     const fieldName = event.target?.name;
     const fieldValue = event.target?.value;
 
     if (fieldName && fieldValue !== undefined) {
+      // Create a new state object with the updated field value
       const newState = {
         ...values,
         [fieldName]: fieldValue,
       };
 
+      // Update the state of the form
       setValues(newState);
 
+      // Clear out any validation errors for the field
       setErrors((prevErrors) => ({
         ...prevErrors,
         [fieldName]: undefined,
@@ -77,9 +94,7 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
     }
   };
 
-  // Променена onSubmit функция за да приема опционален event
   const onSubmit = async (event) => {
-    // Ако е подаден event, предотвратяваме default поведението
     if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
     }
@@ -111,7 +126,14 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
     }
   };
 
-  // Нова функция за директно извикване без event
+  /**
+   * Submits the form data to the submit handler function.
+   * If the form data is valid, calls the submit handler function with the form data.
+   * If the submit handler function returns an error, sets the form error to the error message.
+   * If the form data is invalid, logs a validation failed message.
+   * If an unexpected error occurs, logs the error message and sets the form error to the error message.
+   * Finally, sets the loading state to false.
+   */
   const submitForm = async () => {
     try {
       setLoading(true);
@@ -144,9 +166,9 @@ export default function useForm(submitHandler, initialValues, validatorSettings)
     values,
     onChange,
     onSubmit,
-    submitForm, // Нова функция
+    submitForm,
     errors,
     setValues,
-    loading // Добавяме loading state
+    loading
   };
 }

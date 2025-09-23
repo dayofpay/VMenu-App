@@ -35,7 +35,8 @@ export async function createVisitor() {
          */
         return {
             hasError: true,
-            msg: 'Some error happened while trying to set visitor'
+            msg: error.message || 'Some error happened while trying to set visitor',
+            error_code : error.error_code,
         }
     }
 
@@ -47,7 +48,8 @@ export async function createVisitor() {
 
         return {
             hasError: true,
-            msg: 'Table ID or restaurant ID is null'
+            msg: error.message || 'Some error happened while trying to set visitor',
+            error_code : error.error_code,
         }
     }
 
@@ -76,7 +78,8 @@ export async function createVisitor() {
 
         return {
             hasError: true,
-            msg: 'Some error happened while trying to set visitor'
+            msg: error.message || 'Some error happened while trying to set visitor',
+            error_code : error.error_code,
         }
     }
 

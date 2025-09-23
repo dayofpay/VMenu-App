@@ -1,0 +1,264 @@
+/* PaymentError.css */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    transform: scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    max-height: 500px;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 101, 101, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(245, 101, 101, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 101, 101, 0);
+  }
+}
+
+.payment-error-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 50%, #feebc8 100%);
+  animation: gradientShift 8s ease infinite;
+  background-size: 200% 200%;
+}
+
+.payment-error-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(254, 215, 215, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.payment-error-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(254, 215, 215, 0.5);
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 40px rgba(245, 101, 101, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: cardEntrance 0.6s ease-out;
+}
+
+.payment-error-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 25px 50px rgba(245, 101, 101, 0.2),
+    0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.payment-error-card-header {
+  background: linear-gradient(135deg, #e53e3e 0%, #dd6b20 100%);
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-error-card-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shine 3s infinite;
+}
+
+.payment-error-icon-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bounce 2s infinite;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.payment-error-pulse-dot {
+  width: 12px;
+  height: 12px;
+  background: #e53e3e;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  animation: pulse 2s infinite;
+}
+
+.payment-error-solution-item {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(254, 215, 215, 0.3);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.payment-error-solution-item:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateX(8px);
+  border-color: #fed7d7;
+}
+
+.payment-error-button {
+  background: linear-gradient(135deg, #fed7d7 0%, #feebc8 100%);
+  border: 1px solid rgba(254, 215, 215, 0.5);
+  border-radius: 12px;
+  padding: 1rem;
+  width: 100%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.payment-error-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(254, 215, 215, 0.4);
+}
+
+.payment-error-button:hover .payment-error-button-icon {
+  transform: rotate(180deg);
+}
+
+.payment-error-button-icon {
+  transition: transform 0.3s ease;
+}
+
+.payment-error-owner-panel {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #fcd34d;
+  border-radius: 16px;
+  animation: slideDown 0.4s ease-out;
+}
+
+.payment-error-success-message {
+  background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+  border: 1px solid #68d391;
+  animation: slideDown 0.4s ease-out;
+}
+
+.payment-error-number-badge {
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: bold;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.payment-error-number-badge-green {
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: bold;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.payment-error-info-card {
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  border-radius: 12px;
+  padding: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.payment-error-info-card:hover {
+  transform: scale(1.02);
+}
+
+.payment-error-chevron {
+  transition: transform 0.3s ease;
+}
+
+.payment-error-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* Utility classes */
+.text-gradient {
+  background: linear-gradient(135deg, #e53e3e 0%, #dd6b20 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-items-center {
+  display: flex;
+  align-items: center;
+}

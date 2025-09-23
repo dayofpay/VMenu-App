@@ -224,6 +224,7 @@ const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
                         <div className="delivery-addon-quantity">
                           <button
                             className="delivery-quantity-btn minus"
+                            type="button"
                             onClick={() =>
                               handleQuantityChange(
                                 addon,
@@ -238,6 +239,7 @@ const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
                           </span>
                           <button
                             className="delivery-quantity-btn plus"
+                            type="button"
                             onClick={() =>
                               handleQuantityChange(
                                 addon,
@@ -252,6 +254,7 @@ const ProductAddons = ({ productData, ADDONS_LIST, productInCart }) => {
                       ) : (
                         <button
                           className="delivery-add-btn"
+                          type="button"
                           onClick={() => handleAddonToggle(addon)}
                           disabled={!productInCart || totalSelected >= MAX_ADDONS}
                         >

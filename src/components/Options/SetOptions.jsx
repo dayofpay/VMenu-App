@@ -17,8 +17,15 @@ const SetOptions = () => {
     const APP_NEW_VISITOR = async () => {
        await createVisitor().then((result) => {
         if(result.hasError){
+          console.log('has error',result);
+          
           if(result.error_code === 'VMENU_TABLE_NOT_FOUND'){
             navigate(ERROR_PATHS.OBJECT_ERROR)
+            return;
+          }
+          else if(result.error_code === 'VMENU_OBJECT_HAS_UNPAID_INVOICE'){
+            navigate(ERROR_PATHS.UNPAID_INVOICE);
+            return;
           }
           else{
             navigate(ERROR_PATHS.QR_ERROR)

@@ -53,6 +53,19 @@ export const CartProvider = ({
             cart.splice(indexToDelete, 1);
             storage.setItem('cart', cart);
             setProductExists(false);
+            const savedAddons = JSON.parse(localStorage.getItem('selectedAddons')) || [];
+            for (let addonIndex in savedAddons) {
+                const addon = savedAddons[addonIndex];
+                const productId = data.productId;
+                if (addon.item_id === productId) {
+                    // get copy of the addons without the addon we want to remove
+                    const updatedAddons = savedAddons.filter(
+                    (addon) => addon.item_id !== productId
+                    );
+                    localStorage.setItem("selectedAddons", JSON.stringify(updatedAddons));
+                    setSelectedAddons(updatedAddons);
+                }
+            }
         }
     }
 

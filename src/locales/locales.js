@@ -130,7 +130,7 @@ const localeData = {
                         cleanSpill: 'Почистване на разлято',
                         additionalCondiments: 'Допълнителни подправки',
                         requestWaiterHelp: 'Помощ от сервитьор',
-                        callManager: 'Повикване на оправител',
+                        callManager: 'Повикване на управител',
                         reportOrderIssue: 'Сигнал за проблем с поръчка',
                     }
                 },

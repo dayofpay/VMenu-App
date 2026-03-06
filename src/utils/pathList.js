@@ -12,6 +12,7 @@ const PATH_LIST = {
     'FINAL_CHECKOUT' : '/checkout/final',
     'AUTH_PROFILE' : '/profile',
     'REVIEW_PAGE' : '/review',
+    'CARD_ORDER_SUCCESS' : '/order-success/:orderId',
 }
 
 const ERROR_PATHS = {

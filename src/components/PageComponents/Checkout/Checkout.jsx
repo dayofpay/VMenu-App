@@ -447,7 +447,7 @@ const handlePaymentError = (error) => {
           </div>
         </header>
 
-        {/* Step Indicator */}
+
         <div style={styles.stepIndicator}>
           <div style={styles.stepLine}></div>
           <div style={{ ...styles.stepLine, ...styles.stepLineActive, width: stepLineWidth }}></div>
@@ -467,9 +467,9 @@ const handlePaymentError = (error) => {
           ))}
         </div>
 
-        {/* Form Content */}
+
         <div style={styles.formContainer}>
-          {/* Step 1: Personal Details */}
+
           {currentStep === 1 && (
             <div>
               <h2 style={styles.formTitle}>{menuLanguage.Finalize_Order.Steps.Personal_Data}</h2>
@@ -550,7 +550,7 @@ const handlePaymentError = (error) => {
             </div>
           )}
 
-          {/* Step 2: Payment Method */}
+
           {currentStep === 2 && (
             <div>
               <h2 style={styles.formTitle}>
@@ -585,7 +585,7 @@ const handlePaymentError = (error) => {
             </div>
           )}
 
-          {/* Step 3: Order Confirmation */}
+
           {currentStep === 3 && (
             <div style={styles.confirmationCard}>
               <div style={styles.checkmark}>
@@ -691,7 +691,7 @@ const handlePaymentError = (error) => {
           )}
         </div>
 
-        {/* Payment Method Popup */}
+
         {showPaymentPopup && (
           <div style={styles.paymentPopup}>
             <div style={styles.paymentPopupContent}>
@@ -738,7 +738,7 @@ const handlePaymentError = (error) => {
         )}
       </div>
 
-      {/* Stripe Payment Modal — рендира се само когато clientSecret е наличен */}
+
       {showStripePayment && clientSecret && (
         <div
           style={{

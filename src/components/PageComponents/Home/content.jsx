@@ -1,4 +1,5 @@
 import LoadingAnimation from "../../Animations/Loading";
+import CROLanding from "./Styles/CROLanding";
 import HomeV2_FeaturedCategory from "./Styles/FeaturedCategory";
 import HomeV2LastProducts from "./Styles/LastProducts";
 import HomeV2_SCROLLSPY from "./Styles/ScrollSpyProducts";
@@ -17,6 +18,8 @@ const HomeContent = ({ objectData }) => {
   }
 
   const homeStyle = HOME_STYLE_MODES[landingPageSettings.PRESENTATION_LAYER_SETTINGS.PRESENTATION_MODE] || <HomeV2LastProducts/>
+  const croEnabled = landingPageSettings?.HOME_DESIGN?.cro_mode?.enabled;
+  if(croEnabled) return <CROLanding objectData={objectData}/>
   return <>{homeStyle}</>;
 };
 

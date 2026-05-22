@@ -1,7 +1,7 @@
-import  { useState, useEffect } from "react";
+import  { useState, useEffect, useRef } from "react";
 import { Spinner } from "react-bootstrap";
 import { getEnv } from "../../../utils/appData";
-import { formatPrice, convertPrice } from "../../../utils/pricingUtils";
+import { formatPrice } from "../../../utils/pricingUtils";
 import "./DiscountBox.scss";
 import { do_action } from "../../../services/userServices";
 import { triggerVibration } from "../../../utils/vibrationApi";
@@ -27,14 +27,14 @@ export default function DiscountBox({
   setDiscountPrice,
   setAppliedDiscount,
   appliedDiscount,
-  selectedAddons
+  selectedAddons = []
 }) {
   const [discountCode, setDiscountCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [variant, setVariant] = useState("info");
-  const [validationResult, setValidationResult] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const lastAppliedSignature = useRef(null);
   const menuLanguage = getMenuLanguage();
 
   useEffect(() => {
@@ -43,47 +43,68 @@ export default function DiscountBox({
     }
   }, [cart]);
 
-  /**
-   * Handles the apply discount action.
-   * @returns {void}
-   */
-  const handleApplyDiscount = async () => {
-    triggerVibration();
-    if (!discountCode) return;
-    setLoading(true);
-    setMessage(null);
+  const getSelectedAddons = () => {
+    if (selectedAddons?.length) {
+      return selectedAddons;
+    }
 
-    try {
+    return JSON.parse(localStorage.getItem("selectedAddons") || "[]");
+  };
 
-      const item_addons = JSON.parse(localStorage.getItem("selectedAddons") || "[]");
-      
+  const getDiscountSignature = (code) => {
+    const addons = getSelectedAddons().map((addon) => ({
+      addon_id: addon.addons?.addon_id,
+      item_id: addon.item_id,
+      quantity: addon.addons?.addon_quantity,
+      price: addon.addons?.addon_price
+    }));
 
-      const cartItems = (cart || []).map((item) => {
-        const product = (cartPrototype || []).find(
-          (p) => p.item_id === item.productId
-        );
+    return JSON.stringify({
+      code,
+      cart: (cart || []).map((item) => ({
+        productId: item.productId,
+        quantity: item.productQuantity
+      })),
+      addons
+    });
+  };
 
-        do_action("add_discount_code", { discount_code: discountCode });
-        const productAddons = item_addons.filter(addon => addon.item_id === item.productId);
-        const addonsTotalPrice = productAddons.reduce((sum, addon) => 
-          sum + (addon.addons.addon_price * addon.addons.addon_quantity), 0);
-        
-        return {
-          productId: item.productId,
-          quantity: item.productQuantity,
-          price: product?.item_price || 0,
-          category_id: product?.category_id || null,
-          name: product?.item_name || "",
-          addons_total_price: addonsTotalPrice
-        };
-      });
+  const buildCartItems = () => {
+    const item_addons = getSelectedAddons();
 
-      // 1️⃣ Валидиране на кода
+    return (cart || []).map((item) => {
+      const product = (cartPrototype || []).find(
+        (p) => p?.item_id === item.productId
+      );
+
+      const productAddons = item_addons.filter(addon => addon.item_id === item.productId);
+      const addonsTotalPrice = productAddons.reduce((sum, addon) =>
+        sum + (addon.addons.addon_price * addon.addons.addon_quantity), 0);
+
+      return {
+        productId: item.productId,
+        quantity: item.productQuantity,
+        price: product?.item_price || 0,
+        category_id: product?.category_id || null,
+        name: product?.item_name || "",
+        addons_total_price: addonsTotalPrice
+      };
+    });
+  };
+
+  const applyDiscountToCart = async (code, { validate = false, silent = false } = {}) => {
+    const normalizedCode = code.trim();
+    const item_addons = getSelectedAddons();
+    const cartItems = buildCartItems();
+    let discountInfo = appliedDiscount;
+
+    if (validate) {
+      // 1. Validate the code before applying it for the first time.
       const validateRes = await fetch(getEnv() + "/api/discounts/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          discount_code: discountCode,
+          discount_code: normalizedCode,
           object_id: objectData.objectInformation.object_id,
           customer_email: "",
           customer_phone: ""
@@ -91,92 +112,146 @@ export default function DiscountBox({
       });
 
       const validateData = await validateRes.json();
-      
-      if (!validateData.success) {
-        setVariant("error");
 
+      if (!validateData.success) {
         const errorKey = validateData.error_code || "Invalid_Code";
-        const localizedMessage = 
+        const localizedMessage =
           menuLanguage.Discount_Box.Response_List.Error_List[errorKey] ||
           menuLanguage.Discount_Box.Response_List.Invalid_Code;
 
-        setMessage(localizedMessage);
-        setLoading(false);
-        return;
-      }
-      setValidationResult(validateData.discount);
-
-      // 2️⃣ Прилагане на отстъпката
-      const applyRes = await fetch(getEnv() + "/api/discounts/apply", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          discount_code: discountCode,
-          cart_items: cartItems,
-          object_id: objectData.objectInformation.object_id,
-          item_addons: item_addons
-        }),
-      });
-
-      const applyData = await applyRes.json();
-
-      if (!applyData.success) {
-        setVariant("error");
-
-        const errorKey = applyData.error_code || "Apply_Error";
-        const localizedMessage = 
-          menuLanguage.Discount_Box.Response_List.Error_List[errorKey] ||
-          menuLanguage.Discount_Box.Response_List.Apply_Error;
-
-        setMessage(localizedMessage);
-        setLoading(false);
-        return;
+        return { success: false, variant: "error", message: localizedMessage };
       }
 
-      if (applyData.discountAmount === null || applyData.discountAmount === undefined) {
-        setVariant("warning");
-        setMessage(menuLanguage.Discount_Box.Response_List.No_Discount_Applied);
-        setLoading(false);
-        return;
-      }
+      discountInfo = validateData.discount;
+    }
 
+    // 2. Apply or re-apply the discount to the current cart state.
+    const applyRes = await fetch(getEnv() + "/api/discounts/apply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        discount_code: normalizedCode,
+        cart_items: cartItems,
+        object_id: objectData.objectInformation.object_id,
+        item_addons: item_addons
+      }),
+    });
 
-      const newCart = applyData.cartItems || [];      
-      const discountAmount = applyData.discountAmount || 0;      
+    const applyData = await applyRes.json();
 
+    if (!applyData.success) {
+      const errorKey = applyData.error_code || "Apply_Error";
+      const localizedMessage =
+        menuLanguage.Discount_Box.Response_List.Error_List[errorKey] ||
+        menuLanguage.Discount_Box.Response_List.Apply_Error;
 
-      const updatedCartPrototype = cartPrototype.map(item => {
-        const discountedItem = newCart.find(di => di.productId === item.item_id);
-        if (discountedItem) {
-          return {
-            ...item,
-            final_price: discountedItem.final_price,
-            discount_amount: discountedItem.discount_amount,
-            has_existing_discount: discountedItem.discount_amount > 0,
-            addons_discount_amount: discountedItem.addons_discount_amount || 0,
-            final_addons_price: discountedItem.final_addons_price || 0,
-            discount_description: discountedItem.discount_description,
-            is_discounted: discountedItem.is_discounted
-          };
-        }
+      return { success: false, variant: "error", message: localizedMessage };
+    }
+
+    if (applyData.discountAmount === null || applyData.discountAmount === undefined) {
+      return {
+        success: false,
+        variant: "warning",
+        message: menuLanguage.Discount_Box.Response_List.No_Discount_Applied
+      };
+    }
+
+    const newCart = applyData.cartItems || [];
+    const discountAmount = applyData.discountAmount || 0;
+
+    const updatedCartPrototype = cartPrototype.map(item => {
+      if (!item) {
         return item;
-      });
+      }
 
-      setCartPrototype(updatedCartPrototype);
-      setDiscountPrice(discountAmount);
-      setAppliedDiscount({
-        code: discountCode,
-        amount: discountAmount,
-        type: validateData.discount.type,
-        value: validateData.discount.value,
-        description: validateData.discount.description
-      });
+      const discountedItem = newCart.find(di => di.productId === item.item_id);
+      if (discountedItem) {
+        return {
+          ...item,
+          final_price: discountedItem.final_price,
+          discount_amount: discountedItem.discount_amount,
+          has_existing_discount: discountedItem.discount_amount > 0,
+          addons_discount_amount: discountedItem.addons_discount_amount || 0,
+          final_addons_price: discountedItem.final_addons_price || 0,
+          discount_description: discountedItem.discount_description,
+          is_discounted: discountedItem.is_discounted
+        };
+      }
+      return item;
+    });
+
+    const nextAppliedDiscount = {
+      code: normalizedCode,
+      amount: discountAmount,
+      type: discountInfo?.type,
+      value: discountInfo?.value,
+      description: discountInfo?.description
+    };
+
+    lastAppliedSignature.current = getDiscountSignature(normalizedCode);
+    setCartPrototype(updatedCartPrototype);
+    setDiscountPrice(discountAmount);
+    setAppliedDiscount(nextAppliedDiscount);
+
+    return {
+      success: true,
+      discountAmount,
+      discountInfo,
+      message: silent ? null :
+        `✅ ${discountInfo?.description || menuLanguage.Discount_Box.Response_List.Success} 
+        (-${formatPrice(discountAmount, objectData.objectInformation.object_currency, false)})`
+    };
+  };
+
+  useEffect(() => {
+    if (!appliedDiscount?.code || cart.length === 0 || cartPrototype.length === 0) {
+      return;
+    }
+
+    const signature = getDiscountSignature(appliedDiscount.code);
+    if (signature === lastAppliedSignature.current) {
+      return;
+    }
+
+    const timeoutId = setTimeout(async () => {
+      try {
+        const result = await applyDiscountToCart(appliedDiscount.code, { silent: true });
+        if (!result.success) {
+          setVariant(result.variant);
+          setMessage(result.message);
+        }
+      } catch (err) {
+        console.error("Discount refresh error:", err);
+        setVariant("error");
+        setMessage(menuLanguage.Discount_Box.Response_List.General_Error);
+      }
+    }, 250);
+
+    return () => clearTimeout(timeoutId);
+  }, [cart, cartPrototype, selectedAddons, appliedDiscount?.code]);
+
+  /**
+   * Handles the apply discount action.
+   * @returns {void}
+   */
+  const handleApplyDiscount = async () => {
+    triggerVibration();
+    if (!discountCode.trim()) return;
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      do_action("add_discount_code", { discount_code: discountCode.trim() });
+      const result = await applyDiscountToCart(discountCode, { validate: true });
+
+      if (!result.success) {
+        setVariant(result.variant);
+        setMessage(result.message);
+        return;
+      }
 
       setVariant("success");
-      setMessage(
-        `✅ ${validateData.discount.description || menuLanguage.Discount_Box.Response_List.Success} 
-        (-${formatPrice(discountAmount, objectData.objectInformation.object_currency, false)})`
-      );
+      setMessage(result.message);
       setIsExpanded(false);
 
     } catch (err) {
@@ -196,18 +271,23 @@ export default function DiscountBox({
   const handleRemoveDiscount = () => {
     setDiscountCode("");
     setMessage(null);
-    setValidationResult(null);
     setAppliedDiscount(null);
     
 
-    const originalCartPrototype = cartPrototype.map(item => ({
-      ...item,
-      final_price: item.price,
-      discount_amount: 0,
-      has_existing_discount: false,
-      addons_discount_amount: 0,
-      final_addons_price: item.addons_total_price || 0
-    }));
+    const originalCartPrototype = cartPrototype.map(item => {
+      if (!item) {
+        return item;
+      }
+
+      return {
+        ...item,
+        final_price: item.item_price,
+        discount_amount: 0,
+        has_existing_discount: false,
+        addons_discount_amount: 0,
+        final_addons_price: 0
+      };
+    });
     
     setCartPrototype(originalCartPrototype);
     setDiscountPrice(0);

@@ -11,6 +11,7 @@ import * as storage from '../../../utils/memory';
 import StripePaymentWrapper from "./StripePayment";
 import PaymentErrorModal from "./PaymentErrorModal";
 import { PATH_LIST } from "../../../utils/pathList";
+import "../../Styles/Checkout.css";
 
 const ShowCheckout = ({ objectData }) => {
   const { checkoutHandler } = useContext(CartContext);
@@ -237,18 +238,22 @@ const handlePaymentError = (error) => {
 
   const styles = {
     container: {
-      maxWidth: '800px',
+      maxWidth: '980px',
       margin: '0 auto',
-      padding: '20px',
-      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      padding: '18px',
+      fontFamily: "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      background: '#f6f7f5',
+      minHeight: '100vh',
     },
     header: {
-      background: '#ffffff',
-      boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-      padding: '15px 0',
+      background: 'rgba(255,255,255,0.92)',
+      boxShadow: '0 12px 32px rgba(15,23,42,0.08)',
+      padding: '12px 0',
       position: 'sticky',
       top: 0,
       zIndex: 100,
+      borderRadius: '18px',
+      backdropFilter: 'blur(14px)',
     },
     headerContent: {
       display: 'flex',
@@ -262,19 +267,19 @@ const handlePaymentError = (error) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#f5f7fa',
+      background: '#eef7f2',
       borderRadius: '50px',
       padding: '8px 16px',
       textDecoration: 'none',
-      color: '#4a5568',
+      color: '#0c6b50',
       fontWeight: 500,
       transition: 'all 0.3s ease',
     },
-    title: { fontSize: '1.5rem', fontWeight: 700, color: '#2d3748', margin: 0 },
+    title: { fontSize: '1.35rem', fontWeight: 800, color: '#111827', margin: 0 },
     stepIndicator: {
       display: 'flex',
       justifyContent: 'space-between',
-      margin: '30px auto',
+      margin: '28px auto',
       maxWidth: '600px',
       position: 'relative',
     },
@@ -287,7 +292,7 @@ const handlePaymentError = (error) => {
       right: '10%',
       zIndex: 1,
     },
-    stepLineActive: { background: '#4299e1', transition: 'all 0.3s ease' },
+    stepLineActive: { background: '#0c8a6a', transition: 'all 0.3s ease' },
     step: { display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2 },
     stepNumber: {
       width: '30px',
@@ -301,24 +306,25 @@ const handlePaymentError = (error) => {
       color: '#718096',
       marginBottom: '8px',
     },
-    stepNumberActive: { background: '#4299e1', color: 'white' },
+    stepNumberActive: { background: '#0c8a6a', color: 'white' },
     stepLabel: { fontSize: '0.9rem', color: '#718096', fontWeight: 500 },
     stepLabelActive: { color: '#2d3748', fontWeight: 600 },
     formContainer: {
       background: 'white',
-      borderRadius: '12px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+      borderRadius: '24px',
+      boxShadow: '0 24px 70px rgba(15,23,42,0.08)',
       padding: '30px',
       marginBottom: '30px',
+      border: '1px solid rgba(15,23,42,0.08)',
     },
-    formTitle: { fontSize: '1.25rem', fontWeight: 600, color: '#2d3748', marginBottom: '20px' },
+    formTitle: { fontSize: '1.35rem', fontWeight: 800, color: '#111827', marginBottom: '20px' },
     inputGroup: { marginBottom: '20px', position: 'relative' },
     inputLabel: { display: 'block', marginBottom: '8px', fontSize: '0.9rem', color: '#4a5568', fontWeight: 500 },
     inputField: {
       width: '100%',
       padding: '12px 16px',
-      border: '1px solid #e2e8f0',
-      borderRadius: '8px',
+      border: '1px solid #d9e5df',
+      borderRadius: '14px',
       fontSize: '1rem',
       transition: 'all 0.3s ease',
     },
@@ -336,20 +342,20 @@ const handlePaymentError = (error) => {
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: '15px',
-      border: '1px solid #e2e8f0',
-      borderRadius: '8px',
+      border: '1px solid #d9e5df',
+      borderRadius: '16px',
       marginBottom: '15px',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
     },
-    paymentOptionActive: { borderColor: '#4299e1', background: '#ebf8ff' },
+    paymentOptionActive: { borderColor: '#0c8a6a', background: '#eefaf5' },
     paymentPopup: {
       position: 'fixed',
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'rgba(0,0,0,0.5)',
+      background: 'rgba(15,23,42,0.56)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -357,7 +363,7 @@ const handlePaymentError = (error) => {
     },
     paymentPopupContent: {
       background: 'white',
-      borderRadius: '12px',
+      borderRadius: '22px',
       padding: '25px',
       width: '90%',
       maxWidth: '400px',
@@ -367,7 +373,7 @@ const handlePaymentError = (error) => {
     paymentMethod: {
       padding: '15px',
       border: '1px solid #e2e8f0',
-      borderRadius: '8px',
+      borderRadius: '16px',
       marginBottom: '10px',
       display: 'flex',
       alignItems: 'center',
@@ -375,16 +381,16 @@ const handlePaymentError = (error) => {
       cursor: 'pointer',
       transition: 'all 0.3s ease',
     },
-    paymentMethodActive: { borderColor: '#4299e1', background: '#ebf8ff' },
+    paymentMethodActive: { borderColor: '#0c8a6a', background: '#eefaf5' },
     actionButtons: { display: 'flex', justifyContent: 'space-between', marginTop: '30px' },
-    button: { padding: '12px 24px', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.3s ease' },
-    buttonPrimary: { background: '#4299e1', color: 'white', border: 'none' },
-    buttonSecondary: { background: 'white', color: '#4a5568', border: '1px solid #e2e8f0' },
+    button: { padding: '13px 24px', borderRadius: '14px', fontWeight: 700, cursor: 'pointer', transition: 'all 0.3s ease' },
+    buttonPrimary: { background: '#0c8a6a', color: 'white', border: 'none' },
+    buttonSecondary: { background: 'white', color: '#344054', border: '1px solid #d9e5df' },
     confirmationCard: { textAlign: 'center', padding: '30px' },
     checkmark: {
       width: '60px',
       height: '60px',
-      background: '#48bb78',
+      background: '#0c8a6a',
       borderRadius: '50%',
       display: 'flex',
       alignItems: 'center',
@@ -404,12 +410,12 @@ const handlePaymentError = (error) => {
     summaryIcon: {
       width: '40px',
       height: '40px',
-      background: '#ebf8ff',
-      borderRadius: '8px',
+      background: '#eefaf5',
+      borderRadius: '12px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: '#4299e1',
+      color: '#0c8a6a',
     },
     summaryLabel: { color: '#718096', fontSize: '0.9rem' },
     summaryValue: { fontWeight: 500, marginTop: '3px' },
@@ -433,10 +439,10 @@ const handlePaymentError = (error) => {
         onClose={() => setPaymentError(null)}
       />
     )}
-      <div style={styles.container}>
-        <header style={styles.header}>
+      <div className="vm-checkout-page" style={styles.container}>
+        <header className="vm-checkout-header" style={styles.header}>
           <div style={styles.headerContent}>
-            <Link to="/cart" style={styles.backButton}>
+            <Link to="/cart" className="notranslate" translate="no" style={styles.backButton}>
               <svg width="16" height="16" viewBox="0 0 24 24" style={{ marginRight: '8px' }}>
                 <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
               </svg>
@@ -448,11 +454,11 @@ const handlePaymentError = (error) => {
         </header>
 
 
-        <div style={styles.stepIndicator}>
+        <div className="vm-checkout-steps notranslate" translate="no" style={styles.stepIndicator}>
           <div style={styles.stepLine}></div>
           <div style={{ ...styles.stepLine, ...styles.stepLineActive, width: stepLineWidth }}></div>
           {[1, 2, 3].map((step) => (
-            <div key={step} style={styles.step}>
+            <div key={step} className={`vm-checkout-step ${currentStep >= step ? 'is-active' : ''}`} style={styles.step}>
               <div style={{ ...styles.stepNumber, ...(currentStep >= step ? styles.stepNumberActive : {}) }}>
                 {step}
               </div>
@@ -468,13 +474,13 @@ const handlePaymentError = (error) => {
         </div>
 
 
-        <div style={styles.formContainer}>
+        <div className="vm-checkout-panel" style={styles.formContainer}>
 
           {currentStep === 1 && (
             <div>
               <h2 style={styles.formTitle}>{menuLanguage.Finalize_Order.Steps.Personal_Data}</h2>
 
-              <div style={styles.inputGroup}>
+              <div className="vm-field" style={styles.inputGroup}>
                 <label style={styles.inputLabel}>
                   {menuLanguage.Finalize_Order.Form_Fields.Personal_Data.Guest_Name.Label}
                 </label>
@@ -493,7 +499,7 @@ const handlePaymentError = (error) => {
                 )}
               </div>
 
-              <div style={styles.inputGroup}>
+              <div className="vm-field" style={styles.inputGroup}>
                 <label style={styles.inputLabel}>
                   {menuLanguage.Finalize_Order.Form_Fields.Personal_Data.Guest_Email.Label}
                 </label>
@@ -512,7 +518,7 @@ const handlePaymentError = (error) => {
                 )}
               </div>
 
-              <div style={styles.inputGroup}>
+              <div className="vm-field" style={styles.inputGroup}>
                 <label style={styles.inputLabel}>
                   {menuLanguage.Finalize_Order.Form_Fields.Personal_Data.Guest_Phone.Label}
                 </label>
@@ -531,7 +537,7 @@ const handlePaymentError = (error) => {
                 )}
               </div>
 
-              <div style={styles.inputGroup}>
+              <div className="vm-field" style={styles.inputGroup}>
                 <label style={styles.inputLabel}>
                   {menuLanguage.Finalize_Order.Form_Fields.Personal_Data.Additional_Notes.Label}
                 </label>
@@ -544,7 +550,7 @@ const handlePaymentError = (error) => {
                 />
               </div>
 
-              <button onClick={handleNextStep} style={{ ...styles.button, ...styles.buttonPrimary }}>
+              <button className="vm-btn vm-btn-primary notranslate" translate="no" onClick={handleNextStep} style={{ ...styles.button, ...styles.buttonPrimary }}>
                 {menuLanguage.Finalize_Order.Form_Fields.Personal_Data.Proceed_To_Payment}
               </button>
             </div>
@@ -558,6 +564,8 @@ const handlePaymentError = (error) => {
               </h2>
 
               <div
+                className={`vm-payment-choice notranslate ${values[CheckoutKeys.CHECKOUT_PAYMENT] === 'CASH' ? 'is-active' : ''}`}
+                translate="no"
                 style={{
                   ...styles.paymentOption,
                   ...(values[CheckoutKeys.CHECKOUT_PAYMENT] === 'CASH' ? styles.paymentOptionActive : {}),
@@ -575,10 +583,10 @@ const handlePaymentError = (error) => {
               </div>
 
               <div style={styles.actionButtons}>
-                <button onClick={handlePreviousStep} style={{ ...styles.button, ...styles.buttonSecondary }}>
+                <button className="vm-btn vm-btn-secondary notranslate" translate="no" onClick={handlePreviousStep} style={{ ...styles.button, ...styles.buttonSecondary }}>
                   {menuLanguage.Finalize_Order.Header.Back_Button}
                 </button>
-                <button onClick={handleNextStep} style={{ ...styles.button, ...styles.buttonPrimary }}>
+                <button className="vm-btn vm-btn-primary notranslate" translate="no" onClick={handleNextStep} style={{ ...styles.button, ...styles.buttonPrimary }}>
                   {menuLanguage.Finalize_Order.Form_Fields.Payment.View_Order}
                 </button>
               </div>
@@ -587,7 +595,7 @@ const handlePaymentError = (error) => {
 
 
           {currentStep === 3 && (
-            <div style={styles.confirmationCard}>
+            <div className="vm-confirmation-card" style={styles.confirmationCard}>
               <div style={styles.checkmark}>
                 <svg width="30" height="30" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
@@ -626,7 +634,7 @@ const handlePaymentError = (error) => {
                         : menuLanguage.Finalize_Order.Form_Fields.Payment.Selector.options.CARD,
                   },
                 ].map((item, idx) => (
-                  <div key={idx} style={styles.summaryItem}>
+                  <div key={idx} className="vm-confirmation-item" style={styles.summaryItem}>
                     <div style={styles.summaryIcon}>
                       <svg width="20" height="20" viewBox="0 0 24 24">
                         <path fill="currentColor" d={item.icon} />
@@ -640,7 +648,7 @@ const handlePaymentError = (error) => {
                 ))}
 
                 {appliedDiscount && (
-                  <div style={styles.summaryItem}>
+                  <div className="vm-confirmation-item" style={styles.summaryItem}>
                     <div style={{ ...styles.summaryIcon, background: '#d4edda', color: '#155724' }}>
                       <svg width="20" height="20" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
@@ -656,7 +664,7 @@ const handlePaymentError = (error) => {
                   </div>
                 )}
 
-                <div style={styles.summaryItem}>
+                <div className="vm-confirmation-item" style={styles.summaryItem}>
                   <div style={styles.summaryIcon}>
                     <svg width="20" height="20" viewBox="0 0 24 24">
                       <path fill="currentColor" d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-2 16h-2v-2h2v2zm0-4h-2V8h2v6z" />
@@ -675,10 +683,12 @@ const handlePaymentError = (error) => {
               </div>
 
               <div style={styles.actionButtons}>
-                <button onClick={handlePreviousStep} style={{ ...styles.button, ...styles.buttonSecondary }}>
+                <button className="vm-btn vm-btn-secondary notranslate" translate="no" onClick={handlePreviousStep} style={{ ...styles.button, ...styles.buttonSecondary }}>
                   {menuLanguage.Finalize_Order.Header.Back_Button}
                 </button>
                 <button
+                  className="vm-btn vm-btn-primary notranslate"
+                  translate="no"
                   onClick={() => handleOrderSubmit(values)}
                   style={{ ...styles.button, ...styles.buttonPrimary }}
                   disabled={loading}
@@ -693,8 +703,8 @@ const handlePaymentError = (error) => {
 
 
         {showPaymentPopup && (
-          <div style={styles.paymentPopup}>
-            <div style={styles.paymentPopupContent}>
+          <div className="vm-payment-popup" style={styles.paymentPopup}>
+            <div className="vm-payment-popup-content" style={styles.paymentPopupContent}>
               <h3 style={styles.paymentPopupTitle}>
                 {menuLanguage.Finalize_Order.Form_Fields.Payment.Selector.Header}
               </h3>
@@ -702,6 +712,8 @@ const handlePaymentError = (error) => {
               {['CASH', 'CARD'].map((method) => (
                 <div
                   key={method}
+                  className={`vm-payment-method notranslate ${values[CheckoutKeys.CHECKOUT_PAYMENT] === method ? 'is-active' : ''}`}
+                  translate="no"
                   style={{
                     ...styles.paymentMethod,
                     ...(values[CheckoutKeys.CHECKOUT_PAYMENT] === method ? styles.paymentMethodActive : {}),
@@ -729,6 +741,8 @@ const handlePaymentError = (error) => {
 
               <button
                 onClick={() => setShowPaymentPopup(false)}
+                className="vm-btn vm-btn-secondary notranslate"
+                translate="no"
                 style={{ ...styles.button, ...styles.buttonSecondary, marginTop: '15px' }}
               >
                 {menuLanguage.Header.Information.Close_Button}
@@ -741,6 +755,8 @@ const handlePaymentError = (error) => {
 
       {showStripePayment && clientSecret && (
         <div
+          className="vm-stripe-overlay notranslate"
+          translate="no"
           style={{
             position: 'fixed',
             top: 0, left: 0, right: 0, bottom: 0,
@@ -754,6 +770,8 @@ const handlePaymentError = (error) => {
           }}
         >
           <div
+            className="vm-stripe-modal notranslate"
+            translate="no"
             style={{
               background: 'white',
               borderRadius: '16px',
@@ -765,6 +783,7 @@ const handlePaymentError = (error) => {
             }}
           >
             <div
+              className="vm-stripe-modal-header"
               style={{
                 padding: '20px',
                 borderBottom: '1px solid #e2e8f0',
@@ -773,9 +792,11 @@ const handlePaymentError = (error) => {
                 alignItems: 'center',
               }}
             >
-              <h3 style={{ margin: 0, fontSize: '1.25rem' }}>💳 Онлайн плащане с карта</h3>
+              <h3 style={{ margin: 0, fontSize: '1.25rem' }}>Онлайн плащане с карта</h3>
               <button
                 onClick={() => setShowStripePayment(false)}
+                className="notranslate"
+                translate="no"
                 style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', color: '#718096' }}
               >
                 ×

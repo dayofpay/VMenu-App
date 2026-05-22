@@ -569,6 +569,7 @@ useEffect(() => {
                 setDiscountPrice={setDiscountPrice}
                 setAppliedDiscount={setAppliedDiscount}
                 appliedDiscount={appliedDiscount}
+                selectedAddons={selectedAddons}
           />
         <Link
           to={totalPrice > 0 ? PATH_LIST.APP_CHECKOUT : "#"}

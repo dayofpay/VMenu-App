@@ -4,7 +4,8 @@ import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-
 import withObjectData from "../../../HOC/withObjectInfo";
 import { do_action } from "../../../services/userServices";
 import LoadingAnimation from "../../Animations/Loading";
-import { getAppProperty, getEnv } from "../../../utils/appData";
+import { getAppProperty } from "../../../utils/appData";
+import "../../Styles/Checkout.css";
 
 
 const stripePromise = loadStripe(getAppProperty("STRIPE_PUBLIC_KEY"));
@@ -52,19 +53,16 @@ const StripePaymentForm = ({ amount, onSuccess, onError, onCancel, currency = 'e
     }
   };
   const styles = {
-    container: {
-      padding: '20px',
-    },
     form: {
       maxWidth: '500px',
       margin: '0 auto',
     },
     error: {
-      color: '#e53e3e',
-      padding: '10px',
+      color: '#b42318',
+      padding: '12px',
       marginBottom: '15px',
-      background: '#fff5f5',
-      borderRadius: '8px',
+      background: '#fff3f0',
+      borderRadius: '14px',
       fontSize: '14px',
     },
     amount: {
@@ -72,7 +70,7 @@ const StripePaymentForm = ({ amount, onSuccess, onError, onCancel, currency = 'e
       fontWeight: 'bold',
       textAlign: 'center',
       marginBottom: '20px',
-      color: '#2d3748',
+      color: '#111827',
     },
     actions: {
       display: 'flex',
@@ -82,20 +80,20 @@ const StripePaymentForm = ({ amount, onSuccess, onError, onCancel, currency = 'e
     button: {
       flex: 1,
       padding: '12px',
-      borderRadius: '8px',
+      borderRadius: '14px',
       fontWeight: '600',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
     },
     payButton: {
-      background: '#4299e1',
+      background: '#0c8a6a',
       color: 'white',
       border: 'none',
     },
     cancelButton: {
       background: 'white',
-      color: '#4a5568',
-      border: '1px solid #e2e8f0',
+      color: '#344054',
+      border: '1px solid #d9e5df',
     },
     disabled: {
       opacity: 0.5,
@@ -104,22 +102,25 @@ const StripePaymentForm = ({ amount, onSuccess, onError, onCancel, currency = 'e
   };
 
   return (
-    <form onSubmit={handleSubmit} style={styles.form}>
-      <div style={styles.amount}>
+    <form className="vm-stripe-form notranslate" translate="no" onSubmit={handleSubmit} style={styles.form}>
+      <div className="vm-stripe-amount" style={styles.amount}>
         Сума за плащане: {amount?.toFixed(2)} {currency.toUpperCase()}
       </div>
       
-      {error && <div style={styles.error}>{error}</div>}
+      {error && <div className="vm-stripe-error" style={styles.error}>{error}</div>}
 
-      <PaymentElement />
+      <div className="notranslate" translate="no">
+        <PaymentElement />
+      </div>
 
-      <div style={styles.actions}>
-        <button type="button" onClick={onCancel} style={{ ...styles.button, ...styles.cancelButton }}>
+      <div className="vm-stripe-actions" style={styles.actions}>
+        <button className="vm-btn vm-btn-secondary" type="button" onClick={onCancel} style={{ ...styles.button, ...styles.cancelButton }}>
           Отказ
         </button>
         <button
           type="submit"
           disabled={!stripe || loading}
+          className="vm-btn vm-btn-primary"
           style={{ ...styles.button, ...styles.payButton, ...(!stripe || loading ? styles.disabled : {}) }}
         >
           {loading ? '⏳ Обработка...' : `Плати ${amount?.toFixed(2)} ${currency.toUpperCase()}`}
@@ -139,7 +140,7 @@ const StripePaymentWrapper = ({ amount, clientSecret, onSuccess, onError, onCanc
     appearance: {
       theme: 'stripe',
       variables: {
-        colorPrimary: '#4299e1',
+        colorPrimary: '#0c8a6a',
         colorBackground: '#ffffff',
         colorText: '#2d3748',
         colorDanger: '#e53e3e',

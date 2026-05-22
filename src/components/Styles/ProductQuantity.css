@@ -34,25 +34,28 @@
     background-color: #f0f0f0;
     color: #333;
   }
-  .cart-summary-container {
+.cart-summary-container {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 16px;
+  padding: 14px 16px max(14px, env(safe-area-inset-bottom));
   height: auto;
-  background: white;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 -18px 44px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(14px);
   z-index: 100;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .summary-card {
-  max-width: 600px;
+  max-width: 720px;
   margin: 0 auto;
   background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .summary-grid {
@@ -81,7 +84,7 @@
 }
 
 .summary-value.addons {
-  color: #00A082;
+  color: #0c8a6a;
 }
 
 .summary-value.discount {
@@ -101,9 +104,9 @@
 }
 
 .summary-value.total {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: #00A082;
+  color: #0c8a6a;
 }
 
 .euro-conversion {
@@ -116,12 +119,13 @@
 
 .promo-badge {
   grid-column: 1 / -1;
-  background: #FFF9E6;
-  border-radius: 8px;
+  background: #fff8e7;
+  border-radius: 12px;
   padding: 8px 12px;
   display: flex;
   align-items: center;
   margin-top: 8px;
+  border: 1px solid rgba(230, 126, 34, 0.14);
 }
 
 .badge-icon {
@@ -143,12 +147,13 @@
   background: #00A082;
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 16px 24px;
   font-size: 16px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
+  box-shadow: 0 12px 24px rgba(12, 138, 106, 0.22);
 }
 
 .checkout-btn.disabled {
@@ -195,5 +200,26 @@
   .checkout-btn {
     padding: 14px 20px;
     font-size: 15px;
+  }
+}
+
+@media (min-width: 900px) {
+  .cart-summary-container {
+    padding: 18px 24px;
+  }
+
+  .summary-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 18px;
+    align-items: end;
+  }
+
+  .summary-grid {
+    margin-bottom: 0;
+  }
+
+  .checkout-btn {
+    align-self: stretch;
   }
 }

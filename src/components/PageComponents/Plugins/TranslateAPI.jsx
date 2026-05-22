@@ -249,6 +249,22 @@ const LANGUAGES = [
 
 ];
 
+const getUniqueLanguagesByCode = (languages) => {
+  const seenCodes = new Set();
+
+  return languages.filter((language) => {
+    if (seenCodes.has(language.code)) {
+      return false;
+    }
+
+    seenCodes.add(language.code);
+    return true;
+  });
+};
+
+const UNIQUE_LANGUAGES = getUniqueLanguagesByCode(LANGUAGES);
+const GOOGLE_TRANSLATE_SCRIPT_ID = "google-translate-script";
+
 function TranslateAPI({ objectData }) {
   const DEFAULT_LANGUAGE = objectData.objectInformation.menu_language || 'bg';
   const [isTranslationEnabled, setIsTranslationEnabled] = useState(true);
@@ -272,51 +288,68 @@ useEffect(() => {
   }
 
   const filteredLanguages = langSettings.useAllAvailableLanguages
-    ? LANGUAGES
-    : LANGUAGES.filter(lang => langSettings.options.includes(lang.code));
+    ? UNIQUE_LANGUAGES
+    : UNIQUE_LANGUAGES.filter(lang => langSettings.options.includes(lang.code));
   setAvailableLanguages(filteredLanguages);
 
   const DEFAULT_LANGUAGE = objectData.objectInformation.menu_language || 'bg';
   setCurrentLanguage(DEFAULT_LANGUAGE);
 
-  /**
-   * Initializes the Google Translate element on the page.
-   * Sets up the translation options and default language selection.
-   */
-  window.googleTranslateElementInit = () => {
-    // Create a new Google Translate element with specified settings
+  const initializeGoogleTranslate = () => {
+    const translateElement = document.getElementById("google_translate_element");
+
+    if (!translateElement || translateElement.dataset.initialized === "true") {
+      return;
+    }
+
+    if (!window.google?.translate?.TranslateElement) {
+      return;
+    }
+
+    translateElement.innerHTML = "";
+    translateElement.dataset.initialized = "true";
+
     new window.google.translate.TranslateElement(
       {
-        pageLanguage: getPageLanguage(), // Default page language
-        includedLanguages: LANGUAGES.map(lang => lang.code).join(','), // Languages to include in the translation dropdown
-        layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL, // Layout style
+        pageLanguage: getPageLanguage(),
+        includedLanguages: UNIQUE_LANGUAGES.map(lang => lang.code).join(','),
+        layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
       },
-      "google_translate_element" // Element ID to attach the translate widget
+      "google_translate_element"
     );
 
-    // Hide the language selection dropdown after a short delay
     setTimeout(() => {
       const select = document.querySelector('.goog-te-combo');
       if (select) {
-        select.style.display = 'none'; // Hide the dropdown
+        select.style.display = 'none';
 
-        // If the default language is not default, set it and trigger change event
         if (DEFAULT_LANGUAGE !== getPageLanguage()) {
-          select.value = DEFAULT_LANGUAGE; // Set the selected language
-          select.dispatchEvent(new Event('change')); // Dispatch change event to update translation
+          select.value = DEFAULT_LANGUAGE;
+          select.dispatchEvent(new Event('change'));
         }
       }
-    }, 500); // Delay to ensure the dropdown is available after initialization
+    }, 500);
   };
 
-  const script = document.createElement("script");
-  script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-  script.async = true;
-  document.head.appendChild(script);
+  window.googleTranslateElementInit = initializeGoogleTranslate;
+
+  const existingScript = document.getElementById(GOOGLE_TRANSLATE_SCRIPT_ID);
+  if (existingScript) {
+    initializeGoogleTranslate();
+  } else {
+    const script = document.createElement("script");
+    script.id = GOOGLE_TRANSLATE_SCRIPT_ID;
+    script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    script.async = true;
+    document.head.appendChild(script);
+  }
 
   return () => {
     const el = document.getElementById("google_translate_element");
-    if (el) el.innerHTML = "";
+    if (el) {
+      el.innerHTML = "";
+      delete el.dataset.initialized;
+    }
   };
 }, [objectData]);
 

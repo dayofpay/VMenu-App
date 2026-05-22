@@ -47,7 +47,7 @@ const PaymentErrorModal = ({ error, onRetry, onClose }) => {
   const info = getErrorInfo(error);
 
   return (
-    <div style={{
+    <div className="notranslate" translate="no" style={{
       position: 'fixed', inset: 0,
       background: 'rgba(0,0,0,0.6)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -55,7 +55,7 @@ const PaymentErrorModal = ({ error, onRetry, onClose }) => {
       backdropFilter: 'blur(4px)',
       animation: 'fadeIn 0.2s ease',
     }}>
-      <div style={{
+      <div className="notranslate" translate="no" style={{
         background: 'white', borderRadius: '20px',
         maxWidth: '420px', width: '100%',
         boxShadow: '0 25px 60px rgba(0,0,0,0.25)',

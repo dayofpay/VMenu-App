@@ -24,6 +24,7 @@ import { do_action } from "../../../services/userServices";
 import { convertPrice, formatPrice } from "../../../utils/pricingUtils";
 import { getMenuLanguage } from "../../../services/appServices";
 import { interpolateString } from "../../../utils/stringUtiils";
+import "../../Styles/ProductDetails.css";
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -128,7 +129,7 @@ setCategoryNames([...new Set(product.category_names)]);
   }
 
   return (
-    <div style={styles.container}>
+    <div className="vm-product-page" style={styles.container}>
       <style>
         {
           ` .swiper-pagination-bullet {
@@ -144,7 +145,7 @@ setCategoryNames([...new Set(product.category_names)]);
         }
       </style>
 
-      <header style={styles.header}>
+      <header className="vm-product-header" style={styles.header}>
         <div style={styles.headerContent}>
           <Link to={`/category/${JSON.parse(productData.item_categories)[0]}`} style={styles.backButton}>
           <svg viewBox="0 0 24 24" width="24" height="24">
@@ -157,12 +158,12 @@ setCategoryNames([...new Set(product.category_names)]);
       </header>
 
       <form onSubmit={onSubmit}>
-        <div style={styles.content}>
+        <div className="vm-product-content" style={styles.content}>
           <input type="hidden" name={ProductDetailsKeys.PRODUCT_ID} value={productData.item_id} />
 
           {/* Product Gallery */}
-<div style={styles.gallery}>
-  <div className="product-swiper" style={styles.swiper}>
+<div className="vm-product-gallery" style={styles.gallery}>
+  <div className="product-swiper vm-product-swiper" style={styles.swiper}>
     <div className="swiper-wrapper">
       {(() => {
         try {
@@ -175,9 +176,10 @@ setCategoryNames([...new Set(product.category_names)]);
           if (images.length === 0) {
             return (
               <div className="swiper-slide" style={styles.slide}>
-                <div style={styles.imageContainer}>
+                <div className="vm-product-image-shell" style={styles.imageContainer}>
                   <img 
                     src={`https://v-menu.eu/errors/no-image.png`} 
+                    className="vm-product-image"
                     style={styles.productImage} 
                     alt={productData.item_name || 'Продукт без изображение'}
                     loading="lazy"
@@ -189,9 +191,10 @@ setCategoryNames([...new Set(product.category_names)]);
 
           return images.map((image, index) => (
             <div className="swiper-slide" key={index} style={styles.slide}>
-              <div style={styles.imageContainer}>
+              <div className="vm-product-image-shell" style={styles.imageContainer}>
                 <img 
                   src={`${getEnv()}/uploads/${image}`} 
+                  className="vm-product-image"
                   style={styles.productImage} 
                   alt={`${productData.item_name} - Изображение ${index + 1}`}
                   loading="lazy"
@@ -206,9 +209,10 @@ setCategoryNames([...new Set(product.category_names)]);
         } catch (error) {
           return (
             <div className="swiper-slide" style={styles.slide}>
-              <div style={styles.imageContainer}>
+              <div className="vm-product-image-shell" style={styles.imageContainer}>
                 <img 
                   src={`https://v-menu.eu/errors/no-image.png`} 
+                  className="vm-product-image"
                   style={styles.productImage} 
                   alt="Грешка при зареждане на изображенията"
                   loading="lazy"
@@ -224,14 +228,14 @@ setCategoryNames([...new Set(product.category_names)]);
 </div>
 
           {/* Product Info */}
-          <div style={styles.productInfo}>
+          <div className="vm-product-info" style={styles.productInfo}>
             <div style={styles.productMeta}>
-              <span style={styles.categories}>
+              <span className="vm-product-categories" style={styles.categories}>
                 {categoryNames.join(" • ")}
               </span>
-              <h2 style={styles.productName}>{productData.item_name}</h2>
+              <h2 className="vm-product-name" style={styles.productName}>{productData.item_name}</h2>
 
-              <div style={styles.stats}>
+              <div className="vm-product-stats" style={styles.stats}>
                 <div style={styles.statItem}>
                             <i 
                               className="fas fa-eye" 
@@ -261,7 +265,7 @@ setCategoryNames([...new Set(product.category_names)]);
             <ProductDescription description={productData.product_description} />
 
             {/* Price Section */}
-            <div style={styles.priceSection}>
+            <div className="vm-product-price-panel" style={styles.priceSection}>
   <div style={styles.priceContainer}>
     {productData.hasDiscount ? (
       <>
@@ -307,7 +311,7 @@ setCategoryNames([...new Set(product.category_names)]);
   </div>
 
   {hasAddon(PERK_LIST.CART) && (
-    <div style={styles.quantitySelector}>
+    <div className="vm-product-quantity" style={styles.quantitySelector}>
       <button 
         type="button" 
         style={styles.quantityButton} 
@@ -354,14 +358,14 @@ setCategoryNames([...new Set(product.category_names)]);
 
 {hasAddon(PERK_LIST.UPSELL) && (
   productData?.settings?.upsellDetailed?.length > 0 ? (
-    <div style={styles.upsellSection}>
+    <div className="vm-upsell-section" style={styles.upsellSection}>
       <h3 style={styles.upsellTitle}>
         {(productData.settings.CONVERSION_BOOST_MODULES.UPSELL.TEXT).length > 0 ? productData.settings.CONVERSION_BOOST_MODULES.UPSELL.TEXT : interpolateString(menuLanguage.Marketing_Modules.UpSell.FallBack_Text, { category: productData.category_names[0] })}
       </h3>
-      <div style={styles.upsellGrid}>
+      <div className="vm-upsell-grid" style={styles.upsellGrid}>
         {productData.settings.upsellDetailed.slice(0, 4).map((product) => (
-          <Link to={`/products/${product.item_id}`} key={product.item_id} style={styles.upsellCard}>
-            <div style={styles.upsellImageContainer}>
+          <Link to={`/products/${product.item_id}`} key={product.item_id} className="vm-upsell-card" style={styles.upsellCard}>
+            <div className="vm-upsell-image-shell" style={styles.upsellImageContainer}>
 <img 
   src={`${getEnv()}/uploads/${
     typeof product.item_images === 'string' 
@@ -401,16 +405,16 @@ setCategoryNames([...new Set(product.category_names)]);
     </div>
   ) : (
     Array.isArray(relatedProducts?.categoryData?.[0]) && relatedProducts.categoryData[0].length > 0 && (
-      <div style={styles.upsellSection}>
+      <div className="vm-upsell-section" style={styles.upsellSection}>
 <h3 style={styles.upsellTitle}>
   {interpolateString(menuLanguage.Marketing_Modules.UpSell.FallBack_Text, {
     category: relatedProducts.categoryData[1]?.categoryName
   })}
 </h3>
-        <div style={styles.upsellGrid}>
+        <div className="vm-upsell-grid" style={styles.upsellGrid}>
           {relatedProducts.categoryData[0].slice(0, 4).map((product) => (
-            <Link to={`/products/${product.item_id}`} key={product.item_id} style={styles.upsellCard}>
-              <div style={styles.upsellImageContainer}>
+            <Link to={`/products/${product.item_id}`} key={product.item_id} className="vm-upsell-card" style={styles.upsellCard}>
+              <div className="vm-upsell-image-shell" style={styles.upsellImageContainer}>
               <img 
                 src={`${getEnv()}/uploads/${
                   typeof product.item_images === 'string' 
@@ -456,11 +460,11 @@ setCategoryNames([...new Set(product.category_names)]);
 
         {/* Fixed Footer Button */}
         {hasAddon(PERK_LIST.CART) && (
-        <div style={{
+        <div className="vm-product-footer" style={{
               ...styles.footer,
               visibility: objectData.license.data.plan_id === 1 ? "hidden" : "visible",
             }}>
-          <button type="submit" style={{
+          <button type="submit" className="vm-product-cart-button" style={{
                 ...styles.cartButton,
                 ...(productExists ? styles.cartButtonRemove : {})
               }}>
@@ -480,17 +484,19 @@ setCategoryNames([...new Set(product.category_names)]);
 const styles = {
   container: {
     maxWidth: '100%',
-    background: '#fff',
-    color: '#333',
-    fontFamily: "'Segoe UI', Roboto, sans-serif",
-    paddingBottom: '80px'
+    background: '#f6f7f5',
+    color: '#18231f',
+    fontFamily: "'Inter', 'Segoe UI', Roboto, sans-serif",
+    paddingBottom: '104px',
+    minHeight: '100vh'
   },
   header: {
     position: 'sticky',
     top: 0,
-    background: '#fff',
-    padding: '15px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+    background: 'rgba(255,255,255,0.92)',
+    padding: '12px 15px',
+    boxShadow: '0 10px 30px rgba(15, 23, 42, 0.08)',
+    backdropFilter: 'blur(14px)',
     zIndex: 10
   },
   headerContent: {
@@ -503,18 +509,18 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '40px',
-    height: '40px',
+    width: '44px',
+    height: '44px',
     borderRadius: '50%',
-    background: '#f5f5f5',
-    color: '#333',
+    background: '#eef7f2',
+    color: '#0c6b50',
     marginRight: '15px',
     transition: 'all 0.3s ease',
     textDecoration: 'none'
   },
   headerTitle: {
-    fontSize: '1.2rem',
-    fontWeight: 600,
+    fontSize: '1.05rem',
+    fontWeight: 700,
     margin: 0
   },
   headerSpacer: {
@@ -522,7 +528,7 @@ const styles = {
   },
   gallery: {
     width: '100%',
-    height: '300px',
+    height: '340px',
     overflow: 'hidden',
     position: 'relative'
   },
@@ -537,8 +543,9 @@ const styles = {
 imageContainer: {
   width: '100%',
   height: '100%',
-  background: '#f9f9f9',
-  overflow: 'hidden'
+  background: '#eef2ef',
+  overflow: 'hidden',
+  borderRadius: '0'
 }
 ,
 productImage: {
@@ -555,7 +562,7 @@ productImage: {
     justifyContent: 'center'
   },
   productInfo: {
-    padding: '20px',
+    padding: '22px',
     maxWidth: '1200px',
     margin: '0 auto'
   },
@@ -564,15 +571,19 @@ productImage: {
   },
   categories: {
     display: 'block',
-    color: '#666',
-    fontSize: '0.9rem',
-    marginBottom: '5px'
+    color: '#0c8a6a',
+    fontSize: '0.78rem',
+    marginBottom: '10px',
+    fontWeight: 800,
+    textTransform: 'uppercase',
+    letterSpacing: '0'
   },
   productName: {
-    fontSize: '1.8rem',
-    fontWeight: 700,
-    margin: '0 0 15px 0',
-    color: '#222'
+    fontSize: '2rem',
+    fontWeight: 800,
+    margin: '0 0 16px 0',
+    color: '#111827',
+    lineHeight: 1.12
   },
   stats: {
     display: 'flex',
@@ -598,10 +609,13 @@ productImage: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: '25px 0',
-    padding: '20px 0',
-    borderTop: '1px solid #eee',
-    borderBottom: '1px solid #eee'
+    margin: '26px 0',
+    padding: '18px',
+    borderTop: '0',
+    borderBottom: '0',
+    border: '1px solid rgba(12, 138, 106, 0.12)',
+    borderRadius: '18px',
+    background: '#f8fbf9'
   },
   priceContainer: {
     display: 'flex',
@@ -615,7 +629,7 @@ productImage: {
   priceMain: {
     fontSize: '1.8rem',
     fontWeight: 700,
-    color: '#2e7d32'
+    color: '#0c8a6a'
   },
   priceSecondary: {
     fontSize: '1rem',
@@ -643,14 +657,14 @@ productImage: {
   quantitySelector: {
     display: 'flex',
     alignItems: 'center',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
+    border: '1px solid #dce8e2',
+    borderRadius: '999px',
     overflow: 'hidden'
   },
   quantityButton: {
-    width: '40px',
-    height: '40px',
-    background: '#f5f5f5',
+    width: '42px',
+    height: '42px',
+    background: '#eef7f2',
     border: 'none',
     fontSize: '1.2rem',
     display: 'flex',
@@ -676,17 +690,18 @@ productImage: {
     bottom: 0,
     left: 0,
     right: 0,
-    padding: '15px',
-    background: '#fff',
-    boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
+    padding: '14px 18px',
+    background: 'rgba(255,255,255,0.92)',
+    boxShadow: '0 -16px 42px rgba(15, 23, 42, 0.14)',
+    backdropFilter: 'blur(14px)',
     zIndex: 10
   },
   cartButton: {
     width: '100%',
-    padding: '15px',
+    padding: '16px',
     border: 'none',
-    borderRadius: '8px',
-    background: '#2e7d32',
+    borderRadius: '16px',
+    background: '#0c8a6a',
     color: 'white',
     fontSize: '1rem',
     fontWeight: 600,
@@ -725,7 +740,7 @@ productImage: {
     color: 'inherit',
     borderRadius: '8px',
     overflow: 'hidden',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+    boxShadow: '0 10px 28px rgba(15, 23, 42, 0.08)',
     transition: 'transform 0.2s',
     ':hover': {
       transform: 'translateY(-3px)'
@@ -733,8 +748,8 @@ productImage: {
   },
   upsellImageContainer: {
     width: '100%',
-    height: '120px',
-    background: '#f9f9f9',
+    height: '150px',
+    background: '#eef2ef',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -742,7 +757,7 @@ productImage: {
   upsellImage: {
     maxWidth: '100%',
     maxHeight: '100%',
-    objectFit: 'contain'
+    objectFit: 'cover'
   },
   upsellInfo: {
     padding: '12px'
@@ -762,7 +777,7 @@ productImage: {
   },
   upsellCurrentPrice: {
     fontWeight: 600,
-    color: '#2e7d32'
+    color: '#0c8a6a'
   },
   upsellOriginalPrice: {
     fontSize: '0.9rem',
@@ -771,43 +786,3 @@ productImage: {
   }
 };
 
-// Responsive styles
-const mediaQueries = `
-  @media (min-width: 768px) {
-    .product-gallery {
-      height: 400px;
-    }
-    
-    .product-info {
-      padding: 30px;
-    }
-
-    .upsell-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .product-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    .product-gallery {
-      height: 500px;
-      position: sticky;
-      top: 70px;
-      align-self: start;
-    }
-    
-    .product-info {
-      padding: 40px;
-    }
-    
-    .product-footer {
-      padding: 15px calc(50% - 600px);
-    }
-  }
-`;

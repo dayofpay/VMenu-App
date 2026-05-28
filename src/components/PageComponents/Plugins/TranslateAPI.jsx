@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import withObjectData from "../../../HOC/withObjectInfo";
 import { do_action } from "../../../services/userServices";
@@ -264,12 +264,15 @@ const getUniqueLanguagesByCode = (languages) => {
 
 const UNIQUE_LANGUAGES = getUniqueLanguagesByCode(LANGUAGES);
 const GOOGLE_TRANSLATE_SCRIPT_ID = "google-translate-script";
+const GOOGLE_TRANSLATE_ELEMENT_ID = "google_translate_element";
+const GOOGLE_TRANSLATE_SELECT_SELECTOR = ".goog-te-combo";
 
 function TranslateAPI({ objectData }) {
   const DEFAULT_LANGUAGE = objectData.objectInformation.menu_language || 'bg';
   const [isTranslationEnabled, setIsTranslationEnabled] = useState(true);
   const [currentLanguage, setCurrentLanguage] = useState(DEFAULT_LANGUAGE);
   const [availableLanguages, setAvailableLanguages] = useState([]);
+  const initializeGoogleTranslateRef = useRef(null);
   const getPageLanguage = () => {
     const supportedLanguages = ['bg', 'en', 'de', 'fr', 'ru', 'tr', 'ro'];
 
@@ -279,6 +282,19 @@ function TranslateAPI({ objectData }) {
       return 'bg';
     }
   }
+  const getOrCreateGoogleTranslateElement = () => {
+    let translateElement = document.getElementById(GOOGLE_TRANSLATE_ELEMENT_ID);
+
+    if (!translateElement) {
+      translateElement = document.createElement("div");
+      translateElement.id = GOOGLE_TRANSLATE_ELEMENT_ID;
+      translateElement.style.display = "none";
+      document.body.appendChild(translateElement);
+    }
+
+    return translateElement;
+  };
+
 useEffect(() => {
   if (!objectData) return;
   const langSettings = objectData?.MODULES?.OBJECT_INFO?.ENABLED_LANGUAGES;
@@ -296,9 +312,9 @@ useEffect(() => {
   setCurrentLanguage(DEFAULT_LANGUAGE);
 
   const initializeGoogleTranslate = () => {
-    const translateElement = document.getElementById("google_translate_element");
+    const translateElement = getOrCreateGoogleTranslateElement();
 
-    if (!translateElement || translateElement.dataset.initialized === "true") {
+    if (!translateElement) {
       return;
     }
 
@@ -306,8 +322,11 @@ useEffect(() => {
       return;
     }
 
+    if (document.querySelector(GOOGLE_TRANSLATE_SELECT_SELECTOR)) {
+      return;
+    }
+
     translateElement.innerHTML = "";
-    translateElement.dataset.initialized = "true";
 
     new window.google.translate.TranslateElement(
       {
@@ -315,11 +334,11 @@ useEffect(() => {
         includedLanguages: UNIQUE_LANGUAGES.map(lang => lang.code).join(','),
         layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
       },
-      "google_translate_element"
+      GOOGLE_TRANSLATE_ELEMENT_ID
     );
 
     setTimeout(() => {
-      const select = document.querySelector('.goog-te-combo');
+      const select = document.querySelector(GOOGLE_TRANSLATE_SELECT_SELECTOR);
       if (select) {
         select.style.display = 'none';
 
@@ -331,11 +350,16 @@ useEffect(() => {
     }, 500);
   };
 
+  initializeGoogleTranslateRef.current = initializeGoogleTranslate;
   window.googleTranslateElementInit = initializeGoogleTranslate;
 
   const existingScript = document.getElementById(GOOGLE_TRANSLATE_SCRIPT_ID);
   if (existingScript) {
-    initializeGoogleTranslate();
+    if (window.google?.translate?.TranslateElement) {
+      initializeGoogleTranslate();
+    } else {
+      existingScript.addEventListener("load", initializeGoogleTranslate, { once: true });
+    }
   } else {
     const script = document.createElement("script");
     script.id = GOOGLE_TRANSLATE_SCRIPT_ID;
@@ -344,14 +368,30 @@ useEffect(() => {
     document.head.appendChild(script);
   }
 
-  return () => {
-    const el = document.getElementById("google_translate_element");
-    if (el) {
-      el.innerHTML = "";
-      delete el.dataset.initialized;
-    }
-  };
+  return undefined;
 }, [objectData]);
+
+  const waitForGoogleTranslateSelect = () => {
+    return new Promise((resolve) => {
+      const existingSelect = document.querySelector(GOOGLE_TRANSLATE_SELECT_SELECTOR);
+      if (existingSelect) {
+        resolve(existingSelect);
+        return;
+      }
+
+      let attempts = 0;
+      const intervalId = window.setInterval(() => {
+        initializeGoogleTranslateRef.current?.();
+        const select = document.querySelector(GOOGLE_TRANSLATE_SELECT_SELECTOR);
+        attempts += 1;
+
+        if (select || attempts >= 20) {
+          window.clearInterval(intervalId);
+          resolve(select);
+        }
+      }, 150);
+    });
+  };
 
 
 
@@ -368,7 +408,7 @@ useEffect(() => {
       document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     } else {
       // Set the cookie to the provided language and expires in 30 days
-      document.cookie = `googtrans=/bg/${lang}; expires=${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
+      document.cookie = `googtrans=/${getPageLanguage()}/${lang}; expires=${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
     }
   };
 
@@ -376,22 +416,28 @@ useEffect(() => {
  * Changes the language of the translation.
  * @param {String} langCode - The code of the language to change to.
  */
-const changeLanguage = (langCode) => {
+const changeLanguage = async (langCode) => {
+  initializeGoogleTranslateRef.current?.();
+  const select = await waitForGoogleTranslateSelect();
+
+  if (!select) {
+    setGoogleTranslateCookie(langCode);
+    setCurrentLanguage(langCode);
+    window.location.reload();
+    return;
+  }
+
+  setGoogleTranslateCookie(langCode);
+  select.value = langCode;
+  select.dispatchEvent(new Event('input', { bubbles: true }));
+  select.dispatchEvent(new Event('change', { bubbles: true }));
+
   // Update the current language state
   setCurrentLanguage(langCode);
 
   // Perform an action indicating the language change
   do_action("change_language", { message: "Езика бе сменен на " + langCode });
 
-  // Select the Google Translate dropdown element
-  const select = document.querySelector('.goog-te-combo');
-  if (select) {
-    // Set the selected language in the dropdown
-    select.value = langCode;
-
-    // Trigger change event to update translation
-    select.dispatchEvent(new Event('change'));
-  }
 };
 
   /**
@@ -458,8 +504,6 @@ const changeLanguage = (langCode) => {
               </button>
             ))}
           </div>
-
-          <div id="google_translate_element" style={{ display: "none" }}></div>
 
           <button
             onClick={resetTranslation}

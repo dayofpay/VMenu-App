@@ -6,14 +6,23 @@ import * as storage from '../../utils/memory';
 import { ERROR_PATHS } from '../../utils/pathList';
 const SetOptions = () => {
   const { objectId, tableId } = useParams();
-  const [restaurantId, setRestaurantId] = usePersistedState('restaurantId', '');
-  const [table, setTable] = usePersistedState('tableId','');
+  const [, setRestaurantId] = usePersistedState('restaurantId', '');
+  const [, setTable] = usePersistedState('tableId','');
   const navigate = useNavigate();
 
   useEffect(() => {
+    const previewMode = new URLSearchParams(window.location.search).get('preview') === '1';
+    const safeMode = new URLSearchParams(window.location.search).get('safe_mode') === '1';
+    if (previewMode) sessionStorage.setItem('vmenuPreviewMode', '1');
     localStorage.clear();
     setRestaurantId(objectId);
     setTable(tableId);
+
+    if (previewMode) {
+      navigate(`/?preview=1${safeMode ? '&safe_mode=1' : ''}`, { replace: true });
+      return;
+    }
+
     const APP_NEW_VISITOR = async () => {
        await createVisitor().then((result) => {
         if(result.hasError){
@@ -39,9 +48,10 @@ const SetOptions = () => {
         }
       });
     }
-    APP_NEW_VISITOR();;
+    APP_NEW_VISITOR();
     navigate('/');
-  }, [navigate, restaurantId, table]);
+  // Persisted setters are intentionally excluded because this legacy hook recreates them on every render.
+  }, [navigate, objectId, tableId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 };

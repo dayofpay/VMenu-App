@@ -162,12 +162,12 @@ W3Grocery = function(){
         });
     }
     
-    // // Page Back ============
-	// var handleGoBack = function(){
-	// 	$('.back-btn').on('click',function(){
-	// 		window.history.go(-1); return false
-	// 	})        
-    // }
+    // Page Back ============
+	var handleGoBack = function(){
+		$('.back-btn').off('click.vmenuGoBack').on('click.vmenuGoBack',function(){
+			window.history.go(-1); return false;
+		});
+    }
     
 	// Progressive Web App Modal ============
 	var handlePWAModal = function (){
@@ -683,4 +683,4 @@ jQuery(window).on('resize',function () {
 	
 	W3Grocery.resize();
 });
-/*  Window Resize END */	
+/*  Window Resize END */

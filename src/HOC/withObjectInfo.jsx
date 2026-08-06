@@ -62,6 +62,45 @@ export default function withObjectData(Component) {
       })();
     }, []);
 
+    useEffect(() => {
+      const previewMode = new URLSearchParams(window.location.search).get('preview') === '1'
+        || sessionStorage.getItem('vmenuPreviewMode') === '1';
+      if (!previewMode || window.parent === window) return undefined;
+
+      const allowedOrigins = new Set([
+        'https://v-menu.eu',
+        'http://localhost:7707',
+        'http://127.0.0.1:7707',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+      ]);
+
+      const handlePreviewUpdate = (event) => {
+        if (event.source !== window.parent || !allowedOrigins.has(event.origin)) return;
+        if (event.data?.type !== 'VMENU_PREVIEW_UPDATE') return;
+
+        const restaurantId = Number(storage.getItem('restaurantId'));
+        if (!restaurantId || Number(event.data.objectId) !== restaurantId) return;
+
+        setObjectData((current) => ({
+          ...current,
+          MODULES: {
+            ...current?.MODULES,
+            OBJECT_INFO: {
+              ...current?.MODULES?.OBJECT_INFO,
+              LANDING_PAGE_SETTINGS: {
+                ...current?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS,
+                COMPONENT_BUILDER: event.data.componentBuilder,
+              },
+            },
+          },
+        }));
+      };
+
+      window.addEventListener('message', handlePreviewUpdate);
+      return () => window.removeEventListener('message', handlePreviewUpdate);
+    }, [setObjectData]);
+
     // If the objectData state is null, an error is thrown
     if (objectData === null) {
       throw new Error('objectData is null');

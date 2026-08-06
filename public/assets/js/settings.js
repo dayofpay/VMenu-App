@@ -9,8 +9,8 @@ function dzThemeSettings()
 
     /* Theme Panel Save */
 	var themeOption = ['themeColor','themeVersion'];
-	const body = $('body');
-    const html = $('html');
+	var body = $('body');
+    var html = $('html');
 	
 
 /* Only For Tanam Package Kit */	

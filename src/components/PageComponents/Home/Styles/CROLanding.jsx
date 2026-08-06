@@ -200,9 +200,9 @@ const CROLanding = ({ objectData }) => {
         .category-arrow.open { transform: rotate(180deg); }
         .products-grid { padding: 28px; background: #fefcf9; }
         .grid-cols-1 { display: grid; grid-template-columns: 1fr; gap: 24px; }
-        .grid-cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-        .grid-cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .grid-cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .grid-cols-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+        .grid-cols-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+        .grid-cols-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
         .product-card { background: white; border-radius: 24px; overflow: hidden; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); border: 1px solid rgba(239, 125, 0, 0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
         .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 35px -12px rgba(239, 125, 0, 0.2); border-color: rgba(239, 125, 0, 0.3); }
         .product-image { aspect-ratio: 1 / 1; background: linear-gradient(135deg, #fef5e8, #fff8f0); position: relative; overflow: hidden; }

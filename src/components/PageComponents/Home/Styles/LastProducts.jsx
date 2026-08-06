@@ -16,11 +16,11 @@ import { CallKeys } from "../../../../keys/formKeys";
 import { createCall, do_action } from "../../../../services/userServices";
 import { hasAddon } from "../../../../services/objectServices";
 import PERK_LIST from "../../../../utils/perkAddons";
-import { getProductsByCategory } from "../../../../services/productServices";
 import { CooldownContext } from "../../../../contexts/CoolDownCTX";
 import ShowTranslateAPI from "../../Plugins/TranslateAPI";
 import { formatPrice,convertPrice } from "../../../../utils/pricingUtils";
 import {getMenuLanguage} from "../../../../services/appServices";
+/* eslint-disable react/prop-types */
 const HomeContent = ({ objectData }) => {
   const [callMessage, setCallMessage] = useState("");
   const { cooldowns, setCooldowns, remainingTimes,setRemainingTimes } = useContext(CooldownContext);
@@ -29,27 +29,13 @@ const HomeContent = ({ objectData }) => {
 
   const COOLDOWN_TIME = 60;
   
-  const categoryHighlight = objectData.MODULES.OBJECT_INFO.LANDING_PAGE_SETTINGS.PRESENTATION_LAYER_SETTINGS.MODE_SETTINGS.SELECTED_CATEGORY;
-  const landingPageSettings = objectData.MODULES.OBJECT_INFO.LANDING_PAGE_SETTINGS;
-  const accentSettings = landingPageSettings.ACCENT_TEXT_SETTINGS;
-  
-  const [categoryData, setCategoryData] = useState([]);
-  const [categoryItems, setCategoryItems] = useState([]);
+  const landingPageSettings = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS || {};
   const [showCallWaiter, setShowCallWaiter] = useState(false);
   const [showLanguageOption,setShowLanguageOption] = useState(false);
   const menuLanguage = getMenuLanguage();
   useEffect(() => {
-    const getData = async() => {
-      objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.ACTION_BUTTONS?.CALL_WAITER ? setShowCallWaiter(true) : setShowCallWaiter(false);
-      objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.ACTION_BUTTONS?.SELECT_LANGUAGE ? setShowLanguageOption(true) : setShowLanguageOption(false);
-      setCategoryData(categoryHighlight.CATEGORY);
-      const categoryItemList = await getProductsByCategory(categoryHighlight.CATEGORY);
-      setCategoryItems(categoryItemList.categoryData[0]);
-
-
-    }
-    
-    getData();
+    setShowCallWaiter(Boolean(objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.ACTION_BUTTONS?.CALL_WAITER));
+    setShowLanguageOption(Boolean(objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.ACTION_BUTTONS?.SELECT_LANGUAGE));
   }, [objectData]);
 
   useEffect(() => {
@@ -76,7 +62,7 @@ const HomeContent = ({ objectData }) => {
     }, 1000);
     
     return () => clearInterval(interval);
-  }, [cooldowns]);
+  }, [cooldowns, setRemainingTimes]);
   
   const handleCall = (action) => {
     const currentTime = Date.now();
@@ -446,7 +432,7 @@ const HomeContent = ({ objectData }) => {
                   </div>
                 </div>
               </div>
-              <style jsx>
+              <style>
                 {
 
                   ` .server-call-btn {
@@ -472,7 +458,7 @@ const HomeContent = ({ objectData }) => {
           padding: 14px 20px;
           border-radius: 12px;
           background: linear-gradient(135deg, #2c82c9, #1a4f7a);
-          color: #fff8ee;rgba(46, 148, 168, 1)rgba(46, 140, 168, 1)
+          color: #fff8ee;
           font-weight: 600;
           border: none;
           margin-bottom: 16px;
@@ -759,7 +745,7 @@ const HomeContent = ({ objectData }) => {
   </div>
 </div>
 
-<style jsx>{`
+<style>{`
   .categories-container {
     padding: 20px 0;
     max-width: 1400px;

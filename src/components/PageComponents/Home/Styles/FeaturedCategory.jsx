@@ -604,7 +604,7 @@ const HomeContent = ({ objectData }) => {
   </div>
 </div>
 
-<style jsx>{`
+<style>{`
   .categories-container {
     padding: 1rem 0;
     max-width: 1200px;
@@ -733,7 +733,7 @@ const HomeContent = ({ objectData }) => {
       </div>
       
 {categoryMeta.design.colorScheme === 'minimal' ? (
-        <style jsx>{`
+        <style>{`
         .language-selector-btn {
           display: flex;
           align-items: center;
@@ -952,7 +952,7 @@ const HomeContent = ({ objectData }) => {
         }
       `}</style>
       ): (
-        <style jsx>{`
+        <style>{`
         .language-selector-btn {
           display: flex;
           align-items: center;

@@ -10,6 +10,16 @@ function DefaultHeader({objectData}) {
         return <LoadingAnimation/>
     }
     const menuLanguage = getMenuLanguage();
+    const branding = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.BRANDING_SETUP;
+    const brandingEnabled = branding?.enabled === true;
+    const brandName = brandingEnabled && branding.brandName
+        ? branding.brandName
+        : objectData?.objectInformation?.object_name;
+    const brandLogo = (() => {
+        if (!brandingEnabled || !branding.logoUrl) return '';
+        if (branding.logoUrl.startsWith('/uploads/')) return `${getEnv()}${branding.logoUrl}`;
+        return /^https?:\/\//i.test(branding.logoUrl) ? branding.logoUrl : '';
+    })();
 
     
   const [categoryMeta, setCategoryMeta] = useState({
@@ -65,7 +75,13 @@ useEffect(() => {
                 <div className="container">
                     <div className="header-content">
                         <div className="left-content">
-                            <h5 className="title mb-0 text-nowrap">{objectData?.objectInformation?.object_name}</h5>
+                            <div className="vmenu-header-brand">
+                                {brandLogo && <img className="vmenu-header-brand-logo" src={brandLogo} alt={branding.logoAlt || brandName || 'Brand logo'} />}
+                                <div className="min-w-0">
+                                    <h5 className="title mb-0">{brandName}</h5>
+                                    {brandingEnabled && branding.tagline && <small className="vmenu-header-brand-tagline">{branding.tagline}</small>}
+                                </div>
+                            </div>
                         </div>
                         <div className="mid-content"></div>
                         <div className="right-content">
@@ -117,7 +133,7 @@ useEffect(() => {
         <div className="modal-content">
             <div className="modal-header">
                 <h5 className="modal-title">
-                    {menuLanguage.Header.Information.Text} {objectData?.objectInformation?.object_name}
+                    {menuLanguage.Header.Information.Text} {brandName}
                 </h5>
                 <button className="btn-close" data-bs-dismiss="modal">
                     <i className="fa-solid fa-xmark"></i>
@@ -249,7 +265,7 @@ useEffect(() => {
                 backgroundColor: 'rgba(0,0,0,0.02)'
             }}>
                 {menuLanguage.Header.VMENU_PROMO_TEXT}
-{objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.HEADER_SETTINGS?.SHOW_LOGO && (
+{(brandLogo || objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.HEADER_SETTINGS?.SHOW_LOGO) && (
                     <div style={{
                         marginTop: '10px',
                         maxWidth: '100%',
@@ -260,10 +276,12 @@ useEffect(() => {
                         borderRadius: '8px',
                     }}>
                         <img 
-                            src={objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.HEADER_SETTINGS?.SHOW_LOGO && `${getEnv() + "/uploads/" + objectData.objectInformation.object_image}`}
-                            alt="Logo" 
+                            src={brandLogo || `${getEnv() + "/uploads/" + objectData.objectInformation.object_image}`}
+                            alt={brandingEnabled ? (branding.logoAlt || brandName || 'Logo') : 'Logo'}
                             style={{
-                                width: '200%',
+                                width: '100%',
+                                maxWidth: '200px',
+                                maxHeight: '96px',
                                 height: 'auto',
                                 objectFit: 'contain',
                             }} 

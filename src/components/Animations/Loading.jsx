@@ -10,7 +10,7 @@ const LoadingAnimation = () => {
     <div id="preloader">
       <div className="spinner"></div>
 
-      <style jsx>{`
+      <style>{`
         /**
          * Overlay the whole page with a white background
          */

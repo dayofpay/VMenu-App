@@ -11,5 +11,6 @@
   ],
   "name": "W3Grocery: Pre-Build Grocery Mobile App",
   "short_name": "W3Grocery",
-  "start_url": "index.html"
+  "start_url": "/",
+  "scope": "/"
 }

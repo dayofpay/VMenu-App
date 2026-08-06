@@ -23,7 +23,10 @@
     const urlParams = new URLSearchParams(window.location.search);
     const objectId = Number(JSON.parse(localStorage.getItem('restaurantId'))) || 1;
     const tableId = Number(JSON.parse(localStorage.getItem('tableId'))) || 1;
-    const manifestUrl = `https://v-menu.eu/api/manifest/${objectId}/${tableId}`;
+    const isLocalDevelopment = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const manifestUrl = isLocalDevelopment
+      ? '/assets/manifest.json'
+      : `https://v-menu.eu/api/manifest/${objectId}/${tableId}`;
     const objectLogo_API = `https://v-menu.eu/api/objectLogo/${objectId}`;
     const objectLogo = document.getElementById('objectLogo');
     fetch(objectLogo_API)

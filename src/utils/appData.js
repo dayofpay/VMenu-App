@@ -27,4 +27,4 @@ const getAppProperty = (property) => {
     return appState?.[property] || null;
 }
 const getAppState = () => {return appState.APP_ENV}
-export {appState,getEnv,getAppState,getAppProperty};   
+export {appState,getEnv,getAppState,getAppProperty};

@@ -14,6 +14,7 @@ import ProfilePage from './components/PageComponents/Auth/Profile';
 import { CooldownProvider } from './contexts/CoolDownCTX';
 import ReviewPageWithData from './components/Reviews/content';
 import { PaymentError } from './components/PageComponents/Errors/PaymentError';
+import ExperienceLayout from './components/Experience/ExperienceLayout';
 const Home = lazy(() => import('./Pages/Home'));
 const ShowProductDetails = lazy(() => import('./components/Pages/ProductDetails'));
 const CategoryDetails = lazy(() => import('./components/PageComponents/Categories/CategoryDetails'));
@@ -33,6 +34,7 @@ return (
         <Routes>
             <Route path={PATH_LIST.APP_SET_OPTIONS} element={<SetOptions />}/>
             <Route element={<RequireObjectState />}>
+              <Route element={<ExperienceLayout />}>
                 <Route path={PATH_LIST.APP_HOME} element={<Home />} />
                 <Route path={PATH_LIST.CATEGORY_DETAILS} element={<CategoryDetails/>}/>
                 <Route path={PATH_LIST.CATEGORY_LIST} element={<CategoryList/>}/>
@@ -45,6 +47,7 @@ return (
                 <Route path={ERROR_PATHS.CHECKOUT_ERROR} element={<ShowCheckoutError/>}/>
                 <Route path={PATH_LIST.AUTH_PROFILE} element={<ProfilePage/>}/>
                 <Route path={PATH_LIST.REVIEW_PAGE} element={<ReviewPageWithData/>}/>
+              </Route>
             </Route>
             <Route path='*' element={<NotFound/>}/>
             <Route path={ERROR_PATHS.QR_ERROR} element={<QRError/>}/>

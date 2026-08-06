@@ -14,7 +14,7 @@ export const PaymentError = () => {
 
     return (
         <>
-            <style jsx>{`
+            <style>{`
                 .error-container {
                     min-height: 100vh;
                     background: #f8f9fa;

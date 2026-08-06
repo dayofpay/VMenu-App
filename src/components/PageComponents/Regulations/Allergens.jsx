@@ -64,7 +64,7 @@ const Allergens = ({ productData, ALLERGENES_LIST }) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .delivery-allergens-container {
           margin: 16px 0;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;

@@ -447,7 +447,7 @@ const ReviewPage = ({ objectData }) => {
 
       <ShowAppMenu />
 
-      <style jsx>{`
+      <style>{`
         .delivery-review-page {
           background-color: #f8f9fa;
         }

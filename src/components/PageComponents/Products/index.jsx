@@ -353,6 +353,21 @@ setCategoryNames([...new Set(product.category_names)]);
               )}
               />
               )}
+
+            {hasAddon(PERK_LIST.CART) && objectData.license.data.plan_id !== 1 && (
+              <div className="vm-product-desktop-action">
+                <button type="submit" className="vm-product-cart-button" style={{
+                  ...styles.cartButton,
+                  ...(productExists ? styles.cartButtonRemove : {})
+                }}>
+                  <i className={`fas ${productExists ? 'fa-trash-alt' : 'fa-shopping-cart'}`} style={styles.cartIcon}></i>
+                  {!productExists
+                    ? menuLanguage.Buttons.CART_MANAGEMENT.Add_To_Cart
+                    : menuLanguage.Buttons.CART_MANAGEMENT.Remove_From_Cart
+                  }
+                </button>
+              </div>
+            )}
           </div>
 
 

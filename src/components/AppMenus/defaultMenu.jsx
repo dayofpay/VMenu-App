@@ -1,33 +1,21 @@
 import { Link, NavLink } from "react-router-dom"
-import * as storage from '../../utils/memory';
-import { useEffect, useState } from "react";
 import { hasAddon } from "../../services/objectServices";
 import PERK_LIST from "../../utils/perkAddons";
 const ShowAppMenu = () => {
-const objectData = storage.getItem('objectData');
-
-const [hasCartPerk,setCartPerk] = useState(false);
-
-useEffect(() => {
-		if(hasAddon(PERK_LIST.CART)){
-			setCartPerk(true);
-		}
-},[objectData]);
-
 return (
 <>
 
 	<div className="menubar-area style-1 footer-fixed border-top rounded-0">
 		<div className="toolbar-inner menubar-nav">
 
-			<NavLink to="/" className="nav-link " acitveClassName="active">
+			<NavLink to="/" className={({ isActive }) => 'nav-link ' + (isActive ? 'active' : '')}>
 				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<path
 						d="M9.14373 20.7821V17.7152C9.14372 16.9381 9.77567 16.3067 10.5584 16.3018H13.4326C14.2189 16.3018 14.8563 16.9346 14.8563 17.7152V20.7732C14.8562 21.4473 15.404 21.9951 16.0829 22H18.0438C18.9596 22.0023 19.8388 21.6428 20.4872 21.0007C21.1356 20.3586 21.5 19.4868 21.5 18.5775V9.86585C21.5 9.13139 21.1721 8.43471 20.6046 7.9635L13.943 2.67427C12.7785 1.74912 11.1154 1.77901 9.98539 2.74538L3.46701 7.9635C2.87274 8.42082 2.51755 9.11956 2.5 9.86585V18.5686C2.5 20.4637 4.04738 22 5.95617 22H7.87229C8.19917 22.0023 8.51349 21.8751 8.74547 21.6464C8.97746 21.4178 9.10793 21.1067 9.10792 20.7821H9.14373Z"
 						fill="#130F26"></path>
 				</svg>
 			</NavLink>
-			<NavLink to="/categories" className="nav-link " acitveClassName="active">
+			<NavLink to="/categories" className={({ isActive }) => 'nav-link ' + (isActive ? 'active' : '')}>
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 					className="bi bi-grid" viewBox="0 0 16 16">
 					<path
@@ -49,14 +37,14 @@ return (
 				</svg>
 			</div>
 			</Link></>}
-			<NavLink to="/announces" className="nav-link " acitveClassName="active">
+			<NavLink to="/announces" className={({ isActive }) => 'nav-link ' + (isActive ? 'active' : '')}>
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 					className="bi bi-megaphone" viewBox="0 0 16 16">
 					<path
 						d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-.214c-2.162-1.241-4.49-1.843-6.912-2.083l.405 2.712A1 1 0 0 1 5.51 15.1h-.548a1 1 0 0 1-.916-.599l-1.85-3.49a68.14 68.14 0 0 0-.202-.003A2.014 2.014 0 0 1 0 9V7a2.02 2.02 0 0 1 1.992-2.013 74.663 74.663 0 0 0 2.483-.075c3.043-.154 6.148-.849 8.525-2.199V2.5zm1 0v11a.5.5 0 0 0 1 0v-11a.5.5 0 0 0-1 0zm-1 1.35c-2.344 1.205-5.209 1.842-8 2.033v4.233c.18.01.359.022.537.036 2.568.189 5.093.744 7.463 1.993V3.85zm-9 6.215v-4.13a95.09 95.09 0 0 1-1.992.052A1.02 1.02 0 0 0 1 7v2c0 .55.448 1.002 1.006 1.009A60.49 60.49 0 0 1 4 10.065zm-.657.975 1.609 3.037.01.024h.548l-.002-.014-.443-2.966a68.019 68.019 0 0 0-1.722-.082z" />
 				</svg>
 			</NavLink>
-			<NavLink to="/profile" className="nav-link " acitveClassName="active">
+			<NavLink to="/profile" className={({ isActive }) => 'nav-link ' + (isActive ? 'active' : '')}>
 				<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="30" height="30" viewBox="0 0 24 24"
 					>
 					<path

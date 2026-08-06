@@ -2,14 +2,11 @@
 function registerServiceWorker(){
 	console.log('Registering service worker');
 	if ('serviceWorker' in navigator) {
-		try{
-			navigator.serviceWorker
-			.register('./app.js')
-			.then(() => { console.log('Service Worker Registered'); });
-		}catch(error){
-			console.log('Service Worker Registration Failed');
-		
-		}
+		navigator.serviceWorker
+			.register('/app.js', { updateViaCache: 'none' })
+			.then((registration) => registration.update())
+			.then(() => { console.log('Service Worker Registered'); })
+			.catch((error) => { console.warn('Service Worker Registration Failed', error); });
 	}
 }
 

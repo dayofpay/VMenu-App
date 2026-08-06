@@ -1,7 +1,5 @@
 import { getEnv } from "../../utils/appData";
-import OBJECT_TYPES from "../../utils/objectTypes";
 import LoadingAnimation from "../Animations/Loading";
-import { useState,useEffect } from "react";
 import '../Styles/CKContent.css';
 import { getMenuLanguage } from "../../services/appServices";
 
@@ -22,51 +20,14 @@ function DefaultHeader({objectData}) {
     })();
 
     
-  const [categoryMeta, setCategoryMeta] = useState({
+  const categoryMeta = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_META?.settings || {
     layout: { type: 'grid', columns: 3, spacing: 'medium', order: 'manual' },
     design: { colorScheme: 'default', cardStyle: 'rounded', animation: { hover: true, type: 'lift' } },
     content: { showBadges: true, showDescriptions: false, showCounts: true, showPrices: true },
     advanced: { lazyLoading: true, adaptiveColors: true, responsiveBreakpoints: { mobile: 1, tablet: 2, desktop: 3 } },
     themes: { modern: { showDiscountTags: true, showPopularityBadges: true, quickView: true }, grid: { iconSize: 'medium' }, list: { showDetails: false } },
     meta: { version: '2.0', lastUpdated: new Date().toISOString() }
-  });
-  const [customCss,setCustomCss] = useState('');
-  useEffect(() => {
-    const meta = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_META?.settings;
-    if (meta) {
-      setCategoryMeta(meta);
-    }
-  }, [objectData]);
-useEffect(() => {
-    const customCss = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CUSTOM_STYLES?.CSS;
-    if (customCss) {
-
-        const styleElement = document.createElement('style');
-        styleElement.type = 'text/css';
-        styleElement.innerHTML = customCss;
-        styleElement.id = 'custom-landing-page-css';
-        
-
-        const existingStyle = document.getElementById('custom-landing-page-css');
-        if (existingStyle) {
-            document.head.removeChild(existingStyle);
-        }
-        
-
-        document.head.appendChild(styleElement);
-        
-
-        setCustomCss(customCss);
-    }
-    
-
-    return () => {
-        const styleElement = document.getElementById('custom-landing-page-css');
-        if (styleElement) {
-            document.head.removeChild(styleElement);
-        }
-    };
-}, [objectData]);
+  };
     console.log(objectData);
     
     return (

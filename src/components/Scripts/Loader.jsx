@@ -13,7 +13,6 @@ const COMMON_SCRIPTS = [
   '/assets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js',
   '/assets/js/settings.js',
   '/assets/js/custom.js',
-  '/assets/app.js',
 ];
 
 const scriptPromises = new Map();

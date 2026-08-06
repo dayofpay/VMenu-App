@@ -52,6 +52,21 @@ function consentAllows(category) {
   }
 }
 
+function hasDeveloperPlan(objectData) {
+  const plan = objectData?.license?.data;
+  const planName = String(
+    plan?.plan_name
+    || plan?.displayName
+    || objectData?.objectInformation?.plan_name
+    || '',
+  ).trim().toLowerCase();
+
+  if (planName.includes('gold') || planName.includes('premium')) return true;
+
+  const planId = Number(plan?.canonicalPlanId || plan?.plan_id || objectData?.objectInformation?.object_plan_id);
+  return [3, 4].includes(planId);
+}
+
 function ScriptRuntime({ settings, pageKey, previewMode }) {
   useEffect(() => {
     if (previewMode || !settings?.enabled || !Array.isArray(settings.scripts)) return undefined;
@@ -89,8 +104,7 @@ function BrandSignature({ branding, pageKey }) {
 
 function DeveloperScriptRuntime({ workspace, objectData, pageKey, theme, branding }) {
   useEffect(() => {
-    const planId = Number(objectData?.objectInformation?.object_plan_id);
-    if (![3, 4].includes(planId)) return undefined;
+    if (!hasDeveloperPlan(objectData)) return undefined;
     const root = document.querySelector('.vmenu-experience');
     if (!root) return undefined;
     const runtime = createVMenuDevApi({ objectData, pageKey, theme, branding, root });
@@ -180,6 +194,7 @@ export default function ExperienceLayout() {
   const settings = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS || {};
   const theme = settings.THEME_BUILDER || {};
   const branding = settings.BRANDING_SETUP || {};
+  const customCss = typeof settings.CUSTOM_STYLES?.CSS === 'string' ? settings.CUSTOM_STYLES.CSS : '';
   const colors = theme.colors || {};
   const style = {
     '--vm-theme-primary': colors.primary || '#0c8a6a',
@@ -231,6 +246,7 @@ export default function ExperienceLayout() {
   ].filter(Boolean).join(' ');
 
   return <div className={themeClasses} style={style} data-page={pageKey}>
+    {customCss && <style id="custom-landing-page-css" data-vmenu-object-style="true">{customCss}</style>}
     <ScriptRuntime settings={settings.SCRIPT_INJECTION} pageKey={pageKey} previewMode={previewMode} />
     <DeveloperScriptRuntime workspace={settings.DEVELOPER_SCRIPTS} objectData={objectData} pageKey={pageKey} theme={theme} branding={branding} />
     <div data-vmenu-dev-slot="page-start" />

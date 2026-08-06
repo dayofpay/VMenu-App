@@ -356,7 +356,7 @@ setCategoryNames([...new Set(product.category_names)]);
 
             {hasAddon(PERK_LIST.CART) && objectData.license.data.plan_id !== 1 && (
               <div className="vm-product-desktop-action">
-                <button type="submit" className="vm-product-cart-button" style={{
+                <button type="submit" className={`vm-product-cart-button${productExists ? ' is-remove' : ''}`} style={{
                   ...styles.cartButton,
                   ...(productExists ? styles.cartButtonRemove : {})
                 }}>
@@ -479,7 +479,7 @@ setCategoryNames([...new Set(product.category_names)]);
               ...styles.footer,
               visibility: objectData.license.data.plan_id === 1 ? "hidden" : "visible",
             }}>
-          <button type="submit" className="vm-product-cart-button" style={{
+          <button type="submit" className={`vm-product-cart-button${productExists ? ' is-remove' : ''}`} style={{
                 ...styles.cartButton,
                 ...(productExists ? styles.cartButtonRemove : {})
               }}>

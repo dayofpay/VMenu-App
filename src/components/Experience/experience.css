@@ -10,7 +10,8 @@
 .vmenu-experience.theme-enabled.scale-compact h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
 .vmenu-experience.theme-enabled.scale-expressive h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); }
 .vmenu-experience.theme-enabled.scale-expressive h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); }
-.vmenu-experience.theme-enabled .btn-primary, .vmenu-experience.theme-enabled .vm-product-cart-button:not([style*="e53935"]) { background: var(--vm-theme-primary) !important; border-color: var(--vm-theme-primary) !important; }
+.vmenu-experience.theme-enabled .btn-primary, .vmenu-experience.theme-enabled .vm-product-cart-button:not(.is-remove) { background: var(--vm-theme-primary) !important; border-color: var(--vm-theme-primary) !important; }
+.vmenu-experience.theme-enabled .vm-product-cart-button.is-remove { background: #e53935 !important; border-color: #e53935 !important; box-shadow: 0 14px 28px rgba(229, 57, 53, 0.24); }
 .vmenu-experience.theme-enabled .text-primary { color: var(--vm-theme-primary) !important; }
 .vmenu-experience.theme-enabled .bg-primary { background-color: var(--vm-theme-primary) !important; }
 .vmenu-experience.theme-enabled .card, .vmenu-experience.theme-enabled .vm-product-info { background-color: var(--vm-theme-surface); color: var(--vm-theme-text); border-color: var(--vm-theme-border); }

@@ -40,27 +40,31 @@ export default function withObjectData(Component) {
       (async () => {
         try {
           // The restaurant ID is retrieved from local storage
-          const restaurantId = storage.getItem('restaurantId');
+          const restaurantId = Number(storage.getItem('restaurantId'));
 
           // If the restaurant ID is null, an error is thrown
-          if (restaurantId === null) {
+          if (!restaurantId) {
             throw new Error('Restaurant ID is null');
           }
 
           // The object data is fetched from the server using the
           // getObjectData function from the objectServices module.
-          const response = await getObjectData(Number(restaurantId));
+          const response = await getObjectData(restaurantId);
+          if (!response?.objectData) {
+            throw new Error('Object data request returned no data');
+          }
 
           // The object data is stored in the objectData state
           setObjectData(response.objectData);
         } catch (error) {
-          // If there is an error while fetching the object data, the error
-          // is logged to the console and the local storage is cleared.
+          // Keep the last valid objectData on transient refresh/network errors.
+          // Clearing storage here used to reset CUSTOM_STYLES and saved themes.
           console.error('Error while trying to fetch object data:', error);
-          localStorage.clear();
         }
       })();
-    }, []);
+    // The persisted setter is intentionally excluded because this legacy hook
+    // recreates it on every render and would otherwise refetch indefinitely.
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
       const previewMode = new URLSearchParams(window.location.search).get('preview') === '1'

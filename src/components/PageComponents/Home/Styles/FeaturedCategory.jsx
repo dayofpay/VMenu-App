@@ -39,22 +39,14 @@ const HomeContent = ({ objectData }) => {
   
   const [categoryData, setCategoryData] = useState([]);
   const [categoryItems, setCategoryItems] = useState([]);
-  const [categoryMeta, setCategoryMeta] = useState({
+  const categoryMeta = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_META?.settings || {
     layout: { type: 'grid', columns: 3, spacing: 'medium', order: 'manual' },
     design: { colorScheme: 'default', cardStyle: 'rounded', animation: { hover: true, type: 'lift' } },
     content: { showBadges: true, showDescriptions: false, showCounts: true, showPrices: true },
     advanced: { lazyLoading: true, adaptiveColors: true, responsiveBreakpoints: { mobile: 1, tablet: 2, desktop: 3 } },
     themes: { modern: { showDiscountTags: true, showPopularityBadges: true, quickView: true }, grid: { iconSize: 'medium' }, list: { showDetails: false } },
     meta: { version: '2.0', lastUpdated: new Date().toISOString() }
-  });
-
-  useEffect(() => {
-    const meta = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_META?.settings;
-    if (meta) {
-      setCategoryMeta(meta);
-    }
-  }, [objectData]);
-  console.log(categoryMeta.design.colorScheme);
+  };
   
   useEffect(() => {
     const getData = async() => {

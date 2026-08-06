@@ -14,22 +14,14 @@ import { do_action } from "../../../services/userServices";
 import { getMenuLanguage } from "../../../services/appServices";
 // VMENU_APP_PAGES_CATEGORIES 6.0.0 @VDEVSBG //
 const ShowCategoryList = ({ objectData }) => {
-  const [colorSchemeName,setColorSchemeName] = useState('');
-  const [categoryMeta, setCategoryMeta] = useState({
+  const categoryMeta = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_META?.settings || {
     layout: { type: 'grid', columns: 3, spacing: 'medium', order: 'manual' },
     design: { colorScheme: 'default', cardStyle: 'rounded', animation: { hover: true, type: 'lift' } },
     content: { showBadges: true, showDescriptions: false, showCounts: true, showPrices: true },
     advanced: { lazyLoading: true, adaptiveColors: true, responsiveBreakpoints: { mobile: 1, tablet: 2, desktop: 3 } },
     themes: { modern: { showDiscountTags: true, showPopularityBadges: true, quickView: true }, grid: { iconSize: 'medium' }, list: { showDetails: false } },
     meta: { version: '2.0', lastUpdated: new Date().toISOString() }
-  });
-
-  useEffect(() => {
-    const meta = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.CATEGORY_META?.settings;
-    if (meta) {
-      setCategoryMeta(meta);
-    }
-  }, [objectData]);
+  };
 
   useEffect(() => {
     do_action("click_button", { button_name: "Категории" });
@@ -87,11 +79,6 @@ const getStyles = () => {
     const cardStyle = categoryMeta.design.cardStyle;
     const animationType = categoryMeta.design.animation.type;
     const columns = Math.max(1, Math.min(5, categoryMeta.layout.columns));
-    useEffect(() => {
-      setColorSchemeName(categoryMeta.design.colorScheme);
-    },[categoryMeta])
-    console.log(colorSchemeName);
-    
     let borderRadius;
     switch (cardStyle) {
       case 'rounded': borderRadius = '12px'; break;

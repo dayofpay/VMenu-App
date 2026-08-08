@@ -25,6 +25,7 @@ import { convertPrice, formatPrice } from "../../../utils/pricingUtils";
 import { getMenuLanguage } from "../../../services/appServices";
 import { interpolateString } from "../../../utils/stringUtiils";
 import "../../Styles/ProductDetails.css";
+import { emitVMenuEvent } from "../../Experience/vmenuDevApi";
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -67,7 +68,16 @@ setCategoryNames([...new Set(product.category_names)]);
     async () => {
       try {
         if (!productExists) {
-          await cartUpdateHandler(values, setProductExists);
+          const price = Number(productData.item_price || 0);
+          const discount = Number(productData.discount_percentage || 0);
+          const finalPrice = discount > 0 ? price * (100 - discount) / 100 : price;
+          await cartUpdateHandler(values, setProductExists, {
+            contentName: productData.item_name,
+            category: categoryNames[0] || '',
+            quantity: productQuantity,
+            value: finalPrice * productQuantity,
+            currency: productData.item_currency || objectData?.objectInformation?.object_currency || 'EUR',
+          });
           do_action("add_to_cart", {product_id: productData.item_id});
         } else {
           do_action("remove_from_cart", {product_id: productData.item_id});
@@ -121,8 +131,19 @@ setCategoryNames([...new Set(product.category_names)]);
         product_id: productData.item_id,
         product_name: productData.item_name 
       });
+      const price = Number(productData.item_price || 0);
+      const discount = Number(productData.discount_percentage || 0);
+      const detail = {
+        contentId: productData.item_id,
+        contentName: productData.item_name,
+        category: categoryNames[0] || '',
+        value: discount > 0 ? price * (100 - discount) / 100 : price,
+        currency: productData.item_currency || objectData?.objectInformation?.object_currency || 'EUR',
+      };
+      emitVMenuEvent('product.viewed', detail);
+      emitVMenuEvent('ViewContent', detail);
     }
-  }, [productData?.item_id]);
+  }, [productData?.item_id, categoryNames]);
 
   if (!productData.item_images) {
     return <LoadingAnimation />;

@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 import withObjectData from "../../../HOC/withObjectInfo";
 import useForm from "../../../hooks/useForm";
 import CartContext from "../../../contexts/CartCTX";
@@ -11,6 +12,7 @@ import * as storage from '../../../utils/memory';
 import StripePaymentWrapper from "./StripePayment";
 import PaymentErrorModal from "./PaymentErrorModal";
 import { PATH_LIST } from "../../../utils/pathList";
+import { emitVMenuEvent } from "../../Experience/vmenuDevApi";
 import "../../Styles/Checkout.css";
 
 const ShowCheckout = ({ objectData }) => {
@@ -152,6 +154,23 @@ const ShowCheckout = ({ objectData }) => {
         throw new Error(orderResult.message || 'Грешка при създаване на поръчка');
       }
 
+      const purchaseEvent = {
+        orderId: orderResult.orderId,
+        objectId: Number(paymentData.objectId),
+        paymentMethod: 'CARD',
+        paymentIntentId: paymentIntent.id,
+        amount: paymentAmount,
+        value: paymentAmount,
+        currency: paymentData.currency || objectData?.objectInformation?.object_currency || 'EUR',
+        contentIds: paymentData.cartData.map((item) => item.productId).filter((item) => item != null),
+        numItems: paymentData.cartData.reduce((total, item) => total + Math.max(1, Number(item.productQuantity || 1)), 0),
+        source: 'digital_menu',
+        completedAt: new Date().toISOString(),
+      };
+      emitVMenuEvent('order.created', purchaseEvent);
+      emitVMenuEvent('purchase.completed', purchaseEvent);
+      emitVMenuEvent('PurchaseEvent', purchaseEvent);
+
       
       localStorage.removeItem('cart');
       localStorage.removeItem('selectedAddons');
@@ -181,11 +200,11 @@ const handlePaymentError = (error) => {
     [CheckoutKeys.CHECKOUT_NAME]: { required: true },
     [CheckoutKeys.CHECKOUT_EMAIL]: {
       required: true,
-      regex: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+      regex: /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/,
     },
     [CheckoutKeys.CHECKOUT_PHONE]: {
       required: true,
-      regex: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+      regex: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
     },
   };
 
@@ -822,6 +841,17 @@ const handlePaymentError = (error) => {
     </>
   );
   
+};
+
+ShowCheckout.propTypes = {
+  objectData: PropTypes.shape({
+    allProducts: PropTypes.arrayOf(PropTypes.shape({
+      item_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    })),
+    objectInformation: PropTypes.shape({
+      object_currency: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 const Checkout = withObjectData(ShowCheckout);

@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { getObjectData } from '../../services/objectServices';
 import { getEnv } from '../../utils/appData';
 import CustomComponents from '../PageComponents/Home/CustomComponents';
 import { createVMenuDevApi } from './vmenuDevApi';
+import PluginComponentSlot from './PluginComponents';
+import ConsentManager from './ConsentManager';
+import { consentAllows, normalizeConsentRequirements, readConsent } from './consentStorage';
 import './experience.css';
 
 const PAGE_MATCHERS = [
@@ -42,14 +45,35 @@ function getPageKey(pathname) {
   return PAGE_MATCHERS.find(([pattern]) => pattern.test(pathname))?.[1] || 'all';
 }
 
-function consentAllows(category) {
-  if (category === 'necessary') return true;
+function storedObjectId() {
   try {
-    const consent = JSON.parse(localStorage.getItem('vmenu_cookie_consent') || '{}');
-    return consent?.[category] === true;
+    const id = Number(JSON.parse(localStorage.getItem('restaurantId') || 'null'));
+    return Number.isInteger(id) && id > 0 ? id : null;
   } catch {
-    return false;
+    return null;
   }
+}
+
+function collectConsentRequirements(settings, plugins, objectData, pageKey) {
+  const required = [];
+  const injection = settings?.SCRIPT_INJECTION;
+  if (injection?.enabled && Array.isArray(injection.scripts)) {
+    injection.scripts.forEach((script) => {
+      const matchesPage = script?.pages?.includes('all') || script?.pages?.includes(pageKey);
+      if (script?.enabled && matchesPage && ['analytics', 'marketing'].includes(script.consent)) required.push(script.consent);
+    });
+  }
+  const workspace = settings?.DEVELOPER_SCRIPTS;
+  if (hasDeveloperPlan(objectData) && workspace?.enabled && Array.isArray(workspace.files)) {
+    workspace.files.forEach((file) => {
+      const matchesPage = file?.target === 'all' || file?.target === pageKey;
+      if (file?.enabled && matchesPage && ['analytics', 'marketing'].includes(file.consent)) required.push(file.consent);
+    });
+  }
+  (Array.isArray(plugins) ? plugins : []).forEach((plugin) => {
+    if (Array.isArray(plugin?.consent)) required.push(...plugin.consent);
+  });
+  return normalizeConsentRequirements(required);
 }
 
 function hasDeveloperPlan(objectData) {
@@ -67,14 +91,14 @@ function hasDeveloperPlan(objectData) {
   return [3, 4].includes(planId);
 }
 
-function ScriptRuntime({ settings, pageKey, previewMode }) {
+function ScriptRuntime({ settings, pageKey, previewMode, objectId, consent }) {
   useEffect(() => {
     if (previewMode || !settings?.enabled || !Array.isArray(settings.scripts)) return undefined;
     const added = [];
     settings.scripts.forEach((item) => {
       if (!item?.enabled || !/^https:\/\//i.test(item.src || '')) return;
       if (!(item.pages?.includes('all') || item.pages?.includes(pageKey))) return;
-      if (!consentAllows(item.consent || 'necessary')) return;
+      if (!consentAllows(item.consent || 'necessary', objectId, consent)) return;
       const alreadyLoaded = [...document.querySelectorAll('script[data-vmenu-script]')]
         .some((script) => script.dataset.vmenuScript === item.id);
       if (alreadyLoaded) return;
@@ -89,7 +113,7 @@ function ScriptRuntime({ settings, pageKey, previewMode }) {
       added.push(script);
     });
     return () => added.forEach((script) => script.remove());
-  }, [pageKey, previewMode, settings]);
+  }, [consent, objectId, pageKey, previewMode, settings]);
   return null;
 }
 
@@ -102,12 +126,12 @@ function BrandSignature({ branding, pageKey }) {
   </div>;
 }
 
-function DeveloperScriptRuntime({ workspace, objectData, pageKey, theme, branding }) {
+function DeveloperScriptRuntime({ workspace, objectData, pageKey, theme, branding, objectId, consent, consentRequirements }) {
   useEffect(() => {
     if (!hasDeveloperPlan(objectData)) return undefined;
     const root = document.querySelector('.vmenu-experience');
     if (!root) return undefined;
-    const runtime = createVMenuDevApi({ objectData, pageKey, theme, branding, root });
+    const runtime = createVMenuDevApi({ objectData, pageKey, theme, branding, root, consentRequirements, consentSnapshot: consent });
     window.VMenuDev = runtime.api;
     const scriptCleanups = [];
     let disposed = false;
@@ -116,11 +140,11 @@ function DeveloperScriptRuntime({ workspace, objectData, pageKey, theme, brandin
     if (!safeMode && workspace?.enabled && Array.isArray(workspace.files)) {
       workspace.files
         .filter((file) => file?.enabled && file.code && (file.target === 'all' || file.target === pageKey))
+        .filter((file) => consentAllows(file.consent || 'necessary', objectId, consent))
         .forEach((file) => {
           try {
             console.info('[V-MENU Script] Running ' + (file.name || file.id) + ' on ' + pageKey);
             // Trusted object-admin code. It executes only after explicit workspace + file enablement.
-            // eslint-disable-next-line no-new-func
             const execute = new Function('VMenu', `"use strict"; return (async () => {\n${file.code}\n})();\n//# sourceURL=vmenu-dev/${file.name || file.id}`);
             Promise.resolve(execute(runtime.api)).then((cleanup) => {
               if (typeof cleanup !== 'function') return;
@@ -142,28 +166,74 @@ function DeveloperScriptRuntime({ workspace, objectData, pageKey, theme, brandin
       runtime.destroy();
       if (window.VMenuDev === runtime.api) delete window.VMenuDev;
     };
-  }, [branding, objectData, pageKey, theme, workspace]);
+  }, [branding, consent, consentRequirements, objectData, objectId, pageKey, theme, workspace]);
+  return null;
+}
+
+function PluginRuntime({ plugins, objectData, pageKey, theme, branding, objectId, consent, consentRequirements }) {
+  useEffect(() => {
+    if (!Array.isArray(plugins) || !plugins.length) return undefined;
+    if (new URLSearchParams(window.location.search).get('safe_mode') === '1') return undefined;
+    const root = document.querySelector('.vmenu-experience');
+    if (!root) return undefined;
+    const runtime = createVMenuDevApi({ objectData, pageKey, theme, branding, root, consentRequirements, consentSnapshot: consent });
+    const styles = [];
+    const cleanups = [];
+    let disposed = false;
+
+    plugins.forEach((plugin) => {
+      const identity = `${plugin.slug || plugin.id}@${plugin.version || 'latest'}`;
+      const pluginConsent = normalizeConsentRequirements(plugin.consent);
+      if (pluginConsent.some((category) => !consentAllows(category, objectId, consent))) return;
+      if (plugin.style) {
+        const style = document.createElement('style');
+        style.dataset.vmenuPlugin = identity;
+        style.textContent = String(plugin.style);
+        document.head.appendChild(style);
+        styles.push(style);
+      }
+      if (!plugin.script) return;
+      try {
+        // Only staff-approved plugin versions are returned by the V-MENU API.
+        const execute = new Function('VMenu', 'settings', `"use strict"; return (async () => {\n${plugin.script}\n})();\n//# sourceURL=vmenu-plugin/${identity}/plugin.js`);
+        Promise.resolve(execute(runtime.api, plugin.settings || {})).then((cleanup) => {
+          if (typeof cleanup !== 'function') return;
+          if (disposed) cleanup(); else cleanups.push(cleanup);
+        }).catch((error) => console.error(`[V-MENU Plugin: ${identity}]`, error));
+      } catch (error) {
+        console.error(`[V-MENU Plugin: ${identity}]`, error);
+      }
+    });
+
+    return () => {
+      disposed = true;
+      styles.forEach((style) => style.remove());
+      cleanups.splice(0).reverse().forEach((cleanup) => { try { cleanup(); } catch { /* best effort */ } });
+      runtime.destroy();
+    };
+  }, [branding, consent, consentRequirements, objectData, objectId, pageKey, plugins, theme]);
   return null;
 }
 
 export default function ExperienceLayout() {
   const location = useLocation();
   const pageKey = getPageKey(location.pathname);
+  const objectId = storedObjectId();
   const [objectData, setObjectData] = useState(() => {
     try { return JSON.parse(localStorage.getItem('objectData') || '{}'); } catch { return {}; }
   });
+  const [consent, setConsent] = useState(() => readConsent(objectId));
   const previewMode = new URLSearchParams(location.search).get('preview') === '1'
     || sessionStorage.getItem('vmenuPreviewMode') === '1';
 
   useEffect(() => {
-    const objectId = Number(JSON.parse(localStorage.getItem('restaurantId') || 'null'));
     if (!objectId) return;
     getObjectData(objectId).then((response) => {
       if (!response?.objectData) return;
       setObjectData(response.objectData);
       localStorage.setItem('objectData', JSON.stringify(response.objectData));
     }).catch((error) => console.error('Experience settings could not be loaded:', error));
-  }, []);
+  }, [objectId]);
 
   useEffect(() => {
     if (!previewMode || window.parent === window) return undefined;
@@ -182,6 +252,7 @@ export default function ExperienceLayout() {
             ...(event.data.componentBuilder ? { COMPONENT_BUILDER: event.data.componentBuilder } : {}),
             ...(event.data.themeBuilder ? { THEME_BUILDER: event.data.themeBuilder } : {}),
             ...(event.data.brandingSetup ? { BRANDING_SETUP: event.data.brandingSetup } : {}),
+            ...(event.data.consentSetup ? { CONSENT_SETUP: event.data.consentSetup } : {}),
             ...(event.data.scriptInjection ? { SCRIPT_INJECTION: event.data.scriptInjection } : {}),
           } } },
         };
@@ -194,6 +265,11 @@ export default function ExperienceLayout() {
   const settings = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS || {};
   const theme = settings.THEME_BUILDER || {};
   const branding = settings.BRANDING_SETUP || {};
+  const consentSetup = settings.CONSENT_SETUP || {};
+  const consentRequirements = useMemo(
+    () => collectConsentRequirements(settings, objectData?.installedPlugins, objectData, pageKey),
+    [objectData, pageKey, settings],
+  );
   const customCss = typeof settings.CUSTOM_STYLES?.CSS === 'string' ? settings.CUSTOM_STYLES.CSS : '';
   const colors = theme.colors || {};
   const style = {
@@ -247,14 +323,21 @@ export default function ExperienceLayout() {
 
   return <div className={themeClasses} style={style} data-page={pageKey}>
     {customCss && <style id="custom-landing-page-css" data-vmenu-object-style="true">{customCss}</style>}
-    <ScriptRuntime settings={settings.SCRIPT_INJECTION} pageKey={pageKey} previewMode={previewMode} />
-    <DeveloperScriptRuntime workspace={settings.DEVELOPER_SCRIPTS} objectData={objectData} pageKey={pageKey} theme={theme} branding={branding} />
+    <ScriptRuntime settings={settings.SCRIPT_INJECTION} pageKey={pageKey} previewMode={previewMode} objectId={objectId} consent={consent} />
+    <DeveloperScriptRuntime workspace={settings.DEVELOPER_SCRIPTS} objectData={objectData} pageKey={pageKey} theme={theme} branding={branding} objectId={objectId} consent={consent} consentRequirements={consentRequirements} />
+    <PluginRuntime plugins={objectData?.installedPlugins} objectData={objectData} pageKey={pageKey} theme={theme} branding={branding} objectId={objectId} consent={consent} consentRequirements={consentRequirements} />
+    <PluginComponentSlot plugins={objectData?.installedPlugins} pageKey={pageKey} slot="page-start" />
     <div data-vmenu-dev-slot="page-start" />
     <BrandSignature branding={branding} pageKey={pageKey} />
+    <PluginComponentSlot plugins={objectData?.installedPlugins} pageKey={pageKey} slot="before-content" />
     <div data-vmenu-dev-slot="before-content" />
+    <PluginComponentSlot plugins={objectData?.installedPlugins} pageKey={pageKey} slot="before-menu" />
     <CustomComponents objectData={objectData} placement="before-menu" pageKey={pageKey} />
     <Outlet />
     <CustomComponents objectData={objectData} placement="after-menu" pageKey={pageKey} />
+    <PluginComponentSlot plugins={objectData?.installedPlugins} pageKey={pageKey} slot="after-menu" />
     <div data-vmenu-dev-slot="after-content" />
+    <PluginComponentSlot plugins={objectData?.installedPlugins} pageKey={pageKey} slot="after-content" />
+    <ConsentManager objectId={objectId} requirements={consentRequirements} consent={consent} setup={consentSetup} branding={branding} onChange={setConsent} />
   </div>;
 }

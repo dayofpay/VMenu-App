@@ -1,0 +1,14 @@
+.vmenu-plugin-component-slot { width:min(100% - 28px,var(--vm-content-width,1180px)); margin:14px auto; display:grid; gap:12px; }
+.vmenu-plugin-component { --vmenu-plugin-accent:var(--vm-theme-primary,#0c8a6a); display:flex; align-items:center; gap:13px; padding:15px 16px; border:1px solid color-mix(in srgb,var(--vmenu-plugin-accent) 22%,var(--vm-theme-border,#e5e7eb)); border-radius:var(--vm-radius,18px); background:var(--vm-theme-surface,#fff); color:var(--vm-theme-text,#18231f); box-shadow:0 10px 28px rgba(24,35,31,.07); }
+.vmenu-plugin-component.type-banner { background:linear-gradient(135deg,color-mix(in srgb,var(--vmenu-plugin-accent) 11%,var(--vm-theme-surface,#fff)),var(--vm-theme-surface,#fff)); }
+.vmenu-plugin-component.type-notice { border-style:dashed; }
+.vmenu-plugin-component.type-action { border-color:var(--vmenu-plugin-accent); }
+.vmenu-plugin-component-icon { width:42px; height:42px; flex:0 0 42px; display:grid; place-items:center; overflow:hidden; border-radius:12px; color:var(--vmenu-plugin-accent); background:color-mix(in srgb,var(--vmenu-plugin-accent) 12%,transparent); font-size:20px; }
+.vmenu-plugin-component-icon img { width:100%; height:100%; object-fit:cover; }
+.vmenu-plugin-component-copy { min-width:0; flex:1; }
+.vmenu-plugin-component-copy strong,.vmenu-plugin-component-copy b { display:block; font-family:var(--vm-theme-heading-font,inherit); }
+.vmenu-plugin-component-copy b { color:var(--vmenu-plugin-accent); font-size:20px; }
+.vmenu-plugin-component-copy p { margin:3px 0; color:var(--vm-theme-muted,#667085); line-height:1.45; }
+.vmenu-plugin-component-copy small { color:var(--vm-theme-muted,#667085); opacity:.75; }
+.vmenu-plugin-component > a { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:0 15px; border-radius:999px; background:var(--vmenu-plugin-accent); color:#fff; text-decoration:none; font-weight:700; }
+@media (max-width:600px) { .vmenu-plugin-component { align-items:flex-start; flex-wrap:wrap; }.vmenu-plugin-component > a { width:100%; } }

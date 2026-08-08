@@ -14,6 +14,7 @@ import { ProductDetailsKeys } from "../../../../keys/formKeys";
 import { ALLERGENES_LIST } from "../../../../utils/regulations";
 import { getProductAddonsList } from "../../../../services/productServices";
 import ProductAddons from "../../Plugins/Addons";
+import { emitVMenuEvent } from "../../../Experience/vmenuDevApi";
 
 const CROLanding = ({ objectData }) => {
   const [expandedCategories, setExpandedCategories] = useState({});
@@ -119,6 +120,17 @@ const CROLanding = ({ objectData }) => {
     setSelectedProduct(product);
     setProductQuantity(1);
     setModalOpen(true);
+    const price = Number(product.item_price || 0);
+    const discount = Number(product.discount_percentage || 0);
+    const detail = {
+      contentId: product.item_id,
+      contentName: product.item_name,
+      category: Array.isArray(product.category_names) ? product.category_names[0] || '' : '',
+      value: discount > 0 ? price * (100 - discount) / 100 : price,
+      currency: product.item_currency || 'EUR',
+    };
+    emitVMenuEvent('product.viewed', detail);
+    emitVMenuEvent('ViewContent', detail);
   };
   
   const closeModal = () => {
@@ -134,10 +146,19 @@ const CROLanding = ({ objectData }) => {
     
     try {
       if (!productExists) {
+        const price = Number(selectedProduct.item_price || 0);
+        const discount = Number(selectedProduct.discount_percentage || 0);
+        const finalPrice = discount > 0 ? price * (100 - discount) / 100 : price;
         await cartUpdateHandler({
           [ProductDetailsKeys.PRODUCT_ID]: selectedProduct.item_id,
           [ProductDetailsKeys.PRODUCT_QUANTITY]: productQuantity
-        }, () => {});
+        }, () => {}, {
+          contentName: selectedProduct.item_name,
+          category: Array.isArray(selectedProduct.category_names) ? selectedProduct.category_names[0] || '' : '',
+          quantity: productQuantity,
+          value: finalPrice * productQuantity,
+          currency: selectedProduct.item_currency || 'EUR',
+        });
         do_action("add_to_cart", { product_id: selectedProduct.item_id });
         setProductExists(true);
         

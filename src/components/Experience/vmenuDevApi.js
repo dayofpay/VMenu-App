@@ -1,4 +1,5 @@
 import { getEnv } from '../../utils/appData';
+import { consentAllows, normalizeConsentRequirements, readConsent } from './consentStorage';
 
 const clone = (value) => {
   try { return structuredClone(value); } catch { return JSON.parse(JSON.stringify(value ?? null)); }
@@ -6,7 +7,11 @@ const clone = (value) => {
 
 const safeStorageKey = (objectId, key) => `vmenu_dev_${objectId}_${String(key || '').replace(/[^a-zA-Z0-9_.-]/g, '').slice(0, 80)}`;
 
-export function createVMenuDevApi({ objectData, pageKey, theme, branding, root }) {
+export function emitVMenuEvent(name, detail = {}) {
+  window.dispatchEvent(new CustomEvent(`vmenu:${String(name || '').slice(0, 100)}`, { detail: clone(detail) }));
+}
+
+export function createVMenuDevApi({ objectData, pageKey, theme, branding, root, consentRequirements = [], consentSnapshot }) {
   const objectId = Number(JSON.parse(localStorage.getItem('restaurantId') || 'null')) || null;
   const cleanups = [];
 
@@ -20,7 +25,7 @@ export function createVMenuDevApi({ objectData, pageKey, theme, branding, root }
       return unsubscribe;
     },
     emit(name, detail = {}) {
-      window.dispatchEvent(new CustomEvent(`vmenu:${String(name || '').slice(0, 100)}`, { detail: clone(detail) }));
+      emitVMenuEvent(name, detail);
     },
   };
 
@@ -53,6 +58,11 @@ export function createVMenuDevApi({ objectData, pageKey, theme, branding, root }
       settings: () => clone(theme),
     }),
     branding: Object.freeze({ get: () => clone(branding) }),
+    consent: Object.freeze({
+      get: () => clone(consentSnapshot || readConsent(objectId)),
+      allows: (category) => consentAllows(String(category || ''), objectId, consentSnapshot),
+      required: () => normalizeConsentRequirements(consentRequirements),
+    }),
     events: Object.freeze(events),
     storage: Object.freeze({
       get(key, fallback = null) {

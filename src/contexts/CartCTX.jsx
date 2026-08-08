@@ -1,12 +1,12 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { createContext, useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 import * as storage from '../utils/memory';
 import { CheckoutKeys } from "../keys/formKeys";
 import { getEnv } from "../utils/appData";
+import { emitVMenuEvent } from '../components/Experience/vmenuDevApi';
 
 export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
-    const navigate = useNavigate();
     const [objectData, setObjectData] = useState(null);
     
     
@@ -46,19 +46,35 @@ export const CartProvider = ({ children }) => {
         return () => window.removeEventListener('storage', handleStorageChange);
     }, []);
 
-    const cartUpdateHandler = (data, setProductExists) => {
+    const cartUpdateHandler = (data, setProductExists, trackingData = {}) => {
+        let itemAdded = false;
         const createCart = () => {
             storage.setItem('cart', [data]);
+            itemAdded = true;
         };
         const updateCart = (cartObj) => {
             const productExists = cartObj.some((product) => product?.productId === data.productId);
             if (!productExists) {
                 storage.setItem('cart', [...cartObj, data]);
+                itemAdded = true;
             }
         };
         setProductExists(true);
         const cartObj = storage.getItem('cart');
         cartObj === null ? createCart() : updateCart(cartObj);
+        if (itemAdded) {
+            const quantity = Math.max(1, Number(data.productQuantity || trackingData.quantity || 1));
+            const detail = {
+                contentId: data.productId,
+                contentName: String(trackingData.contentName || ''),
+                category: String(trackingData.category || ''),
+                quantity,
+                value: Number(trackingData.value || 0),
+                currency: String(trackingData.currency || ''),
+            };
+            emitVMenuEvent('cart.item_added', detail);
+            emitVMenuEvent('AddToCart', detail);
+        }
     };
 
     const cartDeleteHandler = (data, setProductExists) => {
@@ -127,6 +143,30 @@ const checkoutHandler = async (formData) => {
       if (!response.ok) throw new Error('Грешка при създаване на поръчка');
       
       const data = await response.json();
+      const products = Array.isArray(objectData?.allProducts) ? objectData.allProducts : [];
+      const productValue = cart.reduce((total, item) => {
+        const product = products.find((candidate) => String(candidate.item_id) === String(item.productId));
+        if (!product) return total;
+        const price = Number(product.item_price || 0);
+        const discount = Number(product.discount_percentage || 0);
+        const finalPrice = discount > 0 ? price * (100 - discount) / 100 : price;
+        return total + finalPrice * Math.max(1, Number(item.productQuantity || 1));
+      }, 0);
+      const addonsValue = selectedAddons.reduce((total, addon) => total + Number(addon?.addons?.addon_price || 0) * Math.max(1, Number(addon?.addons?.addon_quantity || 1)), 0);
+      const purchaseEvent = {
+        orderId: data.orderId,
+        objectId: Number(objectId),
+        paymentMethod: 'CASH',
+        value: Math.max(0, productValue + addonsValue - Number(appliedDiscount?.amount || 0)),
+        currency: objectData?.objectInformation?.object_currency || products[0]?.item_currency || 'EUR',
+        contentIds: cart.map((item) => item.productId).filter((item) => item != null),
+        numItems: cart.reduce((total, item) => total + Math.max(1, Number(item.productQuantity || 1)), 0),
+        source: 'digital_menu',
+        completedAt: new Date().toISOString(),
+      };
+      emitVMenuEvent('order.created', purchaseEvent);
+      emitVMenuEvent('purchase.completed', purchaseEvent);
+      emitVMenuEvent('PurchaseEvent', purchaseEvent);
       
       
       localStorage.removeItem('cart');
@@ -194,6 +234,10 @@ const checkoutHandler = async (formData) => {
             {children}
         </CartContext.Provider>
     );
+};
+
+CartProvider.propTypes = {
+    children: PropTypes.node.isRequired,
 };
 
 CartContext.displayName = 'CartContext';

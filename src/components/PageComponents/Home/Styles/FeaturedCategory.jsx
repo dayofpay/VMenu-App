@@ -19,6 +19,7 @@ import PERK_LIST from "../../../../utils/perkAddons";
 import { getProductsByCategory } from "../../../../services/productServices";
 import { CooldownContext } from "../../../../contexts/CoolDownCTX";
 import ShowTranslateAPI from "../../Plugins/TranslateAPI";
+import GuestAiButton from "../../../GuestAi/GuestAiButton";
 import "../../../Styles/TranslateAPI.css";
 import { formatPrice, formatDiscountedPrice } from "../../../../utils/pricingUtils";
 import { ProductHasDiscount } from "../../../../utils/DateUtils";
@@ -199,6 +200,7 @@ const HomeContent = ({ objectData }) => {
     </div>
         </>
       )}
+      <GuestAiButton objectData={objectData} />
       <div
         className="modal fade"
         id="callModal"

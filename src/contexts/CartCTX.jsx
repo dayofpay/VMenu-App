@@ -137,12 +137,12 @@ const checkoutHandler = async (formData) => {
           cartData: cart,
           item_addons: selectedAddons,
           discountData: appliedDiscount,
+          checkoutFields: formData.__vmenuCheckoutFields || {},
         }),
       });
 
-      if (!response.ok) throw new Error('Грешка при създаване на поръчка');
-      
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || 'Грешка при създаване на поръчка');
       const products = Array.isArray(objectData?.allProducts) ? objectData.allProducts : [];
       const productValue = cart.reduce((total, item) => {
         const product = products.find((candidate) => String(candidate.item_id) === String(item.productId));
@@ -213,6 +213,7 @@ const checkoutHandler = async (formData) => {
           cartData: cart,
           item_addons: selectedAddons,
           discountData: appliedDiscount,
+          checkoutFields: formData.__vmenuCheckoutFields || {},
         }
       };
     }

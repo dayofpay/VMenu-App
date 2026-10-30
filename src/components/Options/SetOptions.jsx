@@ -11,6 +11,7 @@ const SetOptions = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let active = true;
     const previewMode = new URLSearchParams(window.location.search).get('preview') === '1';
     const safeMode = new URLSearchParams(window.location.search).get('safe_mode') === '1';
     if (previewMode) sessionStorage.setItem('vmenuPreviewMode', '1');
@@ -25,6 +26,7 @@ const SetOptions = () => {
 
     const APP_NEW_VISITOR = async () => {
        await createVisitor().then((result) => {
+        if (!active) return;
         if(result.hasError){
           console.log('has error',result);
           
@@ -45,11 +47,12 @@ const SetOptions = () => {
           
           storage.setItem('visitorData', result);
           storage.setItem('user_token', result.user_token);
+          navigate('/', { replace: true });
         }
       });
     }
     APP_NEW_VISITOR();
-    navigate('/');
+    return () => { active = false; };
   // Persisted setters are intentionally excluded because this legacy hook recreates them on every render.
   }, [navigate, objectId, tableId]); // eslint-disable-line react-hooks/exhaustive-deps
 

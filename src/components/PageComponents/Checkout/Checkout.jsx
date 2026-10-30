@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useMemo } from "react";
 import PropTypes from 'prop-types';
 import withObjectData from "../../../HOC/withObjectInfo";
 import useForm from "../../../hooks/useForm";
@@ -30,6 +30,10 @@ const ShowCheckout = ({ objectData }) => {
   const [clientSecret, setClientSecret] = useState(null); 
   const navigate = useNavigate();
   const menuLanguage = getMenuLanguage();
+  const checkoutFields = useMemo(() => (Array.isArray(objectData?.installedPlugins) ? objectData.installedPlugins : [])
+    .flatMap((plugin) => (Array.isArray(plugin?.checkoutFields) ? plugin.checkoutFields : []))
+    .filter((field) => field?.key && field?.id && field?.label), [objectData?.installedPlugins]);
+  const [checkoutFieldValues, setCheckoutFieldValues] = useState({});
 
   const { values, onChange } = useForm(null, {
     [CheckoutKeys.CHECKOUT_NAME]: "",
@@ -45,6 +49,35 @@ const ShowCheckout = ({ objectData }) => {
       setAppliedDiscount(savedDiscount);
     }
   }, []);
+
+  useEffect(() => {
+    setCheckoutFieldValues((current) => {
+      const next = checkoutFields.reduce((result, field) => {
+        result[field.key] = Object.prototype.hasOwnProperty.call(current, field.key)
+        ? current[field.key]
+        : (field.default ?? (field.type === 'checkbox' ? false : ''));
+        return result;
+      }, {});
+      const currentKeys = Object.keys(current);
+      const nextKeys = Object.keys(next);
+      const unchanged = currentKeys.length === nextKeys.length
+        && nextKeys.every((key) => Object.is(current[key], next[key]));
+      return unchanged ? current : next;
+    });
+  }, [checkoutFields]);
+
+  const updateCheckoutField = (field, event) => {
+    const value = field.type === 'checkbox' ? event.target.checked : event.target.value;
+    setCheckoutFieldValues((current) => ({ ...current, [field.key]: value }));
+    setErrors((current) => ({ ...current, [field.key]: undefined }));
+  };
+
+  const checkoutFieldDisplayValue = (field) => {
+    const value = checkoutFieldValues[field.key];
+    if (field.type === 'checkbox') return value ? 'Да' : 'Не';
+    if (field.type === 'select') return field.options?.find((option) => option.value === value)?.label || '';
+    return value == null ? '' : String(value);
+  };
 
   
   const calculateCartTotals = () => {
@@ -78,7 +111,10 @@ const ShowCheckout = ({ objectData }) => {
       setLoading(true);
 
       
-      const result = await checkoutHandler(formData);
+      const result = await checkoutHandler({
+        ...formData,
+        __vmenuCheckoutFields: checkoutFieldValues,
+      });
 
       if (result.type === 'CASH') {
         navigate(PATH_LIST.FINAL_CHECKOUT);
@@ -144,6 +180,7 @@ const ShowCheckout = ({ objectData }) => {
           cartData: paymentData.cartData,
           item_addons: paymentData.item_addons,
           discountData: paymentData.discountData,
+          checkoutFields: paymentData.checkoutFields,
           paymentIntentId: paymentIntent.id, 
         }),
       });
@@ -221,6 +258,24 @@ const handlePaymentError = (error) => {
           newErrors[key] = Validations.Required_Field;
         } else if (rules.regex && value && !rules.regex.test(value)) {
           newErrors[key] = Validations.Invalid_Format;
+        }
+      });
+
+      checkoutFields.forEach((field) => {
+        const value = checkoutFieldValues[field.key];
+        const isEmpty = field.type === 'checkbox' ? value !== true : String(value ?? '').trim() === '';
+        if (field.required && isEmpty) {
+          newErrors[field.key] = Validations.Required_Field;
+          return;
+        }
+        if (!isEmpty && field.maxLength && String(value).length > field.maxLength) {
+          newErrors[field.key] = Validations.Invalid_Format;
+        }
+        if (!isEmpty && field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value))) {
+          newErrors[field.key] = Validations.Invalid_Format;
+        }
+        if (!isEmpty && field.type === 'tel' && !/^[+()0-9\s.-]{3,40}$/.test(String(value))) {
+          newErrors[field.key] = Validations.Invalid_Format;
         }
       });
 
@@ -569,6 +624,83 @@ const handlePaymentError = (error) => {
                 />
               </div>
 
+              {checkoutFields.length > 0 && (
+                <section className="vm-plugin-checkout-fields" aria-labelledby="vm-plugin-checkout-fields-title">
+                  <div className="vm-plugin-checkout-fields-heading">
+                    <div>
+                      <h3 id="vm-plugin-checkout-fields-title">Допълнителна информация</h3>
+                      <p>Попълнете полетата, които са полезни за тази поръчка.</p>
+                    </div>
+                    <span>{checkoutFields.length}</span>
+                  </div>
+
+                  {checkoutFields.map((field) => {
+                    const helpId = `checkout-field-help-${field.plugin?.id || 'plugin'}-${field.id}`;
+                    const commonProps = {
+                      id: field.key,
+                      name: field.key,
+                      value: checkoutFieldValues[field.key] ?? '',
+                      onChange: (event) => updateCheckoutField(field, event),
+                      placeholder: field.placeholder || '',
+                      required: field.required,
+                      'aria-describedby': field.help ? helpId : undefined,
+                      'aria-invalid': Boolean(errors[field.key]),
+                      style: styles.inputField,
+                    };
+                    return (
+                      <div className="vm-field vm-plugin-checkout-field" style={styles.inputGroup} key={field.key}>
+                        {field.type === 'checkbox' ? (
+                          <label className="vm-plugin-checkout-checkbox">
+                            <input
+                              id={field.key}
+                              name={field.key}
+                              type="checkbox"
+                              checked={checkoutFieldValues[field.key] === true}
+                              onChange={(event) => updateCheckoutField(field, event)}
+                              required={field.required}
+                              aria-describedby={field.help ? helpId : undefined}
+                              aria-invalid={Boolean(errors[field.key])}
+                            />
+                            <span>{field.label}{field.required ? ' *' : ''}</span>
+                          </label>
+                        ) : (
+                          <>
+                            <label htmlFor={field.key} style={styles.inputLabel}>
+                              {field.label}{field.required ? ' *' : ''}
+                            </label>
+                            {field.type === 'textarea' ? (
+                              <textarea {...commonProps} maxLength={field.maxLength} style={{ ...styles.inputField, ...styles.textArea }} />
+                            ) : field.type === 'select' ? (
+                              <select {...commonProps}>
+                                <option value="">{field.placeholder || 'Изберете'}</option>
+                                {(field.options || []).map((option) => (
+                                  <option value={option.value} key={option.value}>{option.label}</option>
+                                ))}
+                              </select>
+                            ) : (
+                              <input
+                                {...commonProps}
+                                type={field.type}
+                                min={field.min ?? undefined}
+                                max={field.max ?? undefined}
+                                maxLength={['text', 'email', 'tel'].includes(field.type) ? field.maxLength : undefined}
+                              />
+                            )}
+                          </>
+                        )}
+                        {field.help && <small className="vm-plugin-checkout-help" id={helpId}>{field.help}</small>}
+                        {field.plugin?.name && <small className="vm-plugin-checkout-source">Добавено от {field.plugin.name}</small>}
+                        {errors[field.key] && (
+                          <div style={styles.errorMessage}>
+                            <ErrorIcon /> {errors[field.key]}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </section>
+              )}
+
               <button className="vm-btn vm-btn-primary notranslate" translate="no" onClick={handleNextStep} style={{ ...styles.button, ...styles.buttonPrimary }}>
                 {menuLanguage.Finalize_Order.Form_Fields.Personal_Data.Proceed_To_Payment}
               </button>
@@ -665,6 +797,22 @@ const handlePaymentError = (error) => {
                     </div>
                   </div>
                 ))}
+
+                {checkoutFields
+                  .filter((field) => field.type === 'checkbox' || checkoutFieldDisplayValue(field))
+                  .map((field) => (
+                    <div key={field.key} className="vm-confirmation-item" style={styles.summaryItem}>
+                      <div style={styles.summaryIcon}>
+                        <svg width="20" height="20" viewBox="0 0 24 24">
+                          <path fill="currentColor" d="M9 11.24V7.5C9 5.57 10.57 4 12.5 4S16 5.57 16 7.5v3.74c1.21.72 2 2.03 2 3.51A4.25 4.25 0 0 1 13.75 19h-2.5A4.25 4.25 0 0 1 7 14.75c0-1.48.79-2.79 2-3.51zm2-.69c.48-.09.98-.09 1.5-.09s1.02 0 1.5.09V7.5a1.5 1.5 0 0 0-3 0v3.05z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div style={styles.summaryLabel}>{field.label}</div>
+                        <div style={styles.summaryValue}>{checkoutFieldDisplayValue(field)}</div>
+                      </div>
+                    </div>
+                  ))}
 
                 {appliedDiscount && (
                   <div className="vm-confirmation-item" style={styles.summaryItem}>
@@ -851,6 +999,15 @@ ShowCheckout.propTypes = {
     objectInformation: PropTypes.shape({
       object_currency: PropTypes.string,
     }),
+    installedPlugins: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      checkoutFields: PropTypes.arrayOf(PropTypes.shape({
+        key: PropTypes.string,
+        id: PropTypes.string,
+        label: PropTypes.string,
+        type: PropTypes.string,
+      })),
+    })),
   }).isRequired,
 };
 

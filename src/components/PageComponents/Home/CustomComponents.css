@@ -17,6 +17,12 @@
   color: var(--component-text);
 }
 
+.vmenu-plugin-template-element { width: 100%; min-width: 0; }
+.vmenu-plugin-template-element a { text-decoration: none; transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease; }
+.vmenu-plugin-template-element a:hover { transform: translateY(-1px); opacity: .94; }
+.vmenu-plugin-template-element img { display: block; max-width: 100%; height: auto; }
+.vmenu-plugin-template-element button { font: inherit; cursor: pointer; }
+
 .vmenu-custom-component.theme-primary { --component-accent: var(--vm-theme-accent, #f59e0b); --component-bg: linear-gradient(135deg, var(--vm-theme-primary, #2563eb), var(--vm-theme-secondary, #0ea5e9)); --component-text: #fff; }
 .vmenu-custom-component.theme-soft { --component-accent: var(--vm-theme-secondary, #7c3aed); --component-bg: color-mix(in srgb, var(--vm-theme-primary, #7c3aed) 8%, var(--vm-theme-surface, #fff)); --component-text: var(--vm-theme-text, #312e81); }
 .vmenu-custom-component.theme-dark { --component-accent: #f59e0b; --component-bg: #172033; --component-text: #fff; }

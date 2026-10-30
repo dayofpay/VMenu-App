@@ -18,25 +18,18 @@
   <!-- Favicons Icon -->
   <link rel="shortcut icon" type="image/x-icon" id="objectLogo" href="">
 
-  <!-- Dynamically set the manifest file -->
+  <!-- The Premium PWA manifest is attached by React after the object plan and settings are verified. -->
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const objectId = Number(JSON.parse(localStorage.getItem('restaurantId'))) || 1;
-    const tableId = Number(JSON.parse(localStorage.getItem('tableId'))) || 1;
-    const isLocalDevelopment = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-    const manifestUrl = isLocalDevelopment
-      ? '/assets/manifest.json'
-      : `https://v-menu.eu/api/manifest/${objectId}/${tableId}`;
-    const objectLogo_API = `https://v-menu.eu/api/objectLogo/${objectId}`;
+    const storedObjectId = Number(JSON.parse(localStorage.getItem('restaurantId') || 'null'));
+    const objectLogo_API = `https://v-menu.eu/api/objectLogo/${storedObjectId}`;
     const objectLogo = document.getElementById('objectLogo');
-    fetch(objectLogo_API)
+    if (storedObjectId > 0) fetch(objectLogo_API)
       .then(response => response.json())
       .then(data => {
-        objectLogo.href = `https://v-menu.eu/uploads/${data.logo}`;
-      });
-    document.write('<link rel="manifest" href="' + manifestUrl + '">');
+        if (data.logo) objectLogo.href = `https://v-menu.eu/uploads/${data.logo}`;
+      })
+      .catch(() => {});
   </script>
-  <!-- End of manifest script -->
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">

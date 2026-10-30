@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useMemo, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import PwaManager from '../Utils/PWAInitialize';
 import { getObjectData } from '../../services/objectServices';
 import { getEnv } from '../../utils/appData';
 import CustomComponents from '../PageComponents/Home/CustomComponents';
@@ -38,6 +39,7 @@ const GOOGLE_FONTS = new Set(['Inter', 'Roboto', 'Montserrat', 'Playfair Display
 const assetUrl = (value) => {
   const url = String(value || '').trim();
   if (url.startsWith('/uploads/')) return `${getEnv()}${url}`;
+  if (/^[A-Za-z0-9._-]+$/.test(url)) return `${getEnv()}/uploads/${url}`;
   return /^https?:\/\//i.test(url) ? url : '';
 };
 
@@ -262,7 +264,10 @@ export default function ExperienceLayout() {
     return () => window.removeEventListener('message', onMessage);
   }, [previewMode]);
 
-  const settings = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS || {};
+  const settings = useMemo(
+    () => objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS || {},
+    [objectData],
+  );
   const theme = settings.THEME_BUILDER || {};
   const branding = settings.BRANDING_SETUP || {};
   const consentSetup = settings.CONSENT_SETUP || {};
@@ -291,13 +296,14 @@ export default function ExperienceLayout() {
   };
 
   useEffect(() => {
-    const favicon = branding.enabled ? assetUrl(branding.faviconUrl) : '';
+    const brandedFavicon = branding.enabled ? assetUrl(branding.faviconUrl) : '';
+    const favicon = brandedFavicon || assetUrl(objectData?.objectInformation?.object_image);
     const link = document.getElementById('objectLogo');
     if (!favicon || !link) return undefined;
     const previousHref = link.href;
     link.href = favicon;
     return () => { link.href = previousHref; };
-  }, [branding.enabled, branding.faviconUrl]);
+  }, [branding.enabled, branding.faviconUrl, objectData?.objectInformation?.object_image]);
 
   useEffect(() => {
     if (theme.enabled === false) return undefined;
@@ -322,6 +328,7 @@ export default function ExperienceLayout() {
   ].filter(Boolean).join(' ');
 
   return <div className={themeClasses} style={style} data-page={pageKey}>
+    <PwaManager objectData={objectData} pageKey={pageKey} />
     {customCss && <style id="custom-landing-page-css" data-vmenu-object-style="true">{customCss}</style>}
     <ScriptRuntime settings={settings.SCRIPT_INJECTION} pageKey={pageKey} previewMode={previewMode} objectId={objectId} consent={consent} />
     <DeveloperScriptRuntime workspace={settings.DEVELOPER_SCRIPTS} objectData={objectData} pageKey={pageKey} theme={theme} branding={branding} objectId={objectId} consent={consent} consentRequirements={consentRequirements} />

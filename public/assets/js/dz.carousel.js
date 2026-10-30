@@ -10,12 +10,26 @@
 **/
 
 /* JavaScript Document */
-jQuery(document).ready(function() {
+// React recreates page nodes on navigation. Reuse scripts, initialize each new node.
+window.VMenuCarousels = (function () {
+  function init() {
+    if (typeof window.Swiper !== 'function') return [];
+    var instances = [];
+    function createSwiper(selector, options) {
+      var matches = Array.from(document.querySelectorAll(selector)).map(function (element) {
+        var instance = element.swiper;
+        if (!instance || instance.destroyed) instance = new window.Swiper(element, options);
+        else instance.update();
+        instances.push(instance);
+        return instance;
+      });
+      return matches.length === 1 ? matches[0] : matches;
+    }
     'use strict';
 	
     // Get Started ==========
     if(jQuery('.get-started').length > 0){
-		var swiperGetStarted = new Swiper('.get-started', {
+		var swiperGetStarted = createSwiper('.get-started', {
 			speed: 1500,
 			parallax: true,
 			slidesPerView: "auto",
@@ -30,7 +44,7 @@ jQuery(document).ready(function() {
 	}
 	
 	if(jQuery('.recomand-swiper').length > 0){
-		var swiperRecomandSwiper = new Swiper('.recomand-swiper', {
+		var swiperRecomandSwiper = createSwiper('.recomand-swiper', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 1.2,
@@ -60,7 +74,7 @@ jQuery(document).ready(function() {
 	}
     
 	if(jQuery('.categorie-swiper').length > 0){
-		var swiper4 = new Swiper('.categorie-swiper', {
+		var swiper4 = createSwiper('.categorie-swiper', {
 			speed: 1500,
 			parallax: true,
 			slidesPerView: "auto",
@@ -70,7 +84,7 @@ jQuery(document).ready(function() {
 	}
 	
 	if(jQuery('.recomanded-swiper').length > 0){
-		var swiperGetStarted = new Swiper('.recomanded-swiper', {
+		var swiperGetStarted = createSwiper('.recomanded-swiper', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 'auto',
@@ -89,7 +103,7 @@ jQuery(document).ready(function() {
 	
 	// Team Swiper
 	if(jQuery('.demo-swiper').length > 0){
-		var swiper4 = new Swiper('.demo-swiper', {
+		var swiper4 = createSwiper('.demo-swiper', {
 			speed: 1500,
 			parallax: true,
 			slidesPerView: "auto",
@@ -108,7 +122,7 @@ jQuery(document).ready(function() {
 	}
 	
 	if(jQuery('.offer-swiper').length > 0){
-		var swiperGetStarted = new Swiper('.offer-swiper', {
+		var swiperGetStarted = createSwiper('.offer-swiper', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 'auto',
@@ -118,7 +132,7 @@ jQuery(document).ready(function() {
 	}
 	
 	if(jQuery('.team-swiper-4').length > 0){
-		var swiper4 = new Swiper('.team-swiper-4', {
+		var swiper4 = createSwiper('.team-swiper-4', {
 			speed: 1500,
 			parallax: true,
 			slidesPerView: "auto",
@@ -129,7 +143,7 @@ jQuery(document).ready(function() {
 	
 	//Ecommerce Swiper ===
 	if(jQuery('.ecommerce-swiper1').length > 0){
-		var swiperRecomandSwiper = new Swiper('.ecommerce-swiper1', {
+		var swiperRecomandSwiper = createSwiper('.ecommerce-swiper1', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 1.2,
@@ -149,7 +163,7 @@ jQuery(document).ready(function() {
 	
 	//Milk Swiper ===
 	if(jQuery('.milk-swiper').length > 0){
-		var swiperRecomandSwiper = new Swiper('.milk-swiper', {
+		var swiperRecomandSwiper = createSwiper('.milk-swiper', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 1,
@@ -169,7 +183,7 @@ jQuery(document).ready(function() {
 	
 	//Milk Swiper ===
 	if(jQuery('.milk-swiper2').length > 0){
-		var swiperRecomandSwiper = new Swiper('.milk-swiper2', {
+		var swiperRecomandSwiper = createSwiper('.milk-swiper2', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 1,
@@ -191,7 +205,7 @@ jQuery(document).ready(function() {
 	
 	//Fruit Swiper ===
 	if(jQuery('.fruit-swiper').length > 0){
-		var swiperRecomandSwiper = new Swiper('.fruit-swiper', {
+		var swiperRecomandSwiper = createSwiper('.fruit-swiper', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 1.2,
@@ -211,7 +225,7 @@ jQuery(document).ready(function() {
 	
 	//Fruit Swiper2 ===
 	if(jQuery('.fruit-swiper2').length > 0){
-		var swiperRecomandSwiper = new Swiper('.fruit-swiper2', {
+		var swiperRecomandSwiper = createSwiper('.fruit-swiper2', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 1,
@@ -231,7 +245,7 @@ jQuery(document).ready(function() {
 	
 	//Meat Swiper ===
 	if(jQuery('.meat-swiper').length > 0){
-		var swiperMeatSwiper = new Swiper('.meat-swiper',{
+		var swiperMeatSwiper = createSwiper('.meat-swiper',{
 			speed: 500,
 			parallax: true,
 			slidesPerView: 'auto',
@@ -252,7 +266,7 @@ jQuery(document).ready(function() {
 	}
 	
 	if(jQuery('.product-swiper').length > 0){
-		var swiperRecomandSwiper = new Swiper('.product-swiper', {
+		var swiperRecomandSwiper = createSwiper('.product-swiper', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 'auto',
@@ -270,7 +284,7 @@ jQuery(document).ready(function() {
 	}
 	
 	if(jQuery('.item-swiper').length > 0){
-		var swiper4 = new Swiper('.item-swiper', {
+		var swiper4 = createSwiper('.item-swiper', {
 			speed: 1500,
 			parallax: true,
 			slidesPerView: "auto",
@@ -280,7 +294,7 @@ jQuery(document).ready(function() {
 	}
 	
 	if(jQuery('.item-swiper2').length > 0){
-		var swiper = new Swiper(".item-swiper2", {
+		var swiper = createSwiper(".item-swiper2", {
 			direction: "vertical",
 			loop: false,
 			slidesPerView: 'auto',
@@ -288,7 +302,7 @@ jQuery(document).ready(function() {
 			freeMode: true,
 			watchSlidesProgress: true,
 		});
-		var swiper2 = new Swiper(".item-swiper3", {
+		var swiper2 = createSwiper(".item-swiper3", {
 			loop: true,
 			spaceBetween: 0,
 			thumbs: {
@@ -299,7 +313,7 @@ jQuery(document).ready(function() {
 	
 	//Restaurant Swiper ====
 	if(jQuery('.offer-swiper1').length > 0){
-		var swiperRecomandSwiper = new Swiper('.offer-swiper1', {
+		var swiperRecomandSwiper = createSwiper('.offer-swiper1', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 'auto',
@@ -310,7 +324,7 @@ jQuery(document).ready(function() {
 	
 	//Offer Swiper ====
 	if(jQuery('.offer-swiper2').length > 0){
-		var swiperRecomandSwiper = new Swiper('.offer-swiper2', {
+		var swiperRecomandSwiper = createSwiper('.offer-swiper2', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 'auto',
@@ -322,7 +336,7 @@ jQuery(document).ready(function() {
 	// Welcome page Work Strat ======
 	//Package swiper ===
 	if(jQuery('.package-swiper').length > 0){
-		var swiperRecomandSwiper = new Swiper('.package-swiper', {
+		var swiperRecomandSwiper = createSwiper('.package-swiper', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 'auto',
@@ -333,7 +347,7 @@ jQuery(document).ready(function() {
 	
 	//Client swiper ===
 	if(jQuery('.client-swiper').length > 0){
-		var swiperRecomandSwiper = new Swiper('.client-swiper', {
+		var swiperRecomandSwiper = createSwiper('.client-swiper', {
 			speed: 500,
 			parallax: true,
 			slidesPerView: 'auto',
@@ -341,5 +355,9 @@ jQuery(document).ready(function() {
 			loop: false,
 		});
 	} 
-});
+    return instances;
+  }
+  return { init: init };
+})();
+jQuery(document).ready(function () { window.VMenuCarousels.init(); });
 /* Document .ready END */

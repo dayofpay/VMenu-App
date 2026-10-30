@@ -7,7 +7,6 @@ import Header from "../components/Headers/default"
 import HomeV2 from "../components/PageComponents/Home/content"
 import withObjectData from "../HOC/withObjectInfo"
 import LoadingAnimation from "../components/Animations/Loading"
-import PWAFooter from "../components/Utils/PWAInitialize"
 import { getMenuLanguage } from "../services/appServices"
 import { interpolateString } from "../utils/stringUtiils"
 
@@ -29,7 +28,6 @@ function ShowHome({objectData}){
         <DefaultBanner objectData={objectData}/>
         <HomeV2 objectData={objectData}/>
         <ShowAppMenu objectData={objectData}/>
-        {/* TEMPORARY DISABLED <PWAFooter objectData={objectData}/> */}
         </>
     )
 }

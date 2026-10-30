@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { APP_PAGES } from '../../utils/pageData';
 
 const COMMON_SCRIPTS = [
@@ -7,7 +7,7 @@ const COMMON_SCRIPTS = [
   '/assets/vendor/bootstrap/js/bootstrap.bundle.min.js',
   '/assets/vendor/bootstrap-select/dist/js/bootstrap-select.min.js',
   '/assets/vendor/nouislider/nouislider.min.js',
-  '/assets/js/dz.carousel.js',
+  '/assets/js/dz.carousel.js?v=20261030-home1',
   '/assets/vendor/wnumb/wNumb.js',
   '/assets/js/noui-slider.init.js',
   '/assets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js',
@@ -60,8 +60,9 @@ function scriptsForPage(page) {
   return [...COMMON_SCRIPTS.slice(0, 3), ...extras.slice(0, 1), ...COMMON_SCRIPTS.slice(3), ...extras.slice(1)];
 }
 
-const ScriptLoader = ({ page }) => {
+const ScriptLoader = ({ page, objectData }) => {
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
+  const carousels = useRef(new Set());
 
   useEffect(() => {
     let active = true;
@@ -76,8 +77,27 @@ const ScriptLoader = ({ page }) => {
       }
     })();
 
-    return () => { active = false; };
+    const pageCarousels = carousels.current;
+    return () => {
+      active = false;
+      pageCarousels.forEach((instance) => {
+        if (!instance.destroyed) instance.destroy(true, true);
+      });
+      pageCarousels.clear();
+    };
   }, [page]);
+
+  useEffect(() => {
+    if (!scriptsLoaded) return undefined;
+    const frame = requestAnimationFrame(() => {
+      // Cached script files do not run document.ready again on a React remount.
+      // Also refresh after objectData arrives, so async cards are registered.
+      const instances = window.VMenuCarousels?.init() || [];
+      instances.forEach((instance) => carousels.current.add(instance));
+      window.AOS?.refreshHard();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [scriptsLoaded, page, objectData]);
 
   return scriptsLoaded ? <span hidden data-vmenu-legacy-scripts-ready="true" /> : null;
 };

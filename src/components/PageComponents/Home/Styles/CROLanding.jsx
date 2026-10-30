@@ -6,6 +6,7 @@ import PERK_LIST from "../../../../utils/perkAddons";
 import { CallKeys } from "../../../../keys/formKeys";
 import { createCall, do_action } from "../../../../services/userServices";
 import ShowTranslateAPI from "../../Plugins/TranslateAPI";
+import GuestAiButton from "../../../GuestAi/GuestAiButton";
 import { getMenuLanguage } from "../../../../services/appServices";
 import { incrementQuantity, decrementQuantity } from "../../../../handlers/ProductQuantityHR";
 import CartContext from "../../../../contexts/CartCTX";
@@ -299,6 +300,7 @@ const CROLanding = ({ objectData }) => {
             </div>
           </>
         )}
+        <GuestAiButton objectData={objectData} />
       </div>
       
 

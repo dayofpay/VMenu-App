@@ -18,6 +18,7 @@ import { hasAddon } from "../../../../services/objectServices";
 import PERK_LIST from "../../../../utils/perkAddons";
 import { CooldownContext } from "../../../../contexts/CoolDownCTX";
 import ShowTranslateAPI from "../../Plugins/TranslateAPI";
+import GuestAiButton from "../../../GuestAi/GuestAiButton";
 import { formatPrice,convertPrice } from "../../../../utils/pricingUtils";
 import {getMenuLanguage} from "../../../../services/appServices";
 /* eslint-disable react/prop-types */
@@ -171,6 +172,7 @@ const HomeContent = ({ objectData }) => {
     </div>
         </>
       )}
+              <GuestAiButton objectData={objectData} />
               <div className="modal fade" id="callModal" style={{ display: "none" }}>
                 <div className="modal-dialog" role="document">
                   <div className="modal-content">

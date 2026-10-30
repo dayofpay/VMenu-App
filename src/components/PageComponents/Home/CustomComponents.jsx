@@ -3,6 +3,8 @@ import { getEnv } from '../../../utils/appData';
 import './CustomComponents.css';
 
 const ALLOWED_TYPES = new Set(['hero', 'text', 'notice', 'button', 'image', 'divider', 'spacer', 'quote', 'feature-list', 'contact', 'hours', 'video']);
+const PLUGIN_TEMPLATE_TAGS = new Set(['section', 'article', 'div', 'header', 'footer', 'span', 'p', 'h2', 'h3', 'h4', 'h5', 'h6', 'strong', 'em', 'small', 'ul', 'ol', 'li', 'a', 'img', 'button']);
+const PLUGIN_STYLE_PROPERTIES = new Set(['display', 'flexDirection', 'alignItems', 'justifyContent', 'gap', 'gridTemplateColumns', 'width', 'maxWidth', 'minHeight', 'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'border', 'borderWidth', 'borderStyle', 'borderColor', 'borderRadius', 'background', 'backgroundColor', 'color', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'textAlign', 'textTransform', 'boxShadow', 'opacity', 'objectFit', 'aspectRatio', 'overflow']);
 
 const safeUrl = (value) => {
   const url = String(value || '').trim();
@@ -23,7 +25,65 @@ function ComponentLink({ url, className, children }) {
   return <a href={href} className={className} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{children}</a>;
 }
 
-function CustomComponent({ component }) {
+const safePluginStyleValue = (value) => {
+  const normalized = String(value ?? '').trim().slice(0, 140);
+  return normalized && !/(?:url\s*\(|expression\s*\(|javascript:|[<>{};])/i.test(normalized) ? normalized : '';
+};
+
+const nodeStyles = (definition, node, values) => {
+  const target = node.slot || '';
+  const baseStyles = definition.baseStyles?.[target] || {};
+  const styles = Object.entries(baseStyles).reduce((result, [property, value]) => {
+    const safeValue = safePluginStyleValue(value);
+    if (PLUGIN_STYLE_PROPERTIES.has(property) && safeValue) result[property] = safeValue;
+    return result;
+  }, {});
+  (definition.controls || []).filter((control) => control.section === 'style' && control.target === target).forEach((control) => {
+    if (!PLUGIN_STYLE_PROPERTIES.has(control.cssProperty)) return;
+    const rawValue = Object.prototype.hasOwnProperty.call(values, control.key) ? values[control.key] : control.default;
+    const value = control.unit && Number.isFinite(Number(rawValue)) ? `${Number(rawValue)}${control.unit}` : safePluginStyleValue(rawValue);
+    if (value !== '') styles[control.cssProperty] = value;
+  });
+  return styles;
+};
+
+function PluginTemplateNode({ node, definition, values, path }) {
+  if (!node || !PLUGIN_TEMPLATE_TAGS.has(node.tag)) return null;
+  const Tag = node.tag;
+  const boundText = node.bind ? String(values[node.bind] ?? '') : '';
+  const className = String(node.className || '').split(/\s+/).filter((item) => /^[A-Za-z][A-Za-z0-9_-]{0,49}$/.test(item)).slice(0, 6).join(' ');
+  const elementProps = { className: className || undefined, style: nodeStyles(definition, node, values) };
+  if (Tag === 'a') {
+    const href = safeUrl(values[node.hrefBind]);
+    if (href) {
+      elementProps.href = href;
+      if (/^https?:\/\//i.test(href)) {
+        elementProps.target = '_blank';
+        elementProps.rel = 'noopener noreferrer';
+      }
+    }
+  }
+  if (Tag === 'img') {
+    const src = mediaUrl(values[node.srcBind]);
+    if (!src) return null;
+    elementProps.src = src;
+    elementProps.alt = String(values[node.altBind] || '').slice(0, 160);
+    elementProps.loading = 'lazy';
+  }
+  if (Tag === 'button') elementProps.type = 'button';
+  const children = (node.children || []).map((child, index) => <PluginTemplateNode key={`${path}-${index}`} node={child} definition={definition} values={values} path={`${path}-${index}`} />);
+  return <Tag {...elementProps}>{Tag === 'img' ? null : <>{boundText}{children}</>}</Tag>;
+}
+
+function PluginTemplateElement({ component, definition }) {
+  if (!definition?.template) return null;
+  return <div className="vmenu-custom-component vmenu-plugin-template-element" data-plugin-element={definition.type}>
+    <PluginTemplateNode node={definition.template} definition={definition} values={component.props || {}} path="root" />
+  </div>;
+}
+
+function CustomComponent({ component, pluginDefinition }) {
+  if (pluginDefinition) return <PluginTemplateElement component={component} definition={pluginDefinition} />;
   const props = component.props || {};
   const theme = ['default', 'primary', 'soft', 'dark', 'success', 'warning'].includes(props.theme) ? props.theme : 'default';
   const alignment = ['left', 'center', 'right'].includes(props.alignment) ? props.alignment : 'left';
@@ -127,11 +187,12 @@ function CustomComponent({ component }) {
 export default function CustomComponents({ objectData, placement = 'before-menu', pageKey = 'home' }) {
   const builder = objectData?.MODULES?.OBJECT_INFO?.LANDING_PAGE_SETTINGS?.COMPONENT_BUILDER;
   if (!builder?.enabled || !Array.isArray(builder.components)) return null;
+  const pluginElements = new Map((objectData?.installedPlugins || []).flatMap((plugin) => plugin?.themeBuilderElements || []).map((element) => [element.type, element]));
 
   const components = builder.components.filter((component) => (
     component?.enabled !== false
       && component.position === placement
-      && ALLOWED_TYPES.has(component.type)
+      && (ALLOWED_TYPES.has(component.type) || pluginElements.has(component.type))
       && (component.pages?.includes('all') || (component.pages || ['home']).includes(pageKey))
   ));
   if (!components.length) return null;
@@ -153,6 +214,6 @@ export default function CustomComponents({ objectData, placement = 'before-menu'
       className={previewMode ? 'vmenu-preview-selectable' : undefined}
       onClickCapture={(event) => selectInEditor(event, component.id)}
       title={previewMode ? 'Кликнете за редакция' : undefined}
-    ><CustomComponent component={component} /></div>)}
+    ><CustomComponent component={component} pluginDefinition={pluginElements.get(component.type)} /></div>)}
   </div>;
 }

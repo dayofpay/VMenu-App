@@ -10,7 +10,7 @@ const ShowFinalPage = ({objectData}) => {
     const [activeStep, setActiveStep] = useState(0);
     
     useEffect(() => {
-        do_action("finalized_order", { 
+        do_action("order_completed", {
             message: successData.Header.Text
         });
         

@@ -753,3 +753,86 @@ body:has(.vm-checkout-page) {
 .submit-btn:hover {
   opacity: 0.9;
 }
+
+.vm-plugin-checkout-fields {
+  margin: 28px 0 24px;
+  padding: 20px;
+  border: 1px solid #dfe9e4;
+  border-radius: 18px;
+  background: #f8fbf9;
+}
+
+.vm-plugin-checkout-fields-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.vm-plugin-checkout-fields-heading h3 {
+  margin: 0 0 4px;
+  color: #17211b;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.vm-plugin-checkout-fields-heading p {
+  margin: 0;
+  color: #66736c;
+  font-size: .88rem;
+}
+
+.vm-plugin-checkout-fields-heading > span {
+  display: inline-flex;
+  min-width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #e2f5ec;
+  color: #087f5b;
+  font-weight: 800;
+}
+
+.vm-plugin-checkout-field:last-child {
+  margin-bottom: 0 !important;
+}
+
+.vm-plugin-checkout-checkbox {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: #33413a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.vm-plugin-checkout-checkbox input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #0c8a6a;
+}
+
+.vm-plugin-checkout-help,
+.vm-plugin-checkout-source {
+  display: block;
+  margin-top: 6px;
+  color: #66736c;
+  font-size: .78rem;
+  line-height: 1.45;
+}
+
+.vm-plugin-checkout-source {
+  color: #087f5b;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .vm-plugin-checkout-fields {
+    margin-inline: -8px;
+    padding: 16px;
+    border-radius: 16px;
+  }
+}
